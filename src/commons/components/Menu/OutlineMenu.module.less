@@ -1,0 +1,99 @@
+.container {
+    background-color: white;
+
+    transition: all 0.3s ease;
+
+    .openedContainer {
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+        border: 1.5px solid #0072C7;
+
+
+        .menuItem {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 10px;
+            border-radius: 10px;
+
+            user-select: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: #298fdd;
+                border-radius: 20px;
+
+                padding: 10px 10px;
+
+
+                .menuItemLabel {
+                    color: white;
+                    text-align: center;
+                    font-family: "DM Sans";
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 100%;
+                    /* 18px */
+                    letter-spacing: -0.25px;
+                }
+            }
+
+            .menuItemLabel {
+                color: #0072C7;
+                text-align: center;
+                font-family: "DM Sans";
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 100%;
+                /* 18px */
+                letter-spacing: -0.25px;
+            }
+
+            &.menuItemLabelActive {
+                background-color: #298fdd;
+                border-radius: 20px;
+
+                padding: 10px 10px;
+
+                .menuItemLabel {
+                    color: white;
+                }
+
+            }
+        }
+
+    }
+
+    .closedContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1.5px solid #0072C7;
+        cursor: pointer;
+
+        user-select: none;
+
+        .closedContainerLabel {
+            color: #0072C7;
+            text-align: center;
+            font-family: "DM Sans";
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 100%;
+            /* 18px */
+            letter-spacing: -0.25px;
+        }
+    }
+
+}

@@ -1,0 +1,165 @@
+.container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+
+  gap: 12px;
+  flex: 1 0 0;
+  align-self: stretch;
+  height: 100%;
+  // background-color: var(--background-hala);
+  // opacity: 0.5;
+
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .messageContainer {
+    display: flex;
+    // padding: 20px;
+    margin-top: 10px;
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1 0 0;
+    align-self: stretch;
+    overflow: auto;
+    z-index:0;
+    padding: 0px 5% 30px;
+
+    scrollbar-width: none;
+
+  }
+
+  .scrollDownButton {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 60px;
+    left: 50%;
+    background-color: grey;
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    opacity: 0.9;
+
+    .scrollDownImage {
+      width: 25px;
+      height: 25px;
+      padding: 2px;
+    }
+  }
+
+  .followUpQuestionWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-primary, var(--text-primary, rgba(0, 0, 0, 0.87)));
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 143%;
+    text-align: start;
+    margin-top: 16px;
+
+    .questionItem {
+      border-radius: 16px 16px 16px var(--none, 0px);
+      background: var(--grey-100, #f5f5f5);
+      max-width: 800px;
+      padding: 12px;
+      cursor: pointer;
+    }
+  }
+}
+
+hr {
+  width: 90%;
+  border: 2px solid black;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+ol li {
+  margin-top: 12px;
+  /* 减少列表项之间的上边距 */
+  margin-bottom: 0px;
+  /* 减少列表项之间的下边距 */
+  padding-top: 0px;
+  /* 根据需要调整，这控制着列表项内部顶部的填充 */
+  padding-bottom: 0px;
+  /* 根据需要调整，这控制着列表项内部底部的填充 */
+}
+
+ul {
+  list-style: inside;
+}
+
+pre {
+  white-space: pre-wrap;
+  /* Wraps the text to avoid horizontal scrolling */
+  word-wrap: break-word;
+  /* Allows breaking long words onto the next line */
+  overflow: auto;
+  /* Adds scrollbars if the content overflows */
+  max-width: 100%;
+  /* Ensures it doesn't exceed the width of the container */
+  background-color: #2b2b2b;
+  /* Sets a dark background color similar to the image */
+  padding: 10px;
+  /* Adds some padding for better spacing */
+  border-radius: 5px;
+  /* Rounds the corners for a cleaner look */
+  color: #dcdcdc;
+  /* Sets a light color for the text */
+  font-family: "Inter";
+  /* Ensures a monospaced font */
+}
+
+code {
+  font-family: "Inter";
+  /* Ensures a monospaced font */
+  background-color: #2b2b2b;
+  /* Matches the background color of the <pre> tag */
+  color: #dcdcdc;
+  /* Matches the text color of the <pre> tag */
+  padding: 2px 4px;
+  /* Adds some padding for inline code */
+  border-radius: 3px;
+  /* Rounds the corners for a cleaner look */
+}
+
+pre code {
+  color: #f8f8f2;
+  /* Sets the color of the code within the <pre> tag */
+}
+
+
+@media (max-width: 1200px) {
+  .container {
+    .messageContainer {
+      padding: 0px 15% 30px;
+  
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    .messageContainer {
+      padding: 0px 5% 30px;
+  
+    }
+  }
+}

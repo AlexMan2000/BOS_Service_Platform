@@ -1,0 +1,68 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 15vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal {
+        background-color: #F0EBE3;
+        width: 600px;
+        max-width: 90%;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        transform: translateY(50px);
+        transition: transform 0.3s ease;
+
+        .open & {
+            transform: translateY(0);
+        }
+        
+    }
+
+    &.noBackground {
+        background-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        padding-top: 0;
+        // justify-content: flex-start;
+        // align-items: flex-start;
+        
+        .modal {
+            width: 100%;
+            max-width: none;
+            padding: 0;
+            background-color: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            transform: none;
+            
+            .open & {
+                transform: none;
+            }
+        }
+    }
+}

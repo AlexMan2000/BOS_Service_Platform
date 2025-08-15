@@ -1,0 +1,15 @@
+{
+    "support.question_type": "问题类型",
+    "support.question_type_placeholder": "选择类型",
+    "support.your_question": "您的问题",
+    "support.type_your_question_here": "输入您的问题...",
+    "support.submit": "提交",
+    "support.feedback_survey": "反馈调查",
+    "support.sending_your_message": "发送您的消息中...",
+    "support.message_sent": "消息已发送！",
+    "support.general": "常见问题",
+    "support.account_problem": "账户问题",
+    "support.feedback": "用户反馈",
+    "support.error": "错误！",
+    "support.something_went_wrong_please_try_again": "出错了，请重试。"
+}

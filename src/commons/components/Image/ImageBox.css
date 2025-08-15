@@ -1,0 +1,46 @@
+.image-container {
+    overflow: hidden;
+    position: relative;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(244, 244, 244, 0.73);
+    width: 129.476px;
+    height: 83.571px;
+    padding: 10px;
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: 0.2s background-color ease-in-out;
+    cursor: pointer;
+    align-items: center;
+    
+}
+
+
+.image {
+    width: 100%;
+    height: 100%;
+    
+    /**
+        1. contain: 不会充满，不会裁剪，保持比例
+        2. cover: 会充满，会裁剪，保持比例
+        3. fill: 会充满，可能会裁剪，不保持比例
+    */
+    object-fit: fill;
+}
+
+
+.image-container:hover {
+    background-color: rgba(159, 156, 156, 0.75);;
+}
+
+
+.image-container-mask {
+
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3);
+    position: absolute;
+    top:0;
+    left:0;
+
+}

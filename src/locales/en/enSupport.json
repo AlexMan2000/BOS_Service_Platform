@@ -1,0 +1,15 @@
+{
+    "support.question_type": "Question Type",
+    "support.question_type_placeholder": "Select type",
+    "support.your_question": "Your Question",
+    "support.type_your_question_here": "Type your question here...",
+    "support.submit": "Submit",
+    "support.feedback_survey": "Feedback Survey",
+    "support.sending_your_message": "Sending your message...",
+    "support.message_sent": "Message sent!",
+    "support.general": "General",
+    "support.account_problem": "Account Problem",
+    "support.feedback": "Feedback",
+    "support.error": "Error!",
+    "support.something_went_wrong_please_try_again": "Something went wrong. Please try again."
+}   

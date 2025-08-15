@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 元素的默认边距和填充 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 让元素的宽度和高度包括边框和填充 */
+}
+
+/* 设置页面根元素的字体大小 */
+html, body {
+  font-size: 16px; /* 建议使用相对单位，例如 em 或 rem */
+  /* font-size: 62.5%; 将根元素的字体大小设置为10px（10px / 16px * 100% = 62.5%） */
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+/* 移除列表样式 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 移除链接的默认样式 */
+a {
+  text-decoration: none;
+  color: inherit; /* 继承父元素的文本颜色 */
+}
+
+/* 重置标题元素的默认样式 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* 重置按钮样式 */
+button {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+
+
+
+/* Root color */
+:root {
+  --theme-color: #0B409C;
+  --background-gray-color: #EFF1F5;
+  --title-text-color-white: #FFF;
+  --subtext-text-color-white: #F1F1F1;
+  --BG-3: #EEF0F3;
+  --background-lightblue:#f0f8ff;
+  --background-bluewhite:#F2F7FF;
+  --background-blue:#E6F0FF;
+  --text-yellow:#FCC737;
+  --background-yellow:#FBF3D5;
+  --text-gray:#666;
+  --background-lightblue-hover:#76d1ff;
+  --btn-blue: #1890ff;
+  --btn-red: #e61d21;
+  --btn-red-delete: #7d2222;
+  --theme-background-color: rgba(247, 245, 239, 1);
+
+
+  --background-hala: #F5F4F0;
+  --background-primary: #1A1A1A;
+  --text-primary: #4D4D4D;
+}
+
+
+@font-face {
+  font-family: 'Nunito Sans';
+  src: url('@/fonts/NunitusSans/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf') format('woff');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('@/fonts/NotoSans/NotoSansSC-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("@/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("@/fonts/DMSans/DMSans-VariableFont_opsz,wght.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("@/fonts/inter/Inter-VariableFont_slnt,wght.ttf");
+}
+
+
+@font-face {
+  font-family: "Source Han Serif";
+  src: url("@/fonts/SourceHanSerif/SourceHanSerifTC-Regular.otf");
+}
