@@ -1,4 +1,4 @@
-# Mangrove AI Frontend
+# 稳定币平台
 
 A React + TypeScript + Vite application for Mangrove AI's chat and inbox management platform.
 
@@ -52,43 +52,3 @@ src/
 ├── global.css            # Global css styling, fonts
 └── main.tsx              # Application entry point
 ```
-
-## Module Locations
-
-### Core Features
-
-#### 1. 用户进件
-普通用户：
-- 登录注册，修改个人信息
-
-管理员用户：
-- 创建，管理个人账户，支持批量创建
-- 创建，管理权益账户
-- 创建，管理活动账户
-
-#### 2. 
-
-## Development Guidelines
-
-### Adding New Features
-1. Create components in appropriate `pages/` directory
-2. Add API services in `services/api/`
-3. Update Redux store if needed
-4. Add routes in `App.tsx`
-5. Include internationalization files
-
-### State Management
-- Use Redux for global state
-- Use React Context for component-specific state
-- Use local state for UI-only state
-
-### Styling
-- Use CSS Modules (`.module.less` files)
-- Follow component-specific styling approach
-- Maintain responsive design principles
-
-### Internationalization
-- Add translation keys to appropriate locale files
-- Use `useIntl` hook in components
-- Support English and Chinese languages
-
