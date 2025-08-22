@@ -1,13 +1,11 @@
 
 export interface User {
-    id: number;
-    email: string;
-    user_name: string;
-    employee_id?: string;
-    phone_number?: string;
-    country_code?: string;
-    company_name: string;
-    geographic_location: string;
-    created_at?: string;
-    last_modified_at?: string;
+    employeeNo: string // 工号
+    name: string; // 姓名
+    department: string; // 部门
+    createdTime: string; // 注册时间
+    createdBy: string; // 经办人 
+    lastLogin: string; // 上一次登录时间
+    balance: string; // 稳定余额
 }
+
