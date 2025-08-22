@@ -2,9 +2,11 @@
 import styles from "./IndexPage.module.less"
 
 
-export const IndexPage = () => {
+export const AdminIndexPage = () => {
 
-
+    return (
+        <div>   </div>
+    )
 
 }
 
