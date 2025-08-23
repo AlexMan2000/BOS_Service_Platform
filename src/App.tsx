@@ -5,13 +5,13 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./store/slice/userSlice/userSlice";
 import { AdminIndexPage } from "./pages/AdminPages/AdminIndexPage";
 import { LoginPage } from "./pages/PublicPages/LoginPage";
+import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserManagementIndexPage";
+import { RightsManagementIndexPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/RightsManagementIndexPage";
+import { ActivitiesManagementIndexPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/ActivitiesManagementIndexPage";
+import { UserDetailPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserDetailPage";
 
 function App() {
 
-  const { isAuthenticated, role } = useSelector(selectUser);
-
-  const admin_access = role === "admin"
-  const auth_access = isAuthenticated
 
   return (
     <BrowserRouter>
@@ -19,17 +19,32 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
 
-      
+        {/* 管理员页面 */}
         <Route path="/admin" element={
           <ProtectedRoute
-            isAuthenticated={auth_access}
-            has_access={admin_access}
+            login_required={true}
+            admin_required={true}
           >
             <AdminIndexPage />
           </ProtectedRoute>
         }>
-
+          <Route path="user-management" element={<UserManagementIndexPage />} >
+            <Route path="user-detail" element={<UserDetailPage />} />
+          </Route>
+          <Route path="rights-management" element={<RightsManagementIndexPage />} />
+          <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />
         </Route>
+
+
+        {/* 用户页面 */}
+        {/* <Route path="/profile" element={
+          <ProtectedRoute
+            login_required={true}
+            admin_required={false}
+          >
+            <UserIndexPage />
+          </ProtectedRoute>
+        }></Route> */}
 
       </Routes>
     </BrowserRouter>
