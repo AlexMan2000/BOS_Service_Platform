@@ -1,9 +1,11 @@
 import { User } from "@/commons/types/user"
-import { EditableProTable, ProColumns } from "@ant-design/pro-components"
+import { EditableFormInstance, EditableProTable, ProColumns } from "@ant-design/pro-components"
 import { Button } from "antd"
 import React, { useState } from "react"
 
 export type GenericEditableTableProps<T extends object> = {
+    dataSource: T[]
+    setDataSource: (dataSource: T[]) => void
     columns: ProColumns<T>[]
     defaultNewRow: T
     rowKey: string
@@ -23,6 +25,8 @@ export type GenericEditableTableProps<T extends object> = {
 
 export const GenericEditableTable = <T extends object>(props: GenericEditableTableProps<T>) => {
     const {
+        dataSource,
+        setDataSource,
         columns,
         defaultNewRow,
         rowKey,
@@ -32,11 +36,10 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         scroll,
         headerTitle,
         onSave,
-    } = props
+        } = props
 
 
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
-    const [dataSource, setDataSource] = useState<T[]>([])
 
 
     const PROCOLUMNS_CONFIGS: ProColumns<T>[] = [
@@ -142,6 +145,15 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                     </Button>,
                 ],
             }}
+            request={async () => ({
+                data: dataSource,
+                total: dataSource.length,
+                success: true,
+            })}
+            onSubmit={async (values) => {
+                console.log(values)
+            }}
+
         />
     )
 }

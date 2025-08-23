@@ -3,8 +3,8 @@ import styles from "./UserManagementIndexPage.module.less"
 import { BreadCrumb } from "@/commons/components/Routers/BreadCrumb"
 import { Button, Input, Modal, Space } from "antd"
 import dayjs from "dayjs"
-import { useState } from "react"
-import { ProColumns } from "@ant-design/pro-components"
+import { useRef, useState } from "react"
+import { EditableFormInstance, ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
 import templateUrl from "@/assets/templates/user_import_template.csv?url";
@@ -18,9 +18,7 @@ export const UserManagementIndexPage = () => {
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
-
-
-
+    const [dataSource, setDataSource] = useState<User[]>([])
     // 配置
     const DEFAULT_NEW_ROW = {
         employeeNo: (Math.random() * 1000000).toFixed(0),
@@ -143,6 +141,8 @@ export const UserManagementIndexPage = () => {
     // 表格导入
     const TableImport = () => (
         <GenericEditableTable<User>
+            dataSource={dataSource}
+            setDataSource={setDataSource}
             columns={PROCOLUMNS_CONFIGS}
             rowKey="employeeNo"
             recordCreatorProps={false}
@@ -169,6 +169,9 @@ export const UserManagementIndexPage = () => {
             <Modal
                 open={isBatchImportModalOpen}
                 onCancel={() => setIsBatchImportModalOpen(false)}
+                onOk={() => {
+                    console.log('onOk', dataSource)
+                }}
                 title="批量导入"
                 width={1000}
             >
