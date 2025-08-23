@@ -1,14 +1,10 @@
 import { User } from "@/commons/types/user"
 import { EditableProTable, ProColumns } from "@ant-design/pro-components"
 import { Button } from "antd"
-import React from "react"
+import React, { useState } from "react"
 
 export type GenericEditableTableProps<T extends object> = {
     columns: ProColumns<T>[]
-    dataSource: readonly T[]
-    setDataSource: (dataSource: T[]) => void
-    editableKeys: React.Key[]
-    setEditableRowKeys: (editableKeys: React.Key[]) => void
     defaultNewRow: T
     rowKey: string
     recordCreatorProps?: false | {
@@ -18,32 +14,16 @@ export type GenericEditableTableProps<T extends object> = {
     }
     editable?: {
         type?: "single" | "multiple"
-        editableKeys: React.Key[]
-        onChange: (editableKeys: React.Key[]) => void
-        actionRender?: (
-            row: T,
-            config: any,
-            dom: {
-                save: React.ReactNode
-                cancel: React.ReactNode
-                delete?: React.ReactNode
-            }
-        ) => React.ReactNode[]
     }
     loading?: boolean
     scroll?: { x?: number | string; y?: number | string }
     headerTitle?: React.ReactNode
-    onChange: (value: readonly T[]) => void
     onSave?: (rowKey: React.Key, data: T, row: T) => Promise<void>
 }
 
 export const GenericEditableTable = <T extends object>(props: GenericEditableTableProps<T>) => {
     const {
         columns,
-        dataSource,
-        setDataSource,
-        editableKeys,
-        setEditableRowKeys,
         defaultNewRow,
         rowKey,
         recordCreatorProps,
@@ -51,10 +31,40 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         loading,
         scroll,
         headerTitle,
-        onChange,
         onSave,
-
     } = props
+
+
+    const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
+    const [dataSource, setDataSource] = useState<T[]>([])
+
+
+    const PROCOLUMNS_CONFIGS: ProColumns<T>[] = [
+        ...columns,
+        {
+            title: '操作',
+            valueType: 'option',
+            width: 200,
+            render: (_, record, __, action) => [
+                <a
+                    key="editable"
+                    onClick={() => {
+                        action?.startEditable?.(record[rowKey]);
+                    }}
+                >
+                    编辑
+                </a>,
+                <a
+                    key="delete"
+                    onClick={() => {
+                        setDataSource(dataSource.filter((item) => item[rowKey] !== record[rowKey]));
+                    }}
+                >
+                    删除
+                </a>,
+            ]
+        },
+    ]
 
 
     const addMultipleRows = (count: number) => {
@@ -62,7 +72,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
 
         const newRows: T[] = [];
         for (let i = 0; i < count; i++) {
-            newRows.push(defaultNewRow);
+            newRows.push({ ...defaultNewRow, [rowKey]: (Math.random() * 1000000).toFixed(0) });
         }
 
         // Always add to bottom
@@ -104,18 +114,18 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                     添加10行
                 </Button>,
             ]}
-            columns={columns}
+            columns={PROCOLUMNS_CONFIGS}
             value={dataSource}
-            onChange={onChange}
+            onChange={(value) => setDataSource([...value])}
             editable={{
                 type: editable?.type ?? "multiple",
-                editableKeys: editable?.editableKeys ?? [],
+                editableKeys: editableKeys,
                 onSave: async (rowKeyParam, data, row) => {
                     if (onSave) {
                         await onSave(rowKeyParam as unknown as React.Key, data, row)
                     }
                 },
-                onChange: editable?.onChange ?? (() => {}),
+                onChange: setEditableRowKeys,
                 actionRender: (row, _, dom) => [
                     dom.save,
                     dom.cancel,

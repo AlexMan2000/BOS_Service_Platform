@@ -1,16 +1,16 @@
 import { User } from "@/commons/types/user"
 import styles from "./UserManagementIndexPage.module.less"
 import { BreadCrumb } from "@/commons/components/Routers/BreadCrumb"
-import { Button, Input, Modal, Space, Upload } from "antd"
+import { Button, Input, Modal, Space } from "antd"
 import dayjs from "dayjs"
 import { useState } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
-import { UploadOutlined } from "@ant-design/icons"
 import templateUrl from "@/assets/templates/user_import_template.csv?url";
-import { GenericEditableTable } from "@/commons/components/Table/GenericEditableTable"
+import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import {wait} from "@/commons/utils/sys_utils"
+import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 
 
 export const UserManagementIndexPage = () => {
@@ -18,9 +18,10 @@ export const UserManagementIndexPage = () => {
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
-    const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
-    const [dataSource, setDataSource] = useState<User[]>([])
 
+
+
+    // 配置
     const DEFAULT_NEW_ROW = {
         employeeNo: (Math.random() * 1000000).toFixed(0),
         password: '',
@@ -103,29 +104,6 @@ export const UserManagementIndexPage = () => {
             key: 'balance',
             width: 100,
         },
-        {
-            title: '操作',
-            valueType: 'option',
-            width: 200,
-            render: (_, record, __, action) => [
-                <a
-                    key="editable"
-                    onClick={() => {
-                        action?.startEditable?.(record.employeeNo);
-                    }}
-                >
-                    编辑
-                </a>,
-                <a
-                    key="delete"
-                    onClick={() => {
-                        setDataSource(dataSource.filter((item) => item.employeeNo !== record.employeeNo));
-                    }}
-                >
-                    删除
-                </a>,
-            ],
-        },
     ]
 
 
@@ -166,42 +144,22 @@ export const UserManagementIndexPage = () => {
     const TableImport = () => (
         <GenericEditableTable<User>
             columns={PROCOLUMNS_CONFIGS}
-            dataSource={dataSource}
-            setDataSource={setDataSource}
-            editableKeys={editableKeys}
-            setEditableRowKeys={setEditableRowKeys}
             rowKey="employeeNo"
             recordCreatorProps={false}
             defaultNewRow={DEFAULT_NEW_ROW}
             editable={{
                 type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
             }}
             onSave={async (rowKey: React.Key, data: User, row: User) => {
                 console.log('Saving row:', rowKey, data, row);
                 await wait(1);
             }}
-            onChange={(value) => setDataSource([...value])}
         />
     )
 
     // Excel导入
     const ExcelImport = () => (
-        <div className={styles.excelImport} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: '10px' }}>
-            <a href={templateUrl} download="user_import_template.csv" style={{ color: '#1677ff', textDecoration: 'underline' }}>
-                下载模板
-            </a>
-            <Upload
-                accept=".csv"
-                showUploadList={false}
-                beforeUpload={() => {
-                    return false
-                }}
-            >
-                <Button icon={<UploadOutlined />}>上传CSV文件</Button>
-            </Upload>
-        </div>
+        <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
     )
 
 
