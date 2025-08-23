@@ -1,5 +1,4 @@
-import { User } from "@/commons/types/user"
-import { EditableFormInstance, EditableProTable, ProColumns } from "@ant-design/pro-components"
+import { EditableProTable, ProColumns } from "@ant-design/pro-components"
 import { Button } from "antd"
 import React, { useState } from "react"
 
