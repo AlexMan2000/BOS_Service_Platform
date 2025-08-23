@@ -9,6 +9,9 @@ import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserM
 import { RightsManagementIndexPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/RightsManagementIndexPage";
 import { ActivitiesManagementIndexPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/ActivitiesManagementIndexPage";
 import { UserDetailPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserDetailPage";
+import { ActivityIndexPage } from "./pages/UserPages/ActivityPages/ActiviryIndexPage";
+import { RightsIndexPage } from "./pages/UserPages/RightsPages/RightsIndexPage";
+import { ActivityDetailPage } from "./pages/UserPages/ActivityPages/ActivityDetailPage";
 
 function App() {
 
@@ -28,11 +31,27 @@ function App() {
             <AdminIndexPage />
           </ProtectedRoute>
         }>
+          <Route path="" element={<Navigate to="user-management" />} />
           <Route path="user-management" element={<UserManagementIndexPage />} >
             <Route path="user-detail" element={<UserDetailPage />} />
           </Route>
           <Route path="rights-management" element={<RightsManagementIndexPage />} />
           <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />
+        </Route>
+
+        <Route path="/home" element={
+          <ProtectedRoute
+            login_required={true}
+            admin_required={false}
+          >
+            <LandingPage />
+          </ProtectedRoute>
+        }>
+          <Route path="" element={<Navigate to="activity" />} />
+          <Route path="activity" element={<ActivityIndexPage />} >
+            <Route path="project" element={<ActivityDetailPage />} />
+          </Route>
+          <Route path="rights" element={<RightsIndexPage />} />
         </Route>
 
 

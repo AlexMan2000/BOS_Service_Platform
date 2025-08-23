@@ -4,12 +4,15 @@ import userManagementIcon from "@/assets/icons/userManagement.png"
 import rightManagementIcon from "@/assets/icons/rightManagement.png"
 import activityManagementIcon from "@/assets/icons/activityManagement.png"
 import { useNavigate } from "react-router-dom"
-
+import { useState } from "react"
 
 
 export const SideBar = () => {
 
     const navigate = useNavigate()
+
+    // 当前选中的菜单项
+    const [selectedKey, setSelectedKey] = useState<string>("/admin/user-management")
 
     const menuItems = [
         {
@@ -41,7 +44,10 @@ export const SideBar = () => {
             </div>
             <div className={styles.menuItems}>
                 {menuItems.map((item) => (
-                    <div className={styles.menuItem} key={item.path} onClick={() => navigate(item.path)}>
+                    <div className={`${styles.menuItem} ${selectedKey === item.path ? styles.selected : ""}`} key={item.path} onClick={() => {
+                        setSelectedKey(item.path)
+                        navigate(item.path)
+                    }}>
                         <img src={item.icon} alt={item.label} />
                         <span>{item.label}</span>
                     </div>
