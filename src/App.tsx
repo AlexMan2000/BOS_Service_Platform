@@ -23,6 +23,8 @@ import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserM
 import { RightListPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/displays/RightListPage";
 import { UserProfileDetailsPage } from "./pages/UserPages/ProfilePages/displays/UserProfileDetailsPage";
 import { RightManagementDetailsPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/displays/RightManagementDetailsPage";
+import { ActivityListPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityListPage";
+import { ActivityManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityManagementDetailsPage";
 
 
 
@@ -54,7 +56,10 @@ function App() {
             <Route index element={<RightListPage />} />
             <Route path="right-detail" element={<RightManagementDetailsPage />} />
           </Route>
-          <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />
+          <Route path="activities-management" element={<ActivitiesManagementIndexPage />} >
+            <Route index element={<ActivityListPage />} />
+            <Route path="activity-detail" element={<ActivityManagementDetailsPage />} />
+          </Route>
         </Route>
 
         {/* 用户页面 */}

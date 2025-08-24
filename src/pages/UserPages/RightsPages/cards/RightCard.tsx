@@ -67,7 +67,7 @@ export const RightCard = (props: RightCardType) => {
                                 // Add your betting logic here
                                 setIsModalOpen(false) // Close modal after successful bet
                                 setAmount(0)
-                                message.success(`兑换成功，兑换码为: ${Math.random().toString(36).substring(2, 15)}, 请在权益页面查看`)
+                                message.success(`兑换成功，兑换码为: ${Math.random().toString(36).substring(2, 15)}, 请在权益页面查看`, 10)
                             }}
                             onCancel={(e) => {
                                 if (e) e.stopPropagation()

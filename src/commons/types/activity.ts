@@ -22,6 +22,32 @@ export interface ActivityCardType {
 }
 
 
+export interface ActivityTableType {
+    name: string
+    freeCredit: string
+    cover: string
+    description: string
+    link: string
+    startTime: string
+    endTime: string
+    status: string
+}
+
+export interface ActivitySubmitType {
+    name: string,
+    freeCredit: string,
+    cover: string,
+    description: string,
+    link: string,
+    startTime: string,
+    endTime: string
+}
+
+export interface ActivityTransferSubmitType {
+    accountId: string,
+    balance: string,
+}
+
 export interface ActivityDetail {
     workList: Project[],
     freeCredit: number,

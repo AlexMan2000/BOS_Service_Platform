@@ -47,7 +47,7 @@ export const RightDetailsPage = () => {
                                 description={`确认兑换 ${amount} 个权益吗？`}
                                 onConfirm={() => {
                                     setIsModalOpen(false)
-                                    message.success(`兑换 ${amount} 个权益成功, 兑换码为: ${Math.random().toString(36).substring(2, 15)}，已发送至您的邮箱`)
+                                    message.success(`兑换 ${amount} 个权益成功, 兑换码为: ${Math.random().toString(36).substring(2, 15)}，请妥善保存`, 10)
                                 }}
                                 okText="确认"
                                 cancelText="取消"

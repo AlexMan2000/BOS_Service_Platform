@@ -196,7 +196,7 @@ export const RightListPage = () => {
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
+                                children: <GenericCSVFileImport file_url={templateUrl} download_name="right_import_template.csv" onUpload={() => { }} />
                             }
                         ]}
 
