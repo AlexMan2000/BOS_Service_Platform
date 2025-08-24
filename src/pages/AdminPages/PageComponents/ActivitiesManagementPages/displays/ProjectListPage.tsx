@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { ProColumns } from "@ant-design/pro-components"
-import { Button, Input, Modal, Table, Tabs, Tag } from "antd"
+import { Button, Input, Modal, Table, Tabs } from "antd"
 import { Space } from "antd"
 import { Popconfirm } from "antd"
 import { ProjectSubmitType, ProjectTableType } from "@/commons/types/activity"

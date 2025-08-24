@@ -38,6 +38,26 @@
                     background-color: rgba(0, 0, 0, 0.1);
                 }
             }
+
+            .logo {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+                line-clamp: 1;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                font-size: 20px;
+                font-weight: 600;
+
+                img {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+
+
         }
 
         .menuItems {
@@ -111,6 +131,9 @@
             flex-direction: column;
             font-size: 16px;
             gap: 10px;
+            line-clamp: 1;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .footerAvatar {
@@ -120,8 +143,8 @@
             gap: 10px;
             position: relative;
 
-           
-            
+
+
         }
 
 
@@ -143,6 +166,7 @@
                 gap: 10px;
                 padding: 10px;
                 transition: all 0.3s ease;
+                
 
                 &:hover {
                     background-color: #838383;
@@ -162,13 +186,14 @@
 
         .header {
             justify-content: center;
+
             .logo {
                 display: none;
                 width: 0px;
                 height: 0px;
             }
 
-            
+
         }
 
         .content {
@@ -176,6 +201,7 @@
                 .menuItem {
                     justify-content: center;
                     padding: 20px 10px;
+
                     span {
                         display: none;
                     }

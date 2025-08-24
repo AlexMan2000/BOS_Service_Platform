@@ -1,11 +1,12 @@
 import {  useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import styles from "./SideBar.module.less"
-import { AutoComplete, AutoCompleteProps, Avatar, Form, Input, Modal } from "antd"
+import { Avatar } from "antd"
 import { MenuFoldOutlined, TransactionOutlined, UserOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import { selectGlobalState, setIsSideBarCollapsed } from "@/store/slice/globalSlice/globalSlice";
 import { TransferModal } from "../Modal/TransferModal"
+import logo from "@/assets/icons/platformLogo.png"
 
 interface SideBarProps {
     menuItems: {
@@ -25,11 +26,9 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
     const [avatarMenuOpen, setAvatarMenuOpen] = useState(false)
     const menuClickRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
-    const [transferForm] = Form.useForm()
 
     const { isSideBarCollapsed } = useSelector(selectGlobalState)
     const [transferOpen, setTransferOpen] = useState(false)
-    const [searchOptions, setSearchOptions] = useState<AutoCompleteProps['options']>([]);
 
 
     const pathname = useLocation().pathname
@@ -58,8 +57,8 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
             <div className={styles.content}>
                 <div className={styles.header}>
                     <div className={styles.logo}>
-                        {/* <img src={logo} alt="logo" /> */}
-                        logo
+                        <img src={logo} alt="logo" />
+                        稳定比交易平台
                     </div>
                     <div className={styles.collapse} onClick={() => {
                         dispatch(setIsSideBarCollapsed(!isSideBarCollapsed))
