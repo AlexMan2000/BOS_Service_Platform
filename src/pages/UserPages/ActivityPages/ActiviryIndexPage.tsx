@@ -12,15 +12,15 @@ export const ActivityIndexPage = () => {
             crumb: "首页"
         },
         {
-            pathname: "/home/activity",
+            pathname: "/home/activities",
             crumb: "活动"
         },
         {
-            pathname: "/home/activity/project",
+            pathname: "/home/activities/projects",
             crumb: "项目"
         },
         {
-            pathname: "/home/activity/project/detail",
+            pathname: "/home/activities/projects/detail",
             crumb: "项目详情"
         },
     ]

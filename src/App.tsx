@@ -14,6 +14,12 @@ import { RightsIndexPage } from "./pages/UserPages/RightsPages/RightsIndexPage";
 import { ActivityGridPage } from "./pages/UserPages/ActivityPages/displays/ActivityGridPage";
 import { ProjectGridPage } from "./pages/UserPages/ActivityPages/displays/ProjectGridPage";
 import { ProjectDetailPage } from "./pages/UserPages/ActivityPages/displays/ProjectDetailPage";
+import { RightsGridPage } from "./pages/UserPages/RightsPages/displays/RightsGridPage";
+import { RightDetailPage } from "./pages/UserPages/RightsPages/displays/RightDetailPage";
+
+
+
+
 function App() {
 
 
@@ -49,13 +55,16 @@ function App() {
             <LandingPage />
           </ProtectedRoute>
         }>
-          <Route path="" element={<Navigate to="activity" />} />
-          <Route path="activity" element={<ActivityIndexPage />} >
+          <Route path="" element={<Navigate to="activities" />} />
+          <Route path="activities" element={<ActivityIndexPage />} >
             <Route index element={<ActivityGridPage />} />
-            <Route path="project" element={<ProjectGridPage />} />
-            <Route path="project/detail" element={<ProjectDetailPage  />} />
+            <Route path="projects" element={<ProjectGridPage />} />
+            <Route path="projects/detail" element={<ProjectDetailPage  />} />
           </Route>
-          <Route path="rights" element={<RightsIndexPage />} />
+          <Route path="rights" element={<RightsIndexPage />} >
+            <Route index element={<RightsGridPage />} />
+            <Route path="detail" element={<RightDetailPage />} />
+          </Route>
         </Route>
 
 

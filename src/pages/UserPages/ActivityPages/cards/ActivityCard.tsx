@@ -1,15 +1,22 @@
 import styles from "./ActivityCard.module.less"
 import { ActivityCard as ActivityCardType } from "@/commons/types/activity"
 import { useNavigate } from "react-router-dom"
+import { Modal, Button, InputNumber } from "antd"
+import { useState } from "react"
+import { InfoCircleOutlined } from "@ant-design/icons"
 
 
 export const ActivityCard = (props: ActivityCardType) => {
     const { name, description, cover, status, startTime, endTime } = props
     const navigate = useNavigate()
+
+
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/activity/project`)
+            navigate(`/home/activities/projects`)
         }}>
+
+            
             <div className={styles.cover}>
                 <img src={cover} alt={name} />
             </div>
@@ -30,6 +37,7 @@ export const ActivityCard = (props: ActivityCardType) => {
                     结束时间: {endTime}
                 </div>
             </div>
+            
         </div>
     )
 }

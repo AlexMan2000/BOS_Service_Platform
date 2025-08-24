@@ -1,8 +1,25 @@
 .container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: row;
     gap: 20px;
-    padding: 20px;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+        height: 100%;
+        width: 75%;
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        gap: 20px;
+        width: 25%;
+    }
 }

@@ -11,7 +11,7 @@ export const LandingPage = () => {
     const menuItems = [
         {
             label: "活动",
-            path: "/home/activity",
+            path: "/home/activities",
             icon: activityManagementIcon
         },
         {
@@ -21,7 +21,7 @@ export const LandingPage = () => {
         },
     ]
 
-    const defaultSelectedKey = "/home/activity"
+    const defaultSelectedKey = "/home/activities"
 
 
     return (
@@ -29,7 +29,7 @@ export const LandingPage = () => {
             <div className={styles.sideBar}>
                 <SideBar menuItems={menuItems} defaultSelectedKey={defaultSelectedKey} />
             </div>
-            <div className={styles.content}>
+            <div className={styles.mainContent}>
                 <Outlet />
             </div>
         </div>

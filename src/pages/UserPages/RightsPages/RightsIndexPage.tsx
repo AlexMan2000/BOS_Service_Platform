@@ -1,6 +1,7 @@
 import { BreadcrumbConfig } from "@/commons/types/configs"
 import styles from "./RightsIndexPage.module.less"
 import { BreadCrumb } from "@/commons/components/Routers/BreadCrumb"
+import { Outlet } from "react-router-dom"
 
 
 export const RightsIndexPage = () => {
@@ -20,7 +21,7 @@ export const RightsIndexPage = () => {
                 <BreadCrumb items={BREADCRUMBS_CONFIGS} />
             </div>
             <div className={styles.content}>
-
+                <Outlet />
             </div>
         </div>
     )
