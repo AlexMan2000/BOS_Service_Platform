@@ -1,9 +1,7 @@
 import styles from "./ActivityCard.module.less"
-import { ActivityCard as ActivityCardType } from "@/commons/types/activity"
+import { ActivityCardType } from "@/commons/types/activity"
 import { useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber } from "antd"
-import { useState } from "react"
-import { InfoCircleOutlined } from "@ant-design/icons"
+
 
 
 export const ActivityCard = (props: ActivityCardType) => {

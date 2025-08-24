@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 import styles from "./SideBar.module.less"
 
 interface SideBarProps {
@@ -17,6 +17,12 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
     // 当前选中的菜单项
     const [selectedKey, setSelectedKey] = useState<string>(defaultSelectedKey)
+
+    const pathname = useLocation().pathname
+
+    useEffect(() => {
+        setSelectedKey(pathname)
+    }, [pathname])
 
 
     return (

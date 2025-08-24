@@ -1,4 +1,4 @@
-import { ActivityCard as ActivityCardType } from "@/commons/types/activity"
+import { ActivityCardType } from "@/commons/types/activity"
 import { ActivityCard } from "../cards/ActivityCard"
 import styles from "./ActivityGridPage.module.less"
 

@@ -12,7 +12,7 @@ export interface Activity {
     endTime: string
 }
 
-export interface ActivityCard {
+export interface ActivityCardType {
     name: string
     description: string
     cover: string
@@ -41,7 +41,7 @@ export interface Project {
 }
 
 
-export interface ProjectCard {
+export interface ProjectCardType {
     title: string
     amount: number
     authors: string

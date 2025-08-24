@@ -1,27 +1,26 @@
-import styles from "./ProjectCard.module.less"
-import { ProjectCardType } from "@/commons/types/activity"
-import { useState } from "react"
+import { RightCardType } from "@/commons/types/right"
 import { useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber, Popconfirm } from "antd"
+import styles from "./RightCard.module.less"
+import { Popconfirm, Modal, Button, InputNumber, message } from "antd"
+import { useState } from "react"
 import { InfoCircleOutlined } from "@ant-design/icons"
 
-export const ProjectCard = (props: ProjectCardType) => {
-    const { title, amount, authors, activityId, description, cover, link, createdTime, updatedTime } = props
+export const RightCard = (props: RightCardType) => {
+    const { name, description, price, image, total, remain, active, exp_date } = props
     const navigate = useNavigate()
-
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [amount, setAmount] = useState<number>(0)
 
-
-    const [money, setMoney] = useState<number>(0)
+    
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/activities/projects/detail`)
+            navigate(`/home/rights/detail`)
         }}>
             <Modal
                 open={isModalOpen}
                 onCancel={(e) => {
                     e.stopPropagation()
-                    setMoney(0)
+                    setAmount(0)
                     setIsModalOpen(false)
                 }}
                 footer={null}
@@ -35,19 +34,19 @@ export const ProjectCard = (props: ProjectCardType) => {
                         </div>
                     )
                 }}
-                title={"投注"}
+                title={"兑换权益"}
                 width={500}
             >
                 <div className={styles.modalContentContainer}>
                     <div className={styles.inputContainer}>
                         <div className={styles.title}>
-                            投注金额
+                            兑换数量
                         </div>
                         <InputNumber
-                            value={money}
+                            value={amount}
                             onChange={(value) => {
                                 if (value) {
-                                    setMoney(value)
+                                    setAmount(value)
                                 }
                             }}
                         />
@@ -55,58 +54,65 @@ export const ProjectCard = (props: ProjectCardType) => {
                     <div className={styles.infoContainer}>
                         <InfoCircleOutlined style={{ color: "#1677ff" }} />
                         <div className={styles.infoText} style={{ color: "#1677ff" }}>
-                            投注优先消耗免费额度
+                            兑换消耗余额: {price * amount}
                         </div>
                     </div>
                     <div className={styles.buttonContainer}>
                         <Popconfirm
-                            title="确认投注"
-                            description={`您确定要投注 ${money} 元吗？`}
+                            title="确认兑换"
+                            description={`您确定要兑换 ${amount} 份该权益吗？兑换后将消耗 ${price * amount} 余额`}
                             onConfirm={(e) => {
                                 if (e) e.stopPropagation()
-                                console.log(money)
+                                console.log(amount)
                                 // Add your betting logic here
                                 setIsModalOpen(false) // Close modal after successful bet
-                                setMoney(0)
+                                setAmount(0)
+                                message.success(`兑换成功，兑换码为: ${Math.random().toString(36).substring(2, 15)}, 请在权益页面查看`)
                             }}
                             onCancel={(e) => {
                                 if (e) e.stopPropagation()
                             }}
-                            okText="确认投注"
+                            okText="确认兑换"
                             cancelText="取消"
                         >
                             <Button style={{ width: "100%" }} type="primary" onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault();
                             }}>
-                                投注
+                                兑换
                             </Button>
                         </Popconfirm>
                     </div>
 
                 </div>
             </Modal>
+
             <div className={styles.cover}>
-                <img src={cover} alt={title} />
+                <img src={image} alt={name} />
             </div>
             <div className={styles.content}>
                 <div className={styles.name}>
-                    {title}
+                    {name}
                 </div>
                 <div className={styles.description}>
                     {description}
                 </div>
                 <div className={styles.status}>
-                    {authors}
+                    {active ? "有效" : "无效"}
                 </div>
                 <div className={styles.startTime}>
-                    创建时间: {createdTime}
+                    过期时间: {exp_date}
                 </div>
-                <div className={styles.endTime}>
-                    更新时间: {updatedTime}
+                <div className={styles.price}>
+                    价格: {price}
+                </div>
+                <div className={styles.total}>
+                    总量: {total}
+                </div>
+                <div className={styles.remain}>
+                    剩余: {remain}
                 </div>
             </div>
-
             <div className={styles.button}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -117,7 +123,7 @@ export const ProjectCard = (props: ProjectCardType) => {
                     e.preventDefault()
                     setIsModalOpen(true)
                 }}>
-                    投注
+                    兑换
                 </Button>
             </div>
         </div>

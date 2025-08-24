@@ -1,5 +1,5 @@
 // This is project page
-import { ProjectCard as ProjectCardType } from "@/commons/types/activity"
+import { ProjectCardType } from "@/commons/types/activity"
 import styles from "./ProjectGridPage.module.less"
 import { ProjectCard } from "../cards/ProjectCard"
 import { Pie, Line } from "@ant-design/charts"

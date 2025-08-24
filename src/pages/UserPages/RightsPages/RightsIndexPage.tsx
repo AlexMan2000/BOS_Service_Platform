@@ -14,6 +14,10 @@ export const RightsIndexPage = () => {
             pathname: "/home/rights",
             crumb: "权益"
         },
+        {
+            pathname: "/home/rights/detail",
+            crumb: "权益详情"
+        }
     ]
     return (
         <div className={styles.container}>
