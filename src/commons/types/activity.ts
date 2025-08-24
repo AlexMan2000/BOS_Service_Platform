@@ -1,6 +1,7 @@
 
 
 export interface Activity {
+    name: string
     accountId: string
     balance: string
     cover: string
@@ -64,6 +65,7 @@ export interface Project {
     link: string
     createdTime: string
     updatedTime: string
+    deleted: boolean
 }
 
 
@@ -76,5 +78,27 @@ export interface ProjectCardType {
     cover: string
     link: string
     createdTime: string
+    updatedTime: string
+}
+
+
+export interface ProjectSubmitType {
+    title: string,
+    authors: string,
+    activityId: string,
+    description: string,
+    cover: string,
+    link: string
+}
+
+export interface ProjectTableType {
+    title: string,
+    amount: number,
+    authors: string,
+    activityId: string,
+    description: string,
+    cover: string,
+    link: string,
+    createdTime: string,
     updatedTime: string
 }

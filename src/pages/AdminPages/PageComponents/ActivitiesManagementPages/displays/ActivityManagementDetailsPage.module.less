@@ -1,67 +1,96 @@
-
-
 .container {
-
     display: flex;
     flex-direction: column;
 
-    .content {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-self: flex-end;
+    width: 100%;
+    height: 100%;
     
-            .edit {
-                font-size: 16px;
-                font-weight: 600;
-                color: #006cbe;
-                border: 1px solid #006cbe;
-                border-radius: 5px;
-                padding: 5px 20px;
-                cursor: pointer;
+    .activityDetails {
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        .activityDetailsHeader {
+            .formControls {
+                margin-bottom: 16px;
+                text-align: right;
             }
-    
-    
-          
-        }
-    
-        .form {
-            margin-top: 50px;
-        }
-    
-    
-        .submit {
-            align-self: flex-end;
-            font-size: 16px;
-            font-weight: 600;
-            color: #006cbe;
-            border: 1px solid #006cbe;
-            border-radius: 5px;
-            padding: 5px 20px;
-            cursor: pointer;
-        }
-        
-    
-        .cover {
-            width: 300px;
-            align-self: center;
-            height: 150px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-    
-        .cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+
+            .form {
+                .formItem {
+                    margin-bottom: 16px;
+                }
+            }
+
+            .activityDetailsCover {
+                margin-top: 20px;
+                text-align: center;
+                
+                img {
+                    max-width: 300px;
+                    max-height: 200px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+            }
         }
     }
-
-
     
+    .content {
+        width: 100%;
+    }
+
+    .tabs {
+        width: 100%;
+        display: flex;
+        gap: 0px;
+        
+
+        .tabItem {
+            padding: 5px 0px;
+            width: 130px;
+            text-align: center;
+
+            transition: all 0.3s ease;
+
+            &:hover {
+                color: #006cbe;
+                cursor: pointer;
+
+                &::after {
+                    display: inline-block;
+                    content: "";
+                    width: 100%;
+                    height: 2px;
+                    background-color: #006cbe;
+                }
+            }
+
+
+            &.active {
+                color: #006cbe;
+                cursor: pointer;
+
+                &::after {
+                    display: inline-block;
+                    content: "";
+                    width: 100%;
+                    height: 2px;
+                    background-color: #006cbe;
+                }
+            }
+
+
+            &::after {
+                display: inline-block;
+                content: "";
+                width: 100%;
+                height: 2px;
+                background-color: #d6d6d6;
+                transition: all 0.3s ease;
+            }
+        }
+    }
 }

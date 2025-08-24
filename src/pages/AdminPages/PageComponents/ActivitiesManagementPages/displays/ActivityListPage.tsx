@@ -109,21 +109,21 @@ export const ActivityListPage = () => {
     // 默认数据
     const DEFAULT_DATA_DISPLAY: ActivityTableType[] = [
         {
-            name: "权益1",
-            description: "权益1描述",
+            name: "活动1",
+            description: "活动1描述",
             freeCredit: "100",
-            cover: "权益1图片",
-            link: "权益1链接",
+            cover: "活动1图片",
+            link: "活动1链接",
             startTime: "2021-01-01",
             endTime: "2021-01-01",
             status: "offline",
         },
         {
-            name: "权益2",
-            description: "权益2描述",
+            name: "活动2",
+            description: "活动2描述",
             freeCredit: "200",
-            cover: "权益2图片",
-            link: "权益2链接",
+            cover: "活动2图片",
+            link: "活动2链接",
             startTime: "2021-01-01",
             endTime: "2021-01-01",
             status: "online",
@@ -263,7 +263,7 @@ export const ActivityListPage = () => {
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
                                     navigate("/admin/activities-management/activity-detail", { state: record })
-                                }}>作品管理</Button>
+                                }}>详情</Button>
                                 <Button type="link" size="small" style={{ color: "green" }}
                                     onClick={() => {
                                         console.log("上线", record)

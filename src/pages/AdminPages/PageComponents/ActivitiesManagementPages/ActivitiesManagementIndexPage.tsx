@@ -18,6 +18,10 @@ export const ActivitiesManagementIndexPage = () => {
             pathname: "/admin/activities-management/activity-detail",
             crumb: "活动详情"
         },
+        {
+            pathname: "/admin/activities-management/activity-detail/project-detail",
+            crumb: "作品详情"
+        },
     ]  
 
     return (

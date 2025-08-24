@@ -24,6 +24,8 @@ import { RightListPage } from "./pages/AdminPages/PageComponents/RightsManagemen
 import { UserProfileDetailsPage } from "./pages/UserPages/ProfilePages/displays/UserProfileDetailsPage";
 import { RightManagementDetailsPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/displays/RightManagementDetailsPage";
 import { ActivityListPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityListPage";
+import { ProjectListPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectListPage";
+import { ProjectManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectManagementDetailsPage";
 import { ActivityManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityManagementDetailsPage";
 
 
@@ -58,7 +60,10 @@ function App() {
           </Route>
           <Route path="activities-management" element={<ActivitiesManagementIndexPage />} >
             <Route index element={<ActivityListPage />} />
-            <Route path="activity-detail" element={<ActivityManagementDetailsPage />} />
+            <Route path="activity-detail" element={<ActivityManagementDetailsPage />} >
+              <Route index element={<ProjectListPage />} />
+              <Route path="project-detail" element={<ProjectManagementDetailsPage />} />
+            </Route>
           </Route>
         </Route>
 
