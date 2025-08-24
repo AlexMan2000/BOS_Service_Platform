@@ -14,7 +14,7 @@ export const RightCard = (props: RightCardType) => {
     
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/rights/details`)
+            navigate(`/home/rights/details`, { state: props })
         }}>
             <Modal
                 open={isModalOpen}

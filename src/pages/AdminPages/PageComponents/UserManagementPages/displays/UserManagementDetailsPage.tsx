@@ -4,13 +4,12 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { TransactionOutlined } from "@ant-design/icons"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { TransferModal } from "@/commons/components/Modal/TransferModal"
 import { User } from "@/commons/types/user"
 
 
 export const UserManagementDetailsPage = () => {
-    const navigate = useNavigate()
 
     const { employeeNo, name, department, balance } = useLocation().state as User
 

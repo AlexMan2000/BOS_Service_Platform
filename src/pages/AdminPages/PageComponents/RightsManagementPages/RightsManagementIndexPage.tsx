@@ -17,7 +17,7 @@ export const RightsManagementIndexPage = () => {
             crumb: "权益管理"
         },
         {
-            pathname: "/admin/rights-management/rights-detail",
+            pathname: "/admin/rights-management/right-detail",
             crumb: "权益详情"
         },
     ]  

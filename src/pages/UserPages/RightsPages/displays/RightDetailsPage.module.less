@@ -1,0 +1,203 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .cover {
+        width: 400px;
+        height: 200px;
+        border-radius: 10px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .name {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .description {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .price {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .total {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .remain {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .active {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+        .expDate {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+            color: #666;
+
+            .label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #666;
+            }
+        }
+
+
+
+    }
+
+    .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #006cbe;
+        border: 1px solid #006cbe;
+        border-radius: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        align-self: flex-end;
+        text-align: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #006cbe;
+            scale: 1.05;
+            color: #fff;
+        }
+
+    }
+}
+
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .modalContentContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+
+        .inputContainer {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .buttonContainer {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            align-self: flex-end;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #006cbe;
+            border: 1px solid #006cbe;
+
+            &:hover {
+                background-color: #006cbe;  
+                color: #fff;
+                scale: 1.05;
+                border: 1px solid #fff;
+            }
+        }
+    }
+}

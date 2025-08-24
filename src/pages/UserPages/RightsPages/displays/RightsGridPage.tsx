@@ -14,7 +14,7 @@ export const RightsGridPage = () => {
             total: 100,
             remain: 100,
             active: true,
-            exp_date: "2021-01-01"
+            expDate: "2021-01-01"
         },  
         {
             name: "权益2",
@@ -24,7 +24,7 @@ export const RightsGridPage = () => {
             total: 200,
             remain: 200,
             active: true,
-            exp_date: "2021-01-01"
+            expDate: "2021-01-01"
         }
     ]
 
