@@ -12,7 +12,6 @@ interface GlobalState {
     isWindows: boolean
     isMac: boolean,
     isSideBarCollapsed: boolean,
-    currentApp: 'chat' | 'inbox'
 }
 
 
@@ -35,12 +34,11 @@ const initialState: GlobalState = {
     sessionId: '',
     locale: getInitialLocale(),
     isSideBarCollapsed: false,
-    pageStatus: "/dashboard",
+    pageStatus: "",
     pageIndex: 0,
     isMobile: false,
     isWindows: false,
     isMac: false,
-    currentApp: 'chat',
 }
 
 
@@ -55,8 +53,8 @@ export const globalSlice = createSlice({
             state.locale = action.payload.locale;
             localStorage.setItem("locale", state.locale);
         },
-        setIsSideBarCollapsed: (state, action) => {
-            state.isSideBarCollapsed = action.payload.isSideBarCollapsed;
+        setIsSideBarCollapsed: (state, action: PayloadAction<boolean>) => {
+            state.isSideBarCollapsed = action.payload;
         },
         setPageStatus: (state, action) => {
             state.pageStatus = action.payload.pageStatus;
@@ -74,9 +72,6 @@ export const globalSlice = createSlice({
             state.isWindows = isWindows;
             state.isMac = isMac;
         },
-        setCurrentApp: (state, action: PayloadAction<'chat' | 'inbox'>) => {
-            state.currentApp = action.payload;
-        }
     }
 })
 
@@ -89,7 +84,6 @@ export const { setSessionId
     , setOSInfo
     , setPageStatus
     , setPageIndex
-    , setCurrentApp
 } = globalSlice.actions
 
 export default globalSlice.reducer

@@ -1,59 +1,188 @@
 .container {
     width: 100%;
+    height: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
     padding: 20px 30px 0px;
+    position: relative;
+    justify-content: space-between;
 
-    .header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        // margin-top: 20px;
-        margin-bottom: 40px;
-    }
-
-    .menuItems {
+    .content {
         display: flex;
         flex-direction: column;
+        gap: 20px;
         width: 100%;
-        gap: 5px;
+        height: 100%;
 
-        .menuItem {
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .collapse {
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+
+        .menuItems {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 5px;
+
+            .menuItem {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                // justify-content: center;
+                gap: 25px;
+                width: 100%;
+                padding: 20px 10px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 20px;
+
+                transition: all 0.3s ease;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                }
+
+                &:hover {
+                    background-color: #838383;
+                    color: #fff;
+
+                    img {
+                        filter: invert(1);
+                    }
+                }
+
+                &.selected {
+                    background-color: #838383;
+                    color: #fff;
+
+                    img {
+                        filter: invert(1);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        padding: 20px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        position: relative;
+
+        .footerText {
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+            gap: 10px;
+        }
+
+        .footerAvatar {
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 25px;
-            width: 100%;
-            padding: 20px  10px;
+            gap: 10px;
+            position: relative;
+
+           
+            
+        }
+
+
+        .avatarMenu {
+            width: 200px;
+            height: 120px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+            position: absolute;
+            left: 0;
+            padding: 10px;
             border-radius: 10px;
-            cursor: pointer;
-            font-size: 20px;
+            top: -120px;
 
-            transition: all 0.3s ease;
-            img {
-                width: 30px;
-                height: 30px;
-            }
+            .avatarMenuItem {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                transition: all 0.3s ease;
 
-            &:hover {
-                background-color: #838383;
-                color: #fff;
-
-                img {
-                    filter: invert(1);
+                &:hover {
+                    background-color: #838383;
+                    color: #fff;
+                    border-radius: 10px;
                 }
             }
+        }
 
-            &.selected {
-                background-color: #838383;
-                color: #fff;
 
-                img {
-                    filter: invert(1);
+
+    }
+
+
+    &.collapsed {
+        padding: 20px 10px 0px;
+
+        .header {
+            justify-content: center;
+            .logo {
+                display: none;
+                width: 0px;
+                height: 0px;
+            }
+
+            
+        }
+
+        .content {
+            .menuItems {
+                .menuItem {
+                    justify-content: center;
+                    padding: 20px 10px;
+                    span {
+                        display: none;
+                    }
                 }
+            }
+        }
+
+        .footer {
+            justify-content: center;
+
+            .footerText {
+                display: none;
             }
         }
     }

@@ -16,6 +16,10 @@ import { ProjectGridPage } from "./pages/UserPages/ActivityPages/displays/Projec
 import { ProjectDetailPage } from "./pages/UserPages/ActivityPages/displays/ProjectDetailPage";
 import { RightsGridPage } from "./pages/UserPages/RightsPages/displays/RightsGridPage";
 import { RightDetailPage } from "./pages/UserPages/RightsPages/displays/RightDetailPage";
+import { UserProfileIndexPage } from "./pages/UserPages/ProfilePages/UserProfileIndexPage";
+import { UserRightsPage } from "./pages/UserPages/ProfilePages/displays/UserRightsPage";
+import { UserTransactionPage } from "./pages/UserPages/ProfilePages/displays/UserTransactionPage";
+import { UserDetailsPage } from "./pages/UserPages/ProfilePages/displays/UserDetailsPage";
 
 
 
@@ -65,7 +69,17 @@ function App() {
             <Route index element={<RightsGridPage />} />
             <Route path="detail" element={<RightDetailPage />} />
           </Route>
+          <Route path="profile" element={<UserProfileIndexPage />} >
+            <Route index element={<UserDetailsPage />} />
+            <Route path="details" element={<UserDetailsPage />} />
+            <Route path="rights" element={<UserRightsPage />} />
+            <Route path="transactions" element={<UserTransactionPage />} />
+          </Route>
         </Route>
+
+
+        
+
 
 
         {/* 用户页面 */}
