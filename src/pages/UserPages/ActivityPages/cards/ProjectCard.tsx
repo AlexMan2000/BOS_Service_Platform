@@ -15,7 +15,9 @@ export const ProjectCard = (props: ProjectCardType) => {
     const [money, setMoney] = useState<number>(0)
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/activities/projects/detail`)
+            navigate(`/home/activities/projects/detail`, {
+                state: props
+            })
         }}>
             <Modal
                 open={isModalOpen}

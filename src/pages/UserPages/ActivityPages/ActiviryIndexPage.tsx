@@ -13,15 +13,15 @@ export const ActivityIndexPage = () => {
         },
         {
             pathname: "/home/activities",
-            crumb: "活动"
+            crumb: "活动列表"
         },
         {
             pathname: "/home/activities/projects",
-            crumb: "项目"
+            crumb: "活动详情"
         },
         {
             pathname: "/home/activities/projects/detail",
-            crumb: "项目详情"
+            crumb: "作品详情"
         },
     ]
 

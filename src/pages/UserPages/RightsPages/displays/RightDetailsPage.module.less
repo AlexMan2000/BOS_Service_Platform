@@ -1,203 +1,394 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 24px;
+    background: #f5f5f5;
+    // min-height: 100vh;
 
-    .cover {
-        width: 400px;
-        height: 200px;
-        border-radius: 10px;
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-
-    .content {
+    .header {
         display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-        .name {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            font-weight: bold;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .description {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .price {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .total {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .remain {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .active {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-        .expDate {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                color: #666;
-            }
-        }
-
-
-
-    }
-
-    .button {
-        display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        margin-top: 20px;
-        font-size: 16px;
-        font-weight: bold;
-        color: #006cbe;
-        border: 1px solid #006cbe;
-        border-radius: 10px;
-        padding: 10px 20px;
-        cursor: pointer;
-        width: 150px;
-        height: 40px;
-        align-self: flex-end;
-        text-align: center;
+        margin-bottom: 24px;
+        padding: 20px 24px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        .headerActions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+    }
+
+    .rightCard {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
 
         &:hover {
-            background-color: #006cbe;
-            scale: 1.05;
-            color: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
-    }
-}
-
-
-.modalContent {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-    .modalContentContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-
-        .inputContainer {
+        .rightContent {
             display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-        }
+            gap: 32px;
+            padding: 24px;
 
-        .buttonContainer {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            align-self: flex-end;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 5px 20px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #006cbe;
-            border: 1px solid #006cbe;
+            .rightImageSection {
+                flex: 0 0 400px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
 
-            &:hover {
-                background-color: #006cbe;  
-                color: #fff;
-                scale: 1.05;
-                border: 1px solid #fff;
+                .rightImage {
+                    width: 100%;
+                    height: 300px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease;
+
+                    &:hover {
+                        transform: scale(1.02);
+                    }
+                }
+
+                .stockIndicator {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    padding: 16px;
+                    background: #fafafa;
+                    border-radius: 6px;
+                    border: 1px solid #f0f0f0;
+
+                    .stockBar {
+                        width: 100%;
+                        height: 8px;
+                        background: #f0f0f0;
+                        border-radius: 4px;
+                        overflow: hidden;
+
+                        .stockFill {
+                            height: 100%;
+                            transition: width 0.3s ease;
+                            border-radius: 4px;
+                        }
+                    }
+                }
+            }
+
+            .rightDetails {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+
+                .rightHeader {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    margin-bottom: 16px;
+
+                    .rightTitle {
+                        flex: 1;
+
+                        .statusTags {
+                            margin-top: 8px;
+                            display: flex;
+                            gap: 8px;
+                            flex-wrap: wrap;
+                        }
+                    }
+                }
+
+                .infoSection,
+                .priceSection,
+                .inventorySection,
+                .timeSection {
+                    .infoItem {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 8px;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+
+                .priceSection {
+                    padding: 16px;
+                    background: linear-gradient(135deg, #f6ffed 0%, #f0f9ff 100%);
+                    border-radius: 8px;
+                    border: 1px solid #b7eb8f;
+                }
+
+                .inventorySection {
+                    padding: 16px;
+                    background: #fafafa;
+                    border-radius: 8px;
+                    border: 1px solid #f0f0f0;
+                }
+
+                .timeSection {
+                    padding: 16px;
+                    background: #fffbf0;
+                    border-radius: 8px;
+                    border: 1px solid #ffe58f;
+                }
             }
         }
     }
+}
+
+// Modal styles
+.modalContent {
+    .modalTitle {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .modalCard {
+        .modalRightInfo {
+            text-align: center;
+            padding: 16px 0;
+
+            .modalRightName {
+                font-size: 20px;
+                font-weight: 600;
+                color: #262626;
+                margin-bottom: 12px;
+            }
+
+            .modalRightPrice {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 8px;
+
+                .price {
+                    color: #52c41a;
+                    font-weight: 600;
+                    font-size: 18px;
+                }
+            }
+
+            .modalRemainInfo {
+                font-size: 14px;
+                color: #666;
+
+                .lowStock {
+                    color: #ff4d4f;
+                    font-weight: 600;
+                }
+
+                .normalStock {
+                    color: #52c41a;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .inputSection {
+            .inputLabel {
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: #262626;
+            }
+
+            .inputContainer {
+                margin-bottom: 16px;
+            }
+
+            .totalPrice {
+                text-align: right;
+                font-size: 16px;
+                color: #666;
+
+                .totalAmount {
+                    color: #1890ff;
+                    font-weight: 600;
+                    font-size: 18px;
+                }
+            }
+        }
+
+        .modalActions {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #f0f0f0;
+
+            button {
+                flex: 1;
+                max-width: 160px;
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+    .container {
+        .rightCard {
+            .rightContent {
+                flex-direction: column;
+                gap: 24px;
+
+                .rightImageSection {
+                    flex: none;
+                    max-width: 500px;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+
+        .header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+
+            .headerActions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .rightCard {
+            .rightContent {
+                padding: 16px;
+                gap: 20px;
+
+                .rightImageSection {
+                    .rightImage {
+                        height: 200px;
+                    }
+                }
+
+                .rightDetails {
+                    .rightHeader {
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 12px;
+
+                        .rightTitle {
+                            .statusTags {
+                                justify-content: center;
+                            }
+                        }
+                    }
+
+                    .inventorySection {
+                        :global(.ant-space) {
+                            flex-direction: column;
+                            width: 100%;
+
+                            .ant-space-item {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .modalContent {
+        .modalActions {
+            flex-direction: column;
+
+            button {
+                max-width: none;
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 12px;
+
+        .rightCard {
+            .rightContent {
+                padding: 12px;
+
+                .rightImageSection {
+                    .rightImage {
+                        height: 160px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Animation
+.rightCard {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Custom ant design overrides
+:global(.ant-typography) {
+    color: #262626;
+}
+
+:global(.ant-typography-paragraph) {
+    margin-bottom: 0;
+}
+
+:global(.ant-modal-content) {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+:global(.ant-modal-header) {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 24px;
+}
+
+:global(.ant-modal-body) {
+    padding: 24px;
+}
+
+:global(.ant-card-body) {
+    padding: 0;
+}
+
+:global(.ant-input-number) {
+    border-radius: 6px;
+}
+
+:global(.ant-btn) {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+:global(.ant-tag) {
+    border-radius: 4px;
+    font-weight: 500;
 }

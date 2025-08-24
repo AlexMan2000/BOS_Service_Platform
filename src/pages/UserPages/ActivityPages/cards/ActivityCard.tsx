@@ -11,7 +11,9 @@ export const ActivityCard = (props: ActivityCardType) => {
 
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/activities/projects`)
+            navigate(`/home/activities/projects`, {
+                state: props
+            })
         }}>
 
             
