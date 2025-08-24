@@ -13,14 +13,16 @@ import { ActivityGridPage } from "./pages/UserPages/ActivityPages/displays/Activ
 import { ProjectGridPage } from "./pages/UserPages/ActivityPages/displays/ProjectGridPage";
 import { ProjectDetailPage } from "./pages/UserPages/ActivityPages/displays/ProjectDetailPage";
 import { RightsGridPage } from "./pages/UserPages/RightsPages/displays/RightsGridPage";
-import { RightDetailPage } from "./pages/UserPages/RightsPages/displays/RightDetailPage";
+import { RightDetailsPage } from "./pages/UserPages/RightsPages/displays/RightDetailsPage";
 import { UserProfileIndexPage } from "./pages/UserPages/ProfilePages/UserProfileIndexPage";
 import { UserRightsPage } from "./pages/UserPages/ProfilePages/displays/UserRightsPage";
 import { UserTransactionPage } from "./pages/UserPages/ProfilePages/displays/UserTransactionPage";
-import { UserDetailsPage } from "./pages/AdminPages/PageComponents/UserManagementPages/displays/UserDetailsPage";
+import { UserManagementDetailsPage } from "./pages/AdminPages/PageComponents/UserManagementPages/displays/UserManagementDetailsPage";
 import { UserListPage } from "./pages/AdminPages/PageComponents/UserManagementPages/displays/UserListPage";
 import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserManagementIndexPage";
-
+import { RightListPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/displays/RightListPage";
+import { UserProfileDetailsPage } from "./pages/UserPages/ProfilePages/displays/UserProfileDetailsPage";
+import { RightManagementDetailsPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/displays/RightManagementDetailsPage";
 
 
 
@@ -30,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* 公共页面 */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
 
@@ -43,11 +46,14 @@ function App() {
           </ProtectedRoute>
         }>
           <Route path="" element={<Navigate to="user-management" />} />
-          <Route path="user-management" element={<UserManagementIndexPage />} >
+          <Route path="user-management" element={<UserManagementIndexPage />} > 
             <Route index element={<UserListPage />} />
-            <Route path="user-detail" element={<UserDetailsPage />} />
+            <Route path="user-detail" element={<UserManagementDetailsPage />} />
           </Route>
-          <Route path="rights-management" element={<RightsManagementIndexPage />} />
+          <Route path="rights-management" element={<RightsManagementIndexPage />} >
+            <Route index element={<RightListPage />} />
+            <Route path="right-detail" element={<RightManagementDetailsPage />} />
+          </Route>
           <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />
         </Route>
 
@@ -68,30 +74,15 @@ function App() {
           </Route>
           <Route path="rights" element={<RightsIndexPage />} >
             <Route index element={<RightsGridPage />} />
-            <Route path="detail" element={<RightDetailPage />} />
+            <Route path="details" element={<RightDetailsPage />} />
           </Route>
           <Route path="profile" element={<UserProfileIndexPage />} >
-            <Route index element={<UserDetailsPage />} />
-            <Route path="details" element={<UserDetailsPage />} />
+            <Route index element={<UserProfileDetailsPage />} />
+            <Route path="details" element={<UserProfileDetailsPage />} />
             <Route path="rights" element={<UserRightsPage />} />
             <Route path="transactions" element={<UserTransactionPage />} />
           </Route>
         </Route>
-
-
-        
-
-
-
-        {/* 用户页面 */}
-        {/* <Route path="/profile" element={
-          <ProtectedRoute
-            login_required={true}
-            admin_required={false}
-          >
-            <UserIndexPage />
-          </ProtectedRoute>
-        }></Route> */}
 
       </Routes>
     </BrowserRouter>

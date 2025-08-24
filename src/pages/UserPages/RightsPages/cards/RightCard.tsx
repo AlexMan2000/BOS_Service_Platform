@@ -6,7 +6,7 @@ import { useState } from "react"
 import { InfoCircleOutlined } from "@ant-design/icons"
 
 export const RightCard = (props: RightCardType) => {
-    const { name, description, price, image, total, remain, active, exp_date } = props
+    const { name, description, price, image, total, remain, active, expDate } = props
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [amount, setAmount] = useState<number>(0)
@@ -14,7 +14,7 @@ export const RightCard = (props: RightCardType) => {
     
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/rights/detail`)
+            navigate(`/home/rights/details`)
         }}>
             <Modal
                 open={isModalOpen}
@@ -101,7 +101,7 @@ export const RightCard = (props: RightCardType) => {
                     {active ? "有效" : "无效"}
                 </div>
                 <div className={styles.startTime}>
-                    过期时间: {exp_date}
+                    过期时间: {expDate}
                 </div>
                 <div className={styles.price}>
                     价格: {price}

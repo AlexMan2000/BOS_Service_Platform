@@ -20,6 +20,8 @@ export type GenericEditableTableProps<T extends object> = {
     scroll?: { x?: number | string; y?: number | string }
     headerTitle?: React.ReactNode
     onSave?: (rowKey: React.Key, data: T, row: T) => Promise<void>
+    size?: 'small' | 'middle' | 'large'
+    pagination?: false | object
 }
 
 export const GenericEditableTable = <T extends object>(props: GenericEditableTableProps<T>) => {
@@ -35,6 +37,8 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         scroll,
         headerTitle,
         onSave,
+        size,
+        pagination,
         } = props
 
 
@@ -92,9 +96,11 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         <EditableProTable<T>
             rowKey={rowKey as any}
             headerTitle={headerTitle}
-            scroll={scroll}
+            scroll={scroll || { x: 'max-content', y: 400 }}
             recordCreatorProps={recordCreatorProps as any}
             loading={!!loading}
+            size={size || 'small'}
+            pagination={pagination ?? false}
             toolBarRender={() => [
                 <Button
                     key="addOne"

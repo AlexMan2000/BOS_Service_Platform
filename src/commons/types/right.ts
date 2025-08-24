@@ -9,11 +9,11 @@ export interface Right {
     total: number,
     remain: number,
     active: boolean,
-    exp_date: string,
+    expDate: string,
     deleted?: boolean,
-    created_by?: string,
-    created_time?: string,
-    updated_time?: string
+    createdBy?: string,
+    createdTime?: string,
+    updatedTime?: string
 }
 
 export interface RightCardType extends Right {

@@ -1,6 +1,5 @@
 import { Button, Upload } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
-import templateUrl from "@/assets/templates/user_import_template.csv?url";
 import styles from "./GenericCSVFileImport.module.less"
 
 

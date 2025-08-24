@@ -15,7 +15,7 @@ export const RightsIndexPage = () => {
             crumb: "权益"
         },
         {
-            pathname: "/home/rights/detail",
+            pathname: "/home/rights/details",
             crumb: "权益详情"
         }
     ]

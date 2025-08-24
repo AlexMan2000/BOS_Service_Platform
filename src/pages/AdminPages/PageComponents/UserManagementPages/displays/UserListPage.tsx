@@ -7,20 +7,21 @@ import { useState } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
-import templateUrl from "@/assets/templates/user_import_template.csv?url";
+import templateUrl from "@/assets/templates/user_batch_import_template.csv?url";
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
-import {wait} from "@/commons/utils/sys_utils"
+import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 
 export const UserListPage = () => {
-    
+
     const navigate = useNavigate()
 
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
-    const [dataSource, setDataSource] = useState<User[]>([])
+    const [importDataSource, setImportDataSource] = useState<User[]>([])
+    const [transferDataSource, setTransferDataSource] = useState<User[]>([])
     // 配置
     const DEFAULT_NEW_ROW = {
         employeeNo: (Math.random() * 1000000).toFixed(0),
@@ -37,9 +38,9 @@ export const UserListPage = () => {
         updatedTime: new Date().toISOString()
     }
 
-   
 
-    const PROCOLUMNS_CONFIGS: ProColumns<User>[] = [
+
+    const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<User>[] = [
         {
             title: 'Employee No',
             dataIndex: 'employeeNo',
@@ -93,6 +94,37 @@ export const UserListPage = () => {
     ]
 
 
+    const PROCOLUMNS_TRANSGER_CONFIGS: ProColumns<User>[] = [
+        {
+            title: 'Employee No',
+            dataIndex: 'employeeNo',
+            key: 'employeeNo',
+            width: 120,
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        whitespace: true,
+                        message: '此项是必填项',
+                    },
+                ],
+            },
+        },
+        {
+            title: 'money',
+            dataIndex: 'money',
+            key: 'money',
+            width: 100,
+        },
+        {
+            title: 'reason',
+            dataIndex: 'reason',
+            key: 'reason',
+            width: 120,
+        }
+    ]
+
+
 
     // 默认数据
     const DEFAULT_DATA_DISPLAY: User[] = [
@@ -126,30 +158,6 @@ export const UserListPage = () => {
         },
     ]
 
-    // 表格导入
-    const TableImport = () => (
-        <GenericEditableTable<User>
-            dataSource={dataSource}
-            setDataSource={setDataSource}
-            columns={PROCOLUMNS_CONFIGS}
-            rowKey="employeeNo"
-            recordCreatorProps={false}
-            defaultNewRow={DEFAULT_NEW_ROW}
-            editable={{
-                type: 'multiple',
-            }}
-            onSave={async (rowKey: React.Key, data: User, row: User) => {
-                console.log('Saving row:', rowKey, data, row);
-                await wait(1);
-            }}
-        />
-    )
-
-    // Excel导入
-    const ExcelImport = () => (
-        <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
-    )
-
 
     return (
         <div className={styles.container}>
@@ -158,7 +166,7 @@ export const UserListPage = () => {
                 open={isBatchImportModalOpen}
                 onCancel={() => setIsBatchImportModalOpen(false)}
                 onOk={() => {
-                    console.log('onOk', dataSource)
+                    console.log('onOk', importDataSource)
                 }}
                 title="批量导入"
                 width={1000}
@@ -169,12 +177,28 @@ export const UserListPage = () => {
                             {
                                 key: '1',
                                 label: '表格导入',
-                                children: TableImport()
+                                children: <GenericEditableTable<User>
+                                    dataSource={importDataSource}
+                                    setDataSource={setImportDataSource}
+                                    columns={PROCOLUMNS_IMPORT_CONFIGS}
+                                    rowKey="employeeNo"
+                                    recordCreatorProps={false}
+                                    defaultNewRow={DEFAULT_NEW_ROW}
+                                    editable={{
+                                        type: 'multiple',
+                                    }}
+                                    scroll={{ x: 'max-content', y: 300 }}
+                                    size="small"
+                                    onSave={async (rowKey: React.Key, data: User, row: User) => {
+                                        console.log('Saving row:', rowKey, data, row);
+                                        await wait(1);
+                                    }}
+                                />
                             },
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: ExcelImport()
+                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
                             }
                         ]} />
                     </div>
@@ -182,15 +206,46 @@ export const UserListPage = () => {
                 </div>
             </Modal>
 
+
+            
+
             <Modal
                 open={isBatchTransferModalOpen}
                 onCancel={() => setIsBatchTransferModalOpen(false)}
-                title="批量转账"
+                title="批量发放"
             >
                 <div className={styles.modalContent}>
                     <div className={styles.modalHeader}>
-                        <h2>新增发放</h2>
+                        <Tabs items={[
+                            {
+                                key: '1',
+                                label: '表格导入',
+                                children: <GenericEditableTable<User>
+                                    dataSource={transferDataSource}
+                                    setDataSource={setTransferDataSource}
+                                    columns={PROCOLUMNS_TRANSGER_CONFIGS}
+                                    rowKey="employeeNo"
+                                    recordCreatorProps={false}
+                                    defaultNewRow={DEFAULT_NEW_ROW}
+                                    editable={{
+                                        type: 'multiple',
+                                    }}
+                                    scroll={{ x: 'max-content', y: 300 }}
+                                    size="small"
+                                    onSave={async (rowKey: React.Key, data: User, row: User) => {
+                                        console.log('Saving row:', rowKey, data, row);
+                                        await wait(1);
+                                    }}
+                                />
+                            },
+                            {
+                                key: '2',
+                                label: 'Excel导入',
+                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
+                            }
+                        ]} />
                     </div>
+
                 </div>
             </Modal>
 
@@ -201,8 +256,14 @@ export const UserListPage = () => {
                         <Input placeholder="搜索" />
                     </div>
                     <div className={styles.addUser}>
-                        <Button type="primary" onClick={() => setIsBatchImportModalOpen(true)}>新增用户</Button>
-                        <Button type="primary" onClick={() => setIsBatchTransferModalOpen(true)}>新增发放</Button>
+                        <Button type="primary" onClick={() => {
+                            setImportDataSource([])
+                            setIsBatchImportModalOpen(true)}}
+                        >新增用户</Button>
+                        <Button type="primary" onClick={() => {
+                            setTransferDataSource([])
+                            setIsBatchTransferModalOpen(true)
+                        }}>新增发放</Button>
                     </div>
                 </div>
                 <Table<User> dataSource={DEFAULT_DATA_DISPLAY}>
@@ -224,7 +285,7 @@ export const UserListPage = () => {
                         render={(_: any, record: User) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
-                                    navigate("/admin/user-management/user-detail", { state:  record }) 
+                                    navigate("/admin/user-management/user-detail", { state: record })
                                 }}>查看</Button>
                                 <Button type="link" size="small" style={{ color: "#ff4d4f" }} >删除</Button>
                             </Space>
