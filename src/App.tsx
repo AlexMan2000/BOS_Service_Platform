@@ -5,10 +5,8 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./store/slice/userSlice/userSlice";
 import { AdminIndexPage } from "./pages/AdminPages/AdminIndexPage";
 import { LoginPage } from "./pages/PublicPages/LoginPage";
-import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserManagementIndexPage";
 import { RightsManagementIndexPage } from "./pages/AdminPages/PageComponents/RightsManagementPages/RightsManagementIndexPage";
 import { ActivitiesManagementIndexPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/ActivitiesManagementIndexPage";
-import { UserDetailPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserDetailPage";
 import { ActivityIndexPage } from "./pages/UserPages/ActivityPages/ActiviryIndexPage";
 import { RightsIndexPage } from "./pages/UserPages/RightsPages/RightsIndexPage";
 import { ActivityGridPage } from "./pages/UserPages/ActivityPages/displays/ActivityGridPage";
@@ -19,7 +17,9 @@ import { RightDetailPage } from "./pages/UserPages/RightsPages/displays/RightDet
 import { UserProfileIndexPage } from "./pages/UserPages/ProfilePages/UserProfileIndexPage";
 import { UserRightsPage } from "./pages/UserPages/ProfilePages/displays/UserRightsPage";
 import { UserTransactionPage } from "./pages/UserPages/ProfilePages/displays/UserTransactionPage";
-import { UserDetailsPage } from "./pages/UserPages/ProfilePages/displays/UserDetailsPage";
+import { UserDetailsPage } from "./pages/AdminPages/PageComponents/UserManagementPages/displays/UserDetailsPage";
+import { UserListPage } from "./pages/AdminPages/PageComponents/UserManagementPages/displays/UserListPage";
+import { UserManagementIndexPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserManagementIndexPage";
 
 
 
@@ -44,7 +44,8 @@ function App() {
         }>
           <Route path="" element={<Navigate to="user-management" />} />
           <Route path="user-management" element={<UserManagementIndexPage />} >
-            <Route path="user-detail" element={<UserDetailPage />} />
+            <Route index element={<UserListPage />} />
+            <Route path="user-detail" element={<UserDetailsPage />} />
           </Route>
           <Route path="rights-management" element={<RightsManagementIndexPage />} />
           <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />

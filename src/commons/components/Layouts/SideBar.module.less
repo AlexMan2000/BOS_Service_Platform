@@ -45,6 +45,7 @@
             flex-direction: column;
             width: 100%;
             gap: 5px;
+            overflow: hidden;
 
             .menuItem {
                 display: flex;
@@ -57,6 +58,10 @@
                 border-radius: 10px;
                 cursor: pointer;
                 font-size: 20px;
+                line-clamp: 1;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
 
                 transition: all 0.3s ease;
 

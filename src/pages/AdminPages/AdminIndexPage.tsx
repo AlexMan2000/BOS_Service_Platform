@@ -5,6 +5,8 @@ import { Outlet } from "react-router-dom"
 import userManagementIcon from "@/assets/icons/userManagement.png"
 import rightManagementIcon from "@/assets/icons/rightManagement.png"
 import activityManagementIcon from "@/assets/icons/activityManagement.png"
+import { useSelector } from "react-redux"
+import { selectGlobalState } from "@/store/slice/globalSlice/globalSlice"
 
 export const AdminIndexPage = () => {
     const menuItems = [
@@ -26,12 +28,15 @@ export const AdminIndexPage = () => {
     ]
 
     const defaultSelectedKey = "/admin/user-management"
+
+    const { isSideBarCollapsed } = useSelector(selectGlobalState)
+
     return (
         <div className={styles.container}>
-            <div className={styles.sideBar}>
+            <div className={`${styles.sideBar} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
                 <SideBar menuItems={menuItems} defaultSelectedKey={defaultSelectedKey} />
             </div>
-            <div className={styles.mainContent}>
+            <div className={`${styles.mainContent} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
                 <Outlet />
             </div>
         </div>
