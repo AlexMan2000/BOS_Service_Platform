@@ -11,6 +11,7 @@ import templateUrl from "@/assets/templates/user_import_template.csv?url";
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import {wait} from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
+import { BreadcrumbConfig } from "@/commons/types/configs"
 
 
 export const UserManagementIndexPage = () => {
@@ -35,7 +36,7 @@ export const UserManagementIndexPage = () => {
         updatedTime: new Date().toISOString()
     }
 
-    const BREADCRUMBS_CONFIGS = [
+    const BREADCRUMBS_CONFIGS: BreadcrumbConfig[] = [
         {
             pathname: "/admin",
             crumb: "管理员"

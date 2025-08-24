@@ -6,17 +6,12 @@ import MobileDetect from "mobile-detect"
 interface GlobalState {
     sessionId: string
     locale: string
-    sideBarCollapse: boolean
     pageStatus: string
     pageIndex: number
     isMobile: boolean
     isWindows: boolean
     isMac: boolean,
-    anyChangeOnCurrentPage: boolean // used for protective outgoing link jumping
-    shouldTriggerRefresh: boolean // used for protective outgoing link jumping
-    isChatSideBarCollapsed: boolean
-    isInboxSideBarCollapsed: boolean
-    isSettingModalOpen: boolean
+    isSideBarCollapsed: boolean,
     currentApp: 'chat' | 'inbox'
 }
 
@@ -39,18 +34,13 @@ const getInitialLocale = () => {
 const initialState: GlobalState = {
     sessionId: '',
     locale: getInitialLocale(),
-    sideBarCollapse: false,
+    isSideBarCollapsed: false,
     pageStatus: "/dashboard",
     pageIndex: 0,
     isMobile: false,
     isWindows: false,
     isMac: false,
-    anyChangeOnCurrentPage: false,
-    shouldTriggerRefresh: false,
-    isChatSideBarCollapsed: false,
-    isInboxSideBarCollapsed: false,
-    isSettingModalOpen: false,
-    currentApp: 'chat'
+    currentApp: 'chat',
 }
 
 
@@ -65,8 +55,8 @@ export const globalSlice = createSlice({
             state.locale = action.payload.locale;
             localStorage.setItem("locale", state.locale);
         },
-        setSideBarCollapse: (state, action) => {
-            state.sideBarCollapse = action.payload.sideBarCollapse;
+        setIsSideBarCollapsed: (state, action) => {
+            state.isSideBarCollapsed = action.payload.isSideBarCollapsed;
         },
         setPageStatus: (state, action) => {
             state.pageStatus = action.payload.pageStatus;
@@ -84,21 +74,6 @@ export const globalSlice = createSlice({
             state.isWindows = isWindows;
             state.isMac = isMac;
         },
-        setAnyChangeOnCurrentPage: (state, action: PayloadAction<boolean>) => {
-            state.anyChangeOnCurrentPage = action.payload;
-        },
-        setShouldTriggerRefresh: (state, action: PayloadAction<boolean>) => {
-            state.shouldTriggerRefresh = action.payload;
-        },
-        setIsChatSideBarCollapsed: (state, action: PayloadAction<boolean>) => {
-            state.isChatSideBarCollapsed = action.payload;
-        },
-        setIsInboxSideBarCollapsed: (state, action: PayloadAction<boolean>) => {
-            state.isInboxSideBarCollapsed = action.payload;
-        },
-        setIsSettingModalOpen: (state, action: PayloadAction<boolean>) => {
-            state.isSettingModalOpen = action.payload;
-        },
         setCurrentApp: (state, action: PayloadAction<'chat' | 'inbox'>) => {
             state.currentApp = action.payload;
         }
@@ -110,15 +85,10 @@ export const selectGlobalState = (state: RootState) => state.global
 
 export const { setSessionId
     , setLocale
-    , setSideBarCollapse
+    , setIsSideBarCollapsed
     , setOSInfo
     , setPageStatus
     , setPageIndex
-    , setAnyChangeOnCurrentPage
-    , setShouldTriggerRefresh
-    , setIsChatSideBarCollapsed
-    , setIsInboxSideBarCollapsed
-    , setIsSettingModalOpen
     , setCurrentApp
 } = globalSlice.actions
 
