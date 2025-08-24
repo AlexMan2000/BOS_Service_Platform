@@ -39,6 +39,7 @@ function App() {
           <Route path="activities-management" element={<ActivitiesManagementIndexPage />} />
         </Route>
 
+        {/* 用户页面 */}
         <Route path="/home" element={
           <ProtectedRoute
             login_required={true}

@@ -1,36 +1,23 @@
-import styles from "./SideBar.module.less"
-import { UsergroupAddOutlined, UserOutlined } from "@ant-design/icons"
-import userManagementIcon from "@/assets/icons/userManagement.png"
-import rightManagementIcon from "@/assets/icons/rightManagement.png"
-import activityManagementIcon from "@/assets/icons/activityManagement.png"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import styles from "./SideBar.module.less"
 
+interface SideBarProps {
+    menuItems: {
+        label: string
+        path: string
+        icon: string
+    }[],
+    defaultSelectedKey: string
+}
 
-export const SideBar = () => {
+export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
     const navigate = useNavigate()
 
     // 当前选中的菜单项
-    const [selectedKey, setSelectedKey] = useState<string>("/admin/user-management")
+    const [selectedKey, setSelectedKey] = useState<string>(defaultSelectedKey)
 
-    const menuItems = [
-        {
-            label: "个人账户管理",
-            path: "/admin/user-management",
-            icon: userManagementIcon
-        },
-        {
-            label: "权益账户管理",
-            path: "/admin/rights-management",
-            icon: rightManagementIcon
-        },
-        {
-            label: "活动账户管理",
-            path: "/admin/activities-management",
-            icon: activityManagementIcon
-        },
-    ]
 
     return (
         <div className={styles.container}>
