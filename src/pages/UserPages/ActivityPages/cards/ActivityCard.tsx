@@ -1,11 +1,15 @@
 import styles from "./ActivityCard.module.less"
 import { ActivityCard as ActivityCardType } from "@/commons/types/activity"
+import { useNavigate } from "react-router-dom"
 
 
 export const ActivityCard = (props: ActivityCardType) => {
     const { name, description, cover, status, startTime, endTime } = props
+    const navigate = useNavigate()
     return (
-        <div className={styles.container}>
+        <div className={styles.container} onClick={() => {
+            navigate(`/home/activity/project`)
+        }}>
             <div className={styles.cover}>
                 <img src={cover} alt={name} />
             </div>

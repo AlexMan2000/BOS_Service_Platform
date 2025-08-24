@@ -11,8 +11,9 @@ import { ActivitiesManagementIndexPage } from "./pages/AdminPages/PageComponents
 import { UserDetailPage } from "./pages/AdminPages/PageComponents/UserManagementPages/UserDetailPage";
 import { ActivityIndexPage } from "./pages/UserPages/ActivityPages/ActiviryIndexPage";
 import { RightsIndexPage } from "./pages/UserPages/RightsPages/RightsIndexPage";
-import { ActivityDetailPage } from "./pages/UserPages/ActivityPages/ActivityDetailPage";
-
+import { ActivityGridPage } from "./pages/UserPages/ActivityPages/displays/ActivityGridPage";
+import { ProjectGridPage } from "./pages/UserPages/ActivityPages/displays/ProjectGridPage";
+import { ProjectDetailPage } from "./pages/UserPages/ActivityPages/displays/ProjectDetailPage";
 function App() {
 
 
@@ -50,7 +51,9 @@ function App() {
         }>
           <Route path="" element={<Navigate to="activity" />} />
           <Route path="activity" element={<ActivityIndexPage />} >
-            <Route path="project" element={<ActivityDetailPage />} />
+            <Route index element={<ActivityGridPage />} />
+            <Route path="project" element={<ProjectGridPage />} />
+            <Route path="project/detail" element={<ProjectDetailPage  />} />
           </Route>
           <Route path="rights" element={<RightsIndexPage />} />
         </Route>
