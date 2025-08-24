@@ -1,10 +1,11 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import {  useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import styles from "./SideBar.module.less"
-import { Avatar } from "antd"
+import { AutoComplete, AutoCompleteProps, Avatar, Form, Input, Modal } from "antd"
 import { MenuFoldOutlined, TransactionOutlined, UserOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import { selectGlobalState, setIsSideBarCollapsed } from "@/store/slice/globalSlice/globalSlice";
+import { TransferModal } from "../Modal/TransferModal"
 
 interface SideBarProps {
     menuItems: {
@@ -24,14 +25,21 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
     const [avatarMenuOpen, setAvatarMenuOpen] = useState(false)
     const menuClickRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
+    const [transferForm] = Form.useForm()
+
     const { isSideBarCollapsed } = useSelector(selectGlobalState)
-    console.log("isSideBarCollapsed", isSideBarCollapsed)
+    const [transferOpen, setTransferOpen] = useState(false)
+    const [searchOptions, setSearchOptions] = useState<AutoCompleteProps['options']>([]);
+
 
     const pathname = useLocation().pathname
 
     useEffect(() => {
         setSelectedKey(pathname)
     }, [pathname])
+
+
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuClickRef.current && !menuClickRef.current.contains(event.target as Node)) {
@@ -46,6 +54,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
     return (
         <div className={styles.container + " " + (isSideBarCollapsed ? styles.collapsed : "")} >
+            <TransferModal transferOpen={transferOpen} setTransferOpen={setTransferOpen} title="转账" />
             <div className={styles.content}>
                 <div className={styles.header}>
                     <div className={styles.logo}>
@@ -92,7 +101,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                     </div>
                     <div className={styles.avatarMenuItem} onClick={(e) => {
                         e.stopPropagation()
-                        console.log("个人中心")
+                        setTransferOpen(true)
                     }}>
                         <TransactionOutlined /><span>极速转账</span>
                     </div>

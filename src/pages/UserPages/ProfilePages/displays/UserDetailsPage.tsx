@@ -5,59 +5,24 @@ import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { TransactionOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
+import { TransferModal } from "@/commons/components/Modal/TransferModal"
 
 export const UserDetailsPage = () => {
     const navigate = useNavigate()
 
     const [userForm] = Form.useForm()
-    const [transferForm] = Form.useForm()
     const [edit, setEdit] = useState(false)
     const [transferOpen, setTransferOpen] = useState(false)
 
-
-    const [searchOptions, setSearchOptions] = useState<AutoCompleteProps['options']>([]);
-
     const { employeeNo, name, department, createdTime, createdBy, lastLogin, balance, role, isAuthenticated } = useSelector(selectUser)
-
-
-
 
     return (
         <div className={styles.container}>
-            <Modal
+            <TransferModal
                 title="转账"
-                open={transferOpen}
-                onCancel={() => {
-                    setTransferOpen(false)
-                }}
-                onOk={() => {
-                    transferForm.submit()
-                }}>
-                <Form form={transferForm} onFinish={() => {
-                    console.log(transferForm.getFieldsValue())
-                    setTransferOpen(false)
-                }}>
-                    <Form.Item label="目标账号类型" name="targetType" rules={[{ required: true, message: "请输入目标账号类型" }]}>
-                        <Input placeholder="请输入目标账号类型" />
-                    </Form.Item>
-                    <Form.Item label="目标账号" name="targetAccount" rules={[{ required: true, message: "请输入目标账号" }]}>
-                        <AutoComplete
-                            options={searchOptions}
-                            placeholder="请输入目标账号"
-                            onSearch={(value) => {
-                                // 网络请求
-                                setSearchOptions([{ label: value, value: value }])
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item label="转账金额" name="amount" rules={[{ required: true, message: "请输入转账金额" }]}>
-                        <Input placeholder="请输入转账金额" />
-                    </Form.Item>
-                    <Form.Item label="转账事由" name="remark" rules={[{ required: true, message: "请输入转账备注" }]}>
-                        <Input.TextArea placeholder="请输入转账备注" />
-                    </Form.Item>
-                </Form>
-            </Modal>
+                transferOpen={transferOpen}
+                setTransferOpen={setTransferOpen}
+            />
             <div className={styles.header}>
                 <div className={styles.edit} onClick={() => {
                     if (edit) {
