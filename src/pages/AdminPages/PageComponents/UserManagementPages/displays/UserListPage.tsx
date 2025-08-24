@@ -221,10 +221,10 @@ export const UserListPage = () => {
                         title="Action"
                         key="action"
                         width={150}
-                        render={(_: any, __: User) => (
+                        render={(_: any, record: User) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
-                                    navigate("/admin/user-management/user-detail")
+                                    navigate("/admin/user-management/user-detail", { state:  record }) 
                                 }}>查看</Button>
                                 <Button type="link" size="small" style={{ color: "#ff4d4f" }} >删除</Button>
                             </Space>
