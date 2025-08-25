@@ -9,7 +9,7 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { ActivitySubmitType, Activity, ActivityTableType, ActivityTransferSubmitType } from "@/commons/types/activity"
+import { ActivitySubmitType, ActivityTableType, ActivityTransferSubmitType } from "@/commons/types/activity"
 
 
 export const ActivityListPage = () => {
