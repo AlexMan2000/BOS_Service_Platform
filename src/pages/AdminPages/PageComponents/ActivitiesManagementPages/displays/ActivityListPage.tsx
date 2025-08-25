@@ -244,7 +244,9 @@ export const ActivityListPage = () => {
                         >批量发放</Button>
                     </div>
                 </div>
-                <Table<ActivityTableType> dataSource={DEFAULT_DATA_DISPLAY}>
+                <Table<ActivityTableType> dataSource={DEFAULT_DATA_DISPLAY}
+                    scroll={{ x: 1000 }}
+                >
                     <Column title="Name" dataIndex="name" key="name" />
                     <Column title="Description" dataIndex="description" key="description" />
                     <Column title="Free Credit" dataIndex="freeCredit" key="freeCredit" />

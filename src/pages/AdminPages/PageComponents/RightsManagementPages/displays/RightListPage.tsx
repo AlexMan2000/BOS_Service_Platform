@@ -221,7 +221,9 @@ export const RightListPage = () => {
                         >新增权益</Button>
                     </div>
                 </div>
-                <Table<Right> dataSource={DEFAULT_DATA_DISPLAY}>
+                <Table<Right> dataSource={DEFAULT_DATA_DISPLAY}
+                    scroll={{ x: 1000 }}
+                >
                     <Column title="Name" dataIndex="name" key="name" />
                     <Column title="Description" dataIndex="description" key="description" />
                     <Column title="Price" dataIndex="price" key="price" />

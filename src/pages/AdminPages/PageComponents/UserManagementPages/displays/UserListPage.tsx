@@ -266,7 +266,9 @@ export const UserListPage = () => {
                         }}>新增发放</Button>
                     </div>
                 </div>
-                <Table<User> dataSource={DEFAULT_DATA_DISPLAY}>
+                <Table<User> dataSource={DEFAULT_DATA_DISPLAY}
+                    scroll={{ x: 1000 }}
+                    >
                     <Column title="Name" dataIndex="name" key="name" />
                     <Column title="Employee No" dataIndex="employeeNo" key="employeeNo" />
                     <Column title="Department" dataIndex="department" key="department" />
