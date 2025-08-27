@@ -1,5 +1,4 @@
-
-import { User } from "@/commons/types/user"
+import { User, UserSubmitType, UserTransferSubmitType } from "@/commons/types/user"
 import styles from "./UserListPage.module.less"
 import { Button, Input, Modal, Space } from "antd"
 import dayjs from "dayjs"
@@ -20,10 +19,10 @@ export const UserListPage = () => {
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
-    const [importDataSource, setImportDataSource] = useState<User[]>([])
-    const [transferDataSource, setTransferDataSource] = useState<User[]>([])
+    const [importDataSource, setImportDataSource] = useState<UserSubmitType[]>([])
+    const [transferDataSource, setTransferDataSource] = useState<UserTransferSubmitType[]>([])
     // 配置
-    const DEFAULT_NEW_ROW = {
+    const DEFAULT_NEW_ROW_IMPORT = {
         employeeNo: (Math.random() * 1000000).toFixed(0),
         password: '',
         phone: '',
@@ -31,16 +30,17 @@ export const UserListPage = () => {
         name: '',
         department: '',
         balance: '0',
-        deleted: false,
-        lastLogin: '',
-        createdTime: new Date().toISOString(),
-        createdBy: 'admin',
-        updatedTime: new Date().toISOString()
+    }
+
+    const DEFAULT_NEW_ROW_TRANSFER = {
+        employeeNo: (Math.random() * 1000000).toFixed(0),
+        money: '0',
+        reason: '',
     }
 
 
 
-    const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<User>[] = [
+    const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<UserSubmitType>[] = [
         {
             title: 'Employee No',
             dataIndex: 'employeeNo',
@@ -94,7 +94,7 @@ export const UserListPage = () => {
     ]
 
 
-    const PROCOLUMNS_TRANSGER_CONFIGS: ProColumns<User>[] = [
+    const PROCOLUMNS_TRANSGER_CONFIGS: ProColumns<UserTransferSubmitType>[] = [
         {
             title: 'Employee No',
             dataIndex: 'employeeNo',
@@ -177,19 +177,19 @@ export const UserListPage = () => {
                             {
                                 key: '1',
                                 label: '表格导入',
-                                children: <GenericEditableTable<User>
+                                children: <GenericEditableTable<UserSubmitType>
                                     dataSource={importDataSource}
                                     setDataSource={setImportDataSource}
                                     columns={PROCOLUMNS_IMPORT_CONFIGS}
                                     rowKey="employeeNo"
                                     recordCreatorProps={false}
-                                    defaultNewRow={DEFAULT_NEW_ROW}
+                                    defaultNewRow={DEFAULT_NEW_ROW_IMPORT}
                                     editable={{
                                         type: 'multiple',
                                     }}
                                     scroll={{ x: 'max-content', y: 300 }}
                                     size="small"
-                                    onSave={async (rowKey: React.Key, data: User, row: User) => {
+                                    onSave={async (rowKey: React.Key, data: UserSubmitType, row: UserSubmitType) => {
                                         console.log('Saving row:', rowKey, data, row);
                                         await wait(1);
                                     }}
@@ -213,6 +213,9 @@ export const UserListPage = () => {
                 open={isBatchTransferModalOpen}
                 onCancel={() => setIsBatchTransferModalOpen(false)}
                 title="批量发放"
+                onOk={() => {
+                    console.log('onOk', transferDataSource)
+                }}
             >
                 <div className={styles.modalContent}>
                     <div className={styles.modalHeader}>
@@ -220,19 +223,19 @@ export const UserListPage = () => {
                             {
                                 key: '1',
                                 label: '表格导入',
-                                children: <GenericEditableTable<User>
+                                children: <GenericEditableTable<UserTransferSubmitType>
                                     dataSource={transferDataSource}
                                     setDataSource={setTransferDataSource}
                                     columns={PROCOLUMNS_TRANSGER_CONFIGS}
                                     rowKey="employeeNo"
                                     recordCreatorProps={false}
-                                    defaultNewRow={DEFAULT_NEW_ROW}
+                                    defaultNewRow={DEFAULT_NEW_ROW_TRANSFER}
                                     editable={{
                                         type: 'multiple',
                                     }}
                                     scroll={{ x: 'max-content', y: 300 }}
                                     size="small"
-                                    onSave={async (rowKey: React.Key, data: User, row: User) => {
+                                    onSave={async (rowKey: React.Key, data: UserTransferSubmitType, row: UserTransferSubmitType ) => {
                                         console.log('Saving row:', rowKey, data, row);
                                         await wait(1);
                                     }}

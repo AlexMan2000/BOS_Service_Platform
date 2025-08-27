@@ -14,3 +14,24 @@ export interface User {
     updatedTime: string; // 更新时间
 }
 
+
+/**
+ * 批量导入用户提交类型
+ */
+export interface UserSubmitType {
+    employeeNo: string,
+    name: string,
+    phone: string,
+    role: string,
+    department: string,
+    balance: string,
+}
+
+/**
+ * 批量发放用户提交类型
+ */
+export interface UserTransferSubmitType {
+    employeeNo: string,
+    money: string,
+    reason: string,
+}
