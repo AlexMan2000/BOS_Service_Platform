@@ -1,16 +1,17 @@
 
 
 export interface Activity {
+    id: number
     name: string
-    accountId: string
+    accountId: number
     balance: string
     cover: string
     description: string
-    status: string
-    createdTime: string
-    updatedTime: string
-    startTime: string
-    endTime: string
+    status: number
+    createdTime: Date
+    updatedTime: Date
+    startTime: Date
+    endTime: Date
 }
 
 export interface ActivityCardType {
@@ -18,34 +19,36 @@ export interface ActivityCardType {
     description: string
     cover: string
     status: string
-    startTime: string
-    endTime: string
+    startTime: Date
+    endTime: Date
 }
 
 
-export interface ActivityTableType {
+export interface ActivityTableType extends Activity {
+    id: number
     name: string
     freeCredit: string
     cover: string
     description: string
     link: string
-    startTime: string
-    endTime: string
-    status: string
+    startTime: Date
+    endTime: Date
+    status: number
 }
 
-export interface ActivitySubmitType {
+export interface ActivitySubmitType extends Activity {
+    id: number,
     name: string,
     freeCredit: string,
     cover: string,
     description: string,
     link: string,
-    startTime: string,
-    endTime: string
+    startTime: Date,
+    endTime: Date
 }
 
 export interface ActivityTransferSubmitType {
-    accountId: string,
+    accountId: number,
     balance: string,
 }
 
@@ -63,8 +66,8 @@ export interface Project {
     description: string
     cover: string
     link: string
-    createdTime: string
-    updatedTime: string
+    createdTime: Date
+    updatedTime: Date
     deleted: boolean
 }
 
@@ -77,8 +80,8 @@ export interface ProjectCardType {
     description: string
     cover: string
     link: string
-    createdTime: string
-    updatedTime: string
+    createdTime: Date
+    updatedTime: Date
 }
 
 
@@ -99,6 +102,6 @@ export interface ProjectTableType {
     description: string,
     cover: string,
     link: string,
-    createdTime: string,
-    updatedTime: string
+    createdTime: Date,
+    updatedTime: Date
 }

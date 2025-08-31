@@ -1,5 +1,5 @@
 import styles from "./ActivityListPage.module.less"
-import { Button, Input, Modal, Popconfirm, Space, Tag } from "antd"
+import { Button, Input, message, Modal, Popconfirm, Space, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
@@ -10,30 +10,37 @@ import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 import { ActivitySubmitType, ActivityTableType, ActivityTransferSubmitType } from "@/commons/types/activity"
-import { getAllActivities } from "@/services/activityApi"
-
+import { deleteActivity, getAllActivities, updateActivity } from "@/services/activityApi"
+import dayjs from "dayjs"
 
 export const ActivityListPage = () => {
     const navigate = useNavigate()
 
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
+    const [tableDataSource, setTableDataSource] = useState<ActivityTableType[]>([])
 
     const [batchImportDataSource, setBatchImportDataSource] = useState<ActivitySubmitType[]>([])
     const [batchTransferDataSource, setBatchTransferDataSource] = useState<ActivityTransferSubmitType[]>([])
     // 配置
     const DEFAULT_NEW_ROW: ActivitySubmitType = {
+        id: 0,
+        accountId: 0,
+        balance: '',
+        status: 0,
+        createdTime: new Date(),
+        updatedTime: new Date(),
         name: '',
         freeCredit: '',
         cover: '',
         description: '',
         link: '',
-        startTime: '',
-        endTime: '',
+        startTime: new Date(),  
+        endTime: new Date(),
     }
 
     const DEFAULT_NEW_ROW_TRANSFER: ActivityTransferSubmitType = {
-        accountId: '',
+        accountId: 0,
         balance: '',
     }
 
@@ -106,36 +113,47 @@ export const ActivityListPage = () => {
         },
     ]
 
-
+//0-未开始；1-进行中；2-已结束
     // 默认数据
     const DEFAULT_DATA_DISPLAY: ActivityTableType[] = [
         {
+            id: 1,
             name: "活动1",
+            accountId: 1,
+            balance: "100",
+            createdTime: new Date(),
+            updatedTime: new Date(),
             description: "活动1描述",
             freeCredit: "100",
             cover: "活动1图片",
             link: "活动1链接",
-            startTime: "2021-01-01",
-            endTime: "2021-01-01",
-            status: "offline",
+            startTime: new Date(),
+            endTime: new Date(),
+            status: 0,
         },
         {
+            id: 2,
             name: "活动2",
+            accountId: 2,
+            balance: "200",
+            createdTime: new Date(),
+            updatedTime: new Date(),
             description: "活动2描述",
             freeCredit: "200",
             cover: "活动2图片",
             link: "活动2链接",
-            startTime: "2021-01-01",
-            endTime: "2021-01-01",
-            status: "online",
+            startTime: new Date(),
+            endTime: new Date(),
+            status: 1,
         },
     ]
-
+    const fetchData = async () => {
+        const data = await getAllActivities()
+        console.log('data', data)
+        setTableDataSource(data as ActivityTableType[])
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await getAllActivities()
-            console.log('data', data)
-        }
+        
         fetchData()
         console.log("reload table data", DEFAULT_DATA_DISPLAY)
     }, [])
@@ -258,10 +276,18 @@ export const ActivityListPage = () => {
                     <Column title="Free Credit" dataIndex="freeCredit" key="freeCredit" />
                     <Column title="Cover" dataIndex="cover" key="cover" />
                     <Column title="Link" dataIndex="link" key="link" />
-                    <Column title="Start Time" dataIndex="startTime" key="startTime" />
-                    <Column title="End Time" dataIndex="endTime" key="endTime" />
-                    <Column title="Status" dataIndex="status" key="status" render={(text: string) => {
-                        return <Tag color={text === "online" ? "green" : "red"}>{text}</Tag>
+                    <Column title="Start Time" dataIndex="startTime" key="startTime" 
+                    render={(text: Date) => {
+                        return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
+                    }}
+                    />
+                    <Column title="End Time" dataIndex="endTime" key="endTime" 
+                    render={(text: Date) => {
+                        return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
+                    }}
+                    />
+                    <Column title="Status" dataIndex="status" key="status" render={(text: number) => {
+                        return <Tag color={text === 1 ? "green" : text === 2 ? "red" : "blue"}>{text === 1 ? "进行中" : text === 2 ? "已结束" : "未开始"}</Tag>
                     }} />
                     <Column
                         title="Action"
@@ -273,16 +299,28 @@ export const ActivityListPage = () => {
                                     navigate("/admin/activities-management/activity-detail", { state: record })
                                 }}>详情</Button>
                                 <Button type="link" size="small" style={{ color: "green" }}
-                                    onClick={() => {
+                                    onClick={async () => {
                                         console.log("上线", record)
                                         // 后端请求
+                                        try {
+                                            await updateActivity({...record, status: record.status === 1 ? 2 : 1})
+                                            await fetchData()
+                                        } catch (error) {
+                                            console.log("更新失败", error)
+                                            message.error("更新失败")
+                                        }
                                     }}
-                                >{record.status === "online" ? "下线" : "上线"}</Button>
-                                <Popconfirm title="确定删除吗？" onConfirm={() => {
+                                >{record.status === 1 ? "结束" : "开始"}</Button>
+                                <Popconfirm title="确定删除吗？" onConfirm={async () => {
                                     console.log("删除", record)
-                                    // 后端请求
+                                    await deleteActivity(record.id)
+                                    await fetchData()
                                 }}>
-                                    <Button type="link" size="small" style={{ color: "#ff4d4f" }} >删除</Button>
+                                    <Button type="link" size="small" style={{ color: "#ff4d4f" }} 
+                                    onClick={async () => {
+                                 
+                                    }}
+                                    >删除</Button>
                                 </Popconfirm>
                             </Space>
                         )}

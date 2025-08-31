@@ -4,7 +4,8 @@ import { Form, Input, Button, DatePicker, Select } from "antd"
 import dayjs from "dayjs"
 import styles from "./ActivityManagementDetailsPage.module.less"
 import { Activity } from "@/commons/types/activity"
-
+import { updateActivity } from "@/services/activityApi"
+import { message } from "antd"
 const { TextArea } = Input
 const { Option } = Select
 
@@ -30,10 +31,17 @@ export const ActivityManagementDetailsPage = () => {
         }
     }, [state, activityForm])
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = async (values: any) => {
         console.log('Activity form values:', values)
         setEdit(false)
         // Add your form submission logic here
+        const commonResult = await updateActivity({...values, id: values.id})
+        if (commonResult.code === 200) {
+            message.success("更新成功")
+        } else {
+            message.error("更新失败")
+        }
+
     }
 
     return (

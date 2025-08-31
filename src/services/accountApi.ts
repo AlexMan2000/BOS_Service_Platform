@@ -1,7 +1,5 @@
-import axios from "axios";
 import { deleteRequest, postRequest } from "./axiosInstance";
 import { AccountCreateVO, ListAllAccountVO } from "@/commons/types/account";
-import ENDPOINT from "./config";
 
 export const createAccount = async (body: AccountCreateVO, config?: any): Promise<Boolean> => {
     try {
