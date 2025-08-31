@@ -17,16 +17,10 @@ export const LoginPage = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [newPassword, setNewPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-        const commonResult = await loginUser(values) as CommonResult<User>
-        // const commonResult = {
-        //     code: ResponseCode.FIRST_LOGIN,
-        //     message: "成功",
-        //     data: {
-        //         role: "USER"
-        //     }
-        // }
+            const commonResult = await loginUser(values) as CommonResult<User>  
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
             dispatch(setUserInfo({
@@ -59,6 +53,10 @@ export const LoginPage = () => {
             message.error("密码长度不能大于16位!")
             return
         }
+        if (newPassword !== confirmPassword) {
+            message.error("密码不一致!")
+            return
+        }
         setIsChangePasswordModalOpen(false)
         const commonResult = await changePassword({newPassword: newPassword});
         if (commonResult.code === ResponseCode.SUCCESS) {
@@ -83,7 +81,8 @@ export const LoginPage = () => {
                 <Button key="submit" type="primary" onClick={handleChangePassword}>确定</Button>,
             ]}
             >
-                <Input placeholder="新密码" width={200} style={{ width: "100%" }} onChange={(e) => { setNewPassword(e.target.value) }} />
+                <Input.Password placeholder="新密码" width={200} style={{ width: "100%" }} onChange={(e) => { setNewPassword(e.target.value) }} />
+                <Input.Password placeholder="确认密码" width={200} style={{ width: "100%" }} onChange={(e) => { setConfirmPassword(e.target.value) }} />
             </Modal>
                
             <div className={styles.loginRegion}>
