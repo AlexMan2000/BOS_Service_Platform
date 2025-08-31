@@ -28,7 +28,7 @@ export const LoginPage = () => {
             }))
 
             const role = userInfo.role;
-            if (role === "USER") {
+            if (role === "NORMAL") {
                 navigate("/home")
             } else if (role === "ADMIN") {
                 navigate("/admin")

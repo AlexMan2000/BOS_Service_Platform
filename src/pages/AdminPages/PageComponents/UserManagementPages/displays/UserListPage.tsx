@@ -2,7 +2,7 @@ import { User, UserSubmitType, UserTransferSubmitType } from "@/commons/types/us
 import styles from "./UserListPage.module.less"
 import { Button, Input, Modal, Space } from "antd"
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
@@ -11,6 +11,7 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
+import { getAllAccounts } from "@/services/accountApi"
 
 export const UserListPage = () => {
 
@@ -157,6 +158,14 @@ export const UserListPage = () => {
             updatedTime: "2021-01-01"
         },
     ]
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getAllAccounts({pageNum: 0, pageSize: 10})
+            console.log('data', data)
+        }
+        fetchData()
+    }, [])
 
 
     return (
