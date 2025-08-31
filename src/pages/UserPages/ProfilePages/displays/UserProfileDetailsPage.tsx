@@ -87,9 +87,12 @@ export const UserProfileDetailsPage = () => {
                     label="余额"
                     name="balance"
                     rules={[{ required: true, message: "请输入稳定币余额" }]}
+                    style={{position: "relative"}}
                 >
                     <Input placeholder="请输入稳定币余额" disabled />
-
+                    <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer", position: "absolute", right: "10px", top: "6px" }} onClick={() => {
+                        setTransferOpen(true)
+                    }} />
                 </Form.Item>
                 <Form.Item
                     label="手机号"
