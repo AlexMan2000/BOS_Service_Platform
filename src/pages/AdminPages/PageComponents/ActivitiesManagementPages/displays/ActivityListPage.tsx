@@ -78,11 +78,7 @@ export const ActivityListPage = () => {
             dataIndex: 'description',
             key: 'description',
             width: 120,
-            valueType: 'select',
-            valueEnum: {
-                admin: { text: 'Admin', status: 'Success' },
-                user: { text: 'User', status: 'Default' },
-            },
+            valueType: 'text',
         },
         {
             title: 'Link',
@@ -94,12 +90,14 @@ export const ActivityListPage = () => {
             title: 'Start Time',
             dataIndex: 'startTime',
             key: 'startTime',
+            valueType: 'date',
             width: 100,
         },
         {
             title: 'End Time',
             dataIndex: 'endTime',
             key: 'endTime',
+            valueType: 'date',
             width: 100,
         }
     ]

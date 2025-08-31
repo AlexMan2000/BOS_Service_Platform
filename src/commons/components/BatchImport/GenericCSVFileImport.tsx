@@ -1,6 +1,7 @@
 import { Button, Upload } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
 import styles from "./GenericCSVFileImport.module.less"
+import { downloadTemplate } from "@/services/accountApi"
 
 
 interface GenericCSVFileImportProps {
@@ -10,13 +11,18 @@ interface GenericCSVFileImportProps {
 }
 
 export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
-    const { file_url, download_name, onUpload } = props
+    // const { file_url, download_name, onUpload } = props
+
+
+
 
     return (
         <div className={styles.excelImport} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: '10px' }}>
-            <a href={file_url} download={download_name} style={{ color: '#1677ff', textDecoration: 'underline' }}>
+            <div onClick={async ()=>{
+                await downloadTemplate()
+            }} style={{ color: '#1677ff', textDecoration: 'underline' }}>
                 下载模板
-            </a>
+            </div>
             <Upload
                 accept=".csv"
                 showUploadList={false}

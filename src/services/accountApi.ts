@@ -1,4 +1,4 @@
-import { deleteRequest, postRequest } from "./axiosInstance";
+import { deleteRequest, getRequest, postRequest } from "./axiosInstance";
 import { AccountCreateVO, ListAllAccountVO } from "@/commons/types/account";
 
 export const createAccount = async (body: AccountCreateVO, config?: any): Promise<Boolean> => {
@@ -49,6 +49,49 @@ export const getAllAccounts = async (body: ListAllAccountVO, config?: any) => {
         return res.data;
     } catch (error: any) {
         console.error("Error getting all accounts:", error);
+        throw error;
+    }
+}
+
+function getFilename(disposition?: string | null, fallback = "template.xlsx") {
+    if (!disposition) return fallback;
+    // RFC 5987: filename*=UTF-8''<url-encoded>
+    const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+    if (utf8Match) return decodeURIComponent(utf8Match[1]);
+  
+    // legacy: filename="<...>" or filename=<...>
+    const asciiMatch = disposition.match(/filename="?([^"]+)"?/i);
+    if (asciiMatch) return decodeURIComponent(asciiMatch[1]);
+  
+    return fallback;
+  }
+  
+
+
+export const downloadTemplate = async (config?: any) => {
+    try {
+        const res = await getRequest("/account/get-import-template", {
+            responseType: 'blob',
+            ...config
+        });
+        const contentDisposition = res.headers["content-disposition"];
+        const filename = getFilename(contentDisposition, "批量导入用户模板.xls");
+
+        const blob = new Blob([res.data], {
+            // match your backend's contentType; either is fine for most browsers
+            type: "application/vnd.ms-excel;charset=UTF-8",
+        });
+        const objectUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = objectUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+    } catch (error: any) {
+        console.error("Error downloading template:", error);
         throw error;
     }
 }
