@@ -20,14 +20,7 @@ export const LoginPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-            // const commonResult = await loginUser(values) as CommonResult<User>  
-            const commonResult = {
-                code: ResponseCode.FIRST_LOGIN,
-                message: "成功",
-                data: {
-                    role: "USER"
-                }
-            }
+        const commonResult = await loginUser(values) as CommonResult<User>  
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
             dispatch(setUserInfo({
