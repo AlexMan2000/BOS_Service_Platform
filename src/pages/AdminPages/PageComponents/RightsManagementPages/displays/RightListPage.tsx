@@ -10,18 +10,20 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { getAllRights } from "@/services/benefitApi"
+import { deleteBenefit, getAllRights } from "@/services/benefitApi"
 
 
 export const RightListPage = () => {
 
     const navigate = useNavigate()
 
+    const [tableDataSource, setTableDataSource] = useState<Right[]>([])
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
 
     const [dataSource, setDataSource] = useState<Right[]>([])
     // 配置
     const DEFAULT_NEW_ROW: RightTableType = {
+        id: 0,
         name: '',
         description: '',
         price: 0,
@@ -124,9 +126,10 @@ export const RightListPage = () => {
 
 
 
-    // 默认数据
+    // 默认数据, 到时候可以删掉
     const DEFAULT_DATA_DISPLAY: RightTableType[] = [
         {
+            id: 1,
             name: "权益1",
             description: "权益1描述",
             price: 100,
@@ -142,6 +145,7 @@ export const RightListPage = () => {
             status: 'active',
         },
         {
+            id: 2,
             name: "权益2",
             description: "权益2描述",
             price: 200,
@@ -158,13 +162,14 @@ export const RightListPage = () => {
         },
     ]
 
-
+    const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
+        const data = await getAllRights({pageNum: pageNum, pageSize: pageSize})
+        console.log('data', data)
+        setTableDataSource(data as Right[])
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await getAllRights({pageNum: 0, pageSize: 10})
-            console.log('data', data)
-        }
-        fetchData()
+       
+        fetchData(0, 10)
     }, [])
 
     return (
@@ -257,7 +262,12 @@ export const RightListPage = () => {
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
                                     navigate("/admin/rights-management/right-detail", { state: record })
                                 }}>查看</Button>
-                                <Button type="link" size="small" style={{ color: "#ff4d4f" }} >删除</Button>
+                                <Button type="link" size="small" style={{ color: "#ff4d4f" }} 
+                                onClick={async () => {
+                                    await deleteBenefit(record.id)
+                                    await fetchData(0, 10)
+                                }}
+                                >删除</Button>
                             </Space>
                         )}
                     />

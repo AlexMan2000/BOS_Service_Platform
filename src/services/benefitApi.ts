@@ -1,18 +1,43 @@
-import { ListAllBenefitVO } from "@/commons/types/right";
-
-import axios from "axios";
-import ENDPOINT from "./config";
+import { ListAllBenefitVO, RightUpdateVO } from "@/commons/types/right";
+import { deleteRequest, postRequest, putRequest } from "./axiosInstance";
 
 export const getAllRights = async (body: ListAllBenefitVO, config?:any) => {
     try {
-        const res = await axios.get(ENDPOINT + "/account/listAll", {
-            data: body,
-            timeout: 5000,
+        const res = await postRequest( "/benefit/listAll", 
+            body,
+            {
+                timeout: 5000,
+                ...config
+            }
+        );
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting all accounts:", error);
+        throw error;
+    }
+}
+
+
+export const deleteBenefit = async (id: number, config?:any) => {
+    try {
+        const res = await deleteRequest("/benefit/delete/" + id, {
             ...config
         });
         return res.data;
     } catch (error: any) {
-        console.error("Error getting all accounts:", error);
+        console.error("Error deleting right:", error);
+        throw error;
+    }
+}
+
+export const updateBenefit = async (body: RightUpdateVO, config?:any) => {
+    try {
+        const res = await putRequest("/benefit/update/" + body.id, body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error updating right:", error);
         throw error;
     }
 }

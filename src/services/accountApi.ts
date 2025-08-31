@@ -3,7 +3,7 @@ import { deleteRequest, postRequest } from "./axiosInstance";
 import { AccountCreateVO, ListAllAccountVO } from "@/commons/types/account";
 import ENDPOINT from "./config";
 
-export const createAccount = async (body: AccountCreateVO, config?:any) : Promise<Boolean> => {
+export const createAccount = async (body: AccountCreateVO, config?: any): Promise<Boolean> => {
     try {
 
         // url will be changed
@@ -17,14 +17,14 @@ export const createAccount = async (body: AccountCreateVO, config?:any) : Promis
         );
 
         return res.data; // boolean to show if successful or not
-       
+
     } catch (error: any) {
         console.error("Error initializing model:", error);
         throw error;
     }
 }
 
-export const deleteAccount = async (id: string, config?:any) => {
+export const deleteAccount = async (id: string, config?: any) => {
     try {
         const res = await deleteRequest(
             "/account/delete/" + id,
@@ -40,13 +40,14 @@ export const deleteAccount = async (id: string, config?:any) => {
     }
 }
 
-export const getAllAccounts = async (body: ListAllAccountVO, config?:any) => {
+export const getAllAccounts = async (body: ListAllAccountVO, config?: any) => {
     try {
-        const res = await axios.get(ENDPOINT + "/account/listAll", {
-            data: body,
-            timeout: 5000,
-            ...config
-        });
+        const res = await postRequest("/account/listAll",
+            body,
+            {
+                timeout: 5000,
+                ...config
+            });
         return res.data;
     } catch (error: any) {
         console.error("Error getting all accounts:", error);

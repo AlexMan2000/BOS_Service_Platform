@@ -2,6 +2,7 @@
 
 
 export interface Right {
+    id: number,
     name: string,
     description: string,
     price: number,
@@ -14,6 +15,22 @@ export interface Right {
     createdBy?: string,
     createdTime?: string,
     updatedTime?: string
+}
+
+
+export interface RightUpdateVO {
+    id: number; // update 时需传入 id；create 时可不传
+    name: string;
+    accountId: string;
+    description: string;
+    price: number;
+    image: string;
+    total: number;
+    remain: number;
+    active: boolean;
+    expDate: string;
+
+    userId: string;
 }
 
 

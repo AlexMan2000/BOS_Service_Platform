@@ -1,5 +1,4 @@
 import { ActivitySubmitType } from "@/commons/types/activity"
-import ENDPOINT from "./config";
 import { getRequest } from "./axiosInstance";
 
 
