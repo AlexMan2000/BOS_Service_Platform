@@ -1,11 +1,10 @@
 import { postRequest } from "./axiosInstance";
 import { ChangePasswordRequest, LoginRequest } from "@/commons/types/account";
-import { User } from "@/commons/types/user";
 import { CommonResult } from "@/commons/types/response";
 
 
 
-export const loginUser = async (body: LoginRequest, config?:any): Promise<CommonResult<User>> => {
+export const loginUser = async (body: LoginRequest, config?:any): Promise<CommonResult<any>> => {
     try {
         const res = await postRequest(
             "/user/login",

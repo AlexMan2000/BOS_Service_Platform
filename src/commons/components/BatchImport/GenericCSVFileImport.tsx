@@ -1,6 +1,6 @@
 import { Button, Upload, Table, Card, Space, Typography, Divider } from "antd"
 import { UploadOutlined, EyeOutlined, DeleteOutlined } from "@ant-design/icons"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styles from "./GenericCSVFileImport.module.less"
 import { downloadTemplate } from "@/services/accountApi"
 
@@ -11,6 +11,7 @@ interface GenericCSVFileImportProps {
     download_name: string
     type?: string
     onUpload: (file: File) => void
+    previewTrigger?: any
 }
 
 interface CSVPreviewData {
@@ -21,8 +22,12 @@ interface CSVPreviewData {
 }
 
 export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
-    const { type, onUpload } = props
+    const { type, onUpload, previewTrigger } = props
     const [csvPreview, setCsvPreview] = useState<CSVPreviewData | null>(null)
+
+    useEffect(() => {
+        setCsvPreview(null)
+    }, [previewTrigger])
 
     const parseCSVFile = (file: File): Promise<CSVPreviewData> => {
         return new Promise((resolve, reject) => {

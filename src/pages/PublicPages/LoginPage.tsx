@@ -20,14 +20,16 @@ export const LoginPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-        const commonResult = await loginUser(values) as CommonResult<User>  
+        const commonResult = await loginUser(values)
         if (commonResult.code === ResponseCode.SUCCESS) {
-            const userInfo = commonResult.data;
+            const userInfo = commonResult.data.user;
 
             console.log(userInfo)
             dispatch(setUserInfo({
                 ...userInfo,
             }))
+
+            localStorage.setItem("access_token", commonResult.data.token);
 
             const role = userInfo.role;
             if (role === "NORMAL") {
@@ -35,7 +37,6 @@ export const LoginPage = () => {
             } else if (role === "ADMIN") {
                 navigate("/admin")
             }
-            setIsChangePasswordModalOpen(true)
         } else if (commonResult.code === ResponseCode.FIRST_LOGIN) {
             message.info(commonResult.message + ", 用户首次登录， 请修改密码!")
             setIsChangePasswordModalOpen(true)

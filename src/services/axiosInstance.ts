@@ -25,7 +25,7 @@ let isModalVisible = false;
 // Create an axios instance
 const axiosInstance = axios.create({
   baseURL: ENDPOINT,
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     "Content-Type": "application/json",
   },
@@ -103,25 +103,25 @@ axiosInstance.interceptors.response.use(
     // }
 
     // Authentication errors (401)
-    if (error.response?.status === 401 && !isModalVisible 
-      && !ROUTE_WHITE_LIST.includes(window.location.pathname)
-    ) {
-      notification.error({
-        message: 'Session Expired',
-        description: 'Your session has expired. Please log in again.',
-        placement: 'topRight', // or 'bottomRight'
-        duration: 4.5, // seconds, 0 = never auto close
-      });
-      localStorage.clear();
-      // Dispatch action to reset user state
-      store.dispatch(setIsAuthenticated(false));
-      store.dispatch(initUserInfo());
+    // if (error.response?.status === 401 && !isModalVisible 
+    //   && !ROUTE_WHITE_LIST.includes(window.location.pathname)
+    // ) {
+    //   notification.error({
+    //     message: 'Session Expired',
+    //     description: 'Your session has expired. Please log in again.',
+    //     placement: 'topRight', // or 'bottomRight'
+    //     duration: 4.5, // seconds, 0 = never auto close
+    //   });
+    //   localStorage.clear();
+    //   // Dispatch action to reset user state
+    //   store.dispatch(setIsAuthenticated(false));
+    //   store.dispatch(initUserInfo());
 
-        if (!ROUTE_WHITE_LIST.includes(window.location.pathname)) {
-          window.location.href = "/";
-        }
-        return Promise.reject(error);
-    }
+    //     if (!ROUTE_WHITE_LIST.includes(window.location.pathname)) {
+    //       window.location.href = "/";
+    //     }
+    //     return Promise.reject(error);
+    // }
 
     // Server errors (500, etc.)
     if (error.response?.status >= 500) {

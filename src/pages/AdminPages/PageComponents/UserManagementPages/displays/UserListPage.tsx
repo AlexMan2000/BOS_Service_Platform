@@ -210,6 +210,8 @@ export const UserListPage = () => {
                         <Tabs 
                         onChange={(key) => {
                             setBatchImportActiveTab(key)
+                            setBatchImportFile(null)
+                            setImportDataSource([])
                         }}
                         items={[
                             {
@@ -236,7 +238,11 @@ export const UserListPage = () => {
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={async (file: File) => { 
+                                children: <GenericCSVFileImport 
+                                file_url={templateUrl} 
+                                download_name="user_import_template.csv" 
+                                previewTrigger={batchImportActiveTab}
+                                onUpload={async (file: File) => { 
                                     setBatchImportFile(file)
                                     //后端接口
                                     // setIsBatchImportModalOpen(false)
