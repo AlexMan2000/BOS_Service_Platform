@@ -1,7 +1,7 @@
 import { Right, RightTableType } from "@/commons/types/right"
 import styles from "./RightListPage.module.less"
 import { Button, Input, Modal, Space, Tag } from "antd"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
@@ -10,6 +10,8 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
+import { getAllRights } from "@/services/benefitApi"
+
 
 export const RightListPage = () => {
 
@@ -156,6 +158,14 @@ export const RightListPage = () => {
         },
     ]
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getAllRights({pageNum: 0, pageSize: 10})
+            console.log('data', data)
+        }
+        fetchData()
+    }, [])
 
     return (
         <div className={styles.container}>

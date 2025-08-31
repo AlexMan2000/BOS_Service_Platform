@@ -11,15 +11,18 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { getAllAccounts } from "@/services/accountApi"
+import { deleteAccount, getAllAccounts } from "@/services/accountApi"
 
 export const UserListPage = () => {
 
     const navigate = useNavigate()
 
+    const [tableDataSource, setTableDataSource] = useState<User[]>([])
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
+
+    // Used for batch import
     const [importDataSource, setImportDataSource] = useState<UserSubmitType[]>([])
     const [transferDataSource, setTransferDataSource] = useState<UserTransferSubmitType[]>([])
     // 配置
@@ -159,12 +162,17 @@ export const UserListPage = () => {
         },
     ]
 
+    const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
+        const commonResult = await getAllAccounts({pageNum: pageNum, pageSize: pageSize})
+        console.log('data', commonResult.data)
+
+        setTableDataSource(commonResult.data as User[])
+    }
+
+    // Used for fetch data
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await getAllAccounts({pageNum: 0, pageSize: 10})
-            console.log('data', data)
-        }
-        fetchData()
+        
+        fetchData(0, 10)
     }, [])
 
 
@@ -301,7 +309,14 @@ export const UserListPage = () => {
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
                                     navigate("/admin/user-management/user-detail", { state: record })
                                 }}>查看</Button>
-                                <Button type="link" size="small" style={{ color: "#ff4d4f" }} >删除</Button>
+                                <Button type="link" size="small" style={{ color: "#ff4d4f" }} 
+                                onClick={async () => {
+                                    //删除用户
+                                    await deleteAccount(record.employeeNo)
+                                    // 重新获取数据
+                                    await fetchData(0, 10)
+                                }}
+                                >删除</Button>
                             </Space>
                         )}
                     />

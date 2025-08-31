@@ -10,6 +10,7 @@ import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 import { ActivitySubmitType, ActivityTableType, ActivityTransferSubmitType } from "@/commons/types/activity"
+import { getAllActivities } from "@/services/activityApi"
 
 
 export const ActivityListPage = () => {
@@ -131,6 +132,11 @@ export const ActivityListPage = () => {
     ]
 
     useEffect(() => {
+        const fetchData = async () => {
+            const data = await getAllActivities()
+            console.log('data', data)
+        }
+        fetchData()
         console.log("reload table data", DEFAULT_DATA_DISPLAY)
     }, [])
 

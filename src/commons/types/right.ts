@@ -16,6 +16,12 @@ export interface Right {
     updatedTime?: string
 }
 
+
+export interface ListAllBenefitVO {
+    pageNum: number,
+    pageSize: number
+}
+
 export interface RightCardType extends Right {
 }
 
