@@ -12,7 +12,7 @@ interface UserState {
   balance: string; // 稳定余额
   
   // Role and authentication
-  role: 'normal' | 'admin'; // User role
+  role: string; // User role
   isAuthenticated: boolean;
   access_token: string | null;
 }
@@ -44,7 +44,7 @@ const initialState: UserState = {
   balance: '',
   
   // Role and authentication
-  role: 'normal',
+  role: 'user',
   isAuthenticated: getUserLoginStatus(),
   access_token: getAccessToken(),
 }
@@ -58,7 +58,7 @@ export const userSlice = createSlice({
       // Update only the properties that are provided in the payload
       Object.assign(state, action.payload)
     },
-    setUserRole: (state, action: PayloadAction<'normal' | 'admin'>) => {
+    setUserRole: (state, action: PayloadAction<string>) => {
       state.role = action.payload
     },
     initUserInfo: (state) => {
@@ -72,7 +72,7 @@ export const userSlice = createSlice({
       state.balance = ''
       
       // Reset role and authentication
-      state.role = 'normal'
+      state.role = 'user'
       state.isAuthenticated = false
       state.access_token = null
       

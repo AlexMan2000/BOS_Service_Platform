@@ -1,10 +1,11 @@
 import { postRequest } from "./axiosInstance";
 import { LoginRequest } from "@/commons/types/account";
 import { User } from "@/commons/types/user";
+import { CommonResult } from "@/commons/types/response";
 
 
 
-export const loginUser = async (body: LoginRequest, config?:any): Promise<User> => {
+export const loginUser = async (body: LoginRequest, config?:any): Promise<CommonResult<User>> => {
     try {
         const res = await postRequest(
             "/user/login",
@@ -15,7 +16,7 @@ export const loginUser = async (body: LoginRequest, config?:any): Promise<User> 
             }
         );
 
-        return res.data; // User object
+        return res.data; // CommonResult<User>， 这个data是Promise的data
     } catch (error: any) {
         throw error;
     }
