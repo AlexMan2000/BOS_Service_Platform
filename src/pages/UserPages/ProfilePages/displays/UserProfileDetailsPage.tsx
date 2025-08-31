@@ -52,9 +52,9 @@ export const UserProfileDetailsPage = () => {
                 disabled={!edit}
                 form={userForm}
                 className={styles.form}
-                labelCol={{ span: 6 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
-                style={{ maxWidth: 600 }}
+                style={{ maxWidth: 800 }}
                 onFinish={() => {
                     console.log(userForm.getFieldsValue())
                     setEdit(!edit)
@@ -64,7 +64,6 @@ export const UserProfileDetailsPage = () => {
                     label="工号"
                     name="employeeNo"
                     rules={[{ required: true, message: "请输入用户名" }]}
-                    className={styles.formItem}
                 >
 
                     <Input placeholder="请输入用户名"  />
@@ -72,38 +71,32 @@ export const UserProfileDetailsPage = () => {
                 <Form.Item
                     label="用户名"
                     name="name"
-                    rules={[{ required: true, message: "请输入用户名" }]}>
+                    rules={[{ required: true, message: "请输入用户名" }]}
+
+                    >
                     <Input placeholder="请输入用户名"  />
                 </Form.Item>
                 <Form.Item
                     label="部门"
                     name="department"
-                    rules={[{ required: true, message: "请输入部门" }]}>
+                    rules={[{ required: true, message: "请输入部门" }]}
+                    >
                     <Input placeholder="请输入部门"  />
                 </Form.Item>
                 <Form.Item
-                    label="稳定币余额"
+                    label="余额"
                     name="balance"
                     rules={[{ required: true, message: "请输入稳定币余额" }]}
                 >
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
-                        <Input placeholder="请输入稳定币余额" disabled />
-                        <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer" }} onClick={() => {
-                            setTransferOpen(true)
-                        }} />
-                    </div>
+                    <Input placeholder="请输入稳定币余额" disabled />
+
                 </Form.Item>
                 <Form.Item
                     label="手机号"
                     name="phone"
                     rules={[{ required: true, message: "请输入手机号" }]}
                 >
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
                         <Input placeholder="请输入手机号" disabled />
-                        <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer" }} onClick={() => {
-                            setTransferOpen(true)
-                        }} />
-                    </div>
                 </Form.Item>
             </Form>
         </div>

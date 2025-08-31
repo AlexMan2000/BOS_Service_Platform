@@ -5,11 +5,13 @@ import activityManagementIcon from "@/assets/icons/activityManagement.png"
 import rightsManagementIcon from "@/assets/icons/rightManagement.png"
 import { selectGlobalState } from '@/store/slice/globalSlice/globalSlice'
 import { useSelector } from 'react-redux'
-
+import { selectUser } from '@/store/slice/userSlice/userSlice'
+import userManagementIcon from "@/assets/icons/userManagement.png"
+import rightManagementIcon from "@/assets/icons/rightManagement.png"
 
 export const LandingPage = () => {
 
-
+    const { role} = useSelector(selectUser)
     const menuItems = [
         {
             label: "活动",
@@ -23,6 +25,25 @@ export const LandingPage = () => {
         },
     ]
 
+
+    const adminMenuItems = [
+        {
+            label: "个人账户管理",
+            path: "/admin/user-management",
+            icon: userManagementIcon
+        },
+        {
+            label: "权益账户管理",
+            path: "/admin/rights-management",
+            icon: rightManagementIcon
+        },
+        {
+            label: "活动账户管理",
+            path: "/admin/activities-management",
+            icon: activityManagementIcon
+        },
+    ]
+
     const defaultSelectedKey = "/home/activities"
 
     const { isSideBarCollapsed } = useSelector(selectGlobalState)
@@ -30,7 +51,7 @@ export const LandingPage = () => {
     return (
         <div className={styles.container}>
             <div className={`${styles.sideBar} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
-                <SideBar menuItems={menuItems} defaultSelectedKey={defaultSelectedKey} />
+                <SideBar menuItems={role === "ADMIN" ? adminMenuItems :menuItems} defaultSelectedKey={defaultSelectedKey} />
             </div>
             <div className={`${styles.mainContent} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
                 <Outlet />

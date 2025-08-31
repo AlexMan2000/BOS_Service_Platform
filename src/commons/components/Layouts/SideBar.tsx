@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { selectGlobalState, setIsSideBarCollapsed } from "@/store/slice/globalSlice/globalSlice";
 import { TransferModal } from "../Modal/TransferModal"
 import logo from "@/assets/icons/platformLogo.png"
-import { initUserInfo, setIsAuthenticated } from "@/store/slice/userSlice/userSlice"
+import { initUserInfo, selectUser, setIsAuthenticated } from "@/store/slice/userSlice/userSlice"
 
 interface SideBarProps {
     menuItems: {
@@ -21,6 +21,8 @@ interface SideBarProps {
 export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
     const navigate = useNavigate()
+
+    const { employeeNo, name, department, phone, balance} = useSelector(selectUser)
 
     // 当前选中的菜单项
     const [selectedKey, setSelectedKey] = useState<string>(defaultSelectedKey)
@@ -87,8 +89,8 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                 </div>
 
                 <div className={styles.footerText}>
-                    <span>用户名: 1234567890</span>
-                    <span>余额: 10000</span>
+                    <span>用户名: {name}</span>
+                    <span>余额: {balance}</span>
                 </div>
 
                 {avatarMenuOpen && <div className={styles.avatarMenu}>
