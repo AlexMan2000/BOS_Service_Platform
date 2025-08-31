@@ -317,7 +317,7 @@ export const UserListPage = () => {
                         }}>新增发放</Button>
                     </div>
                 </div>
-                <Table<User> dataSource={DEFAULT_DATA_DISPLAY}
+                <Table<User> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                     >
                     <Column title="Name" dataIndex="name" key="name" />
@@ -329,7 +329,11 @@ export const UserListPage = () => {
                             return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                         }}
                     />
-                    <Column title="Created Time" dataIndex="createdTime" key="createdTime" />
+                    <Column title="Created Time" dataIndex="createdTime" key="createdTime"
+                        render={(text: string) => {
+                            return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
+                        }}
+                    />
                     <Column title="Created By" dataIndex="createdBy" key="createdBy" />
                     <Column
                         title="Action"
