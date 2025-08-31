@@ -23,9 +23,9 @@ export const LoginPage = () => {
             }))
 
             const role = userInfo.role;
-            if (role === "user") {
+            if (role === "USER") {
                 navigate("/home")
-            } else if (role === "admin") {
+            } else if (role === "ADMIN") {
                 navigate("/admin")
             }
         } else if (commonResult.code === ResponseCode.FAILED) {
