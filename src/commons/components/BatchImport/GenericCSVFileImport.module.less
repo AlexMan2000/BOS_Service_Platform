@@ -1,0 +1,123 @@
+.container {
+    width: 100%;
+    
+    .uploadSection {
+        .downloadLink {
+            color: #1677ff;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            
+            &:hover {
+                color: #40a9ff;
+                text-decoration: none;
+            }
+        }
+    }
+    
+    .previewSection {
+        margin-top: 16px;
+        
+        .previewCard {
+            .fileInfo {
+                margin-bottom: 16px;
+                padding: 12px;
+                background: #f8f9fa;
+                border-radius: 6px;
+                border-left: 4px solid #1677ff;
+            }
+            
+            .tableContainer {
+                .previewTable {
+                    border-radius: 6px;
+                    overflow: hidden;
+                    
+                    :global(.ant-table-thead > tr > th) {
+                        background: #f0f5ff;
+                        color: #1677ff;
+                        font-weight: 600;
+                        border-bottom: 2px solid #d6e4ff;
+                    }
+                    
+                    :global(.ant-table-tbody > tr:nth-child(even)) {
+                        background: #fafafa;
+                    }
+                    
+                    :global(.ant-table-tbody > tr:hover) {
+                        background: #e6f7ff !important;
+                    }
+                    
+                    :global(.ant-table-cell) {
+                        padding: 8px 12px;
+                        
+                        &:global(.ant-table-cell-ellipsis) {
+                            .ant-table-cell-content {
+                                display: block;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .container {
+        .previewSection {
+            .previewCard {
+                .fileInfo {
+                    :global(.ant-space) {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        width: 100%;
+                        
+                        :global(.ant-space-item) {
+                            width: 100%;
+                        }
+                    }
+                }
+                
+                .tableContainer {
+                    .previewTable {
+                        :global(.ant-table-cell) {
+                            padding: 6px 8px;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Loading animation for file processing
+.uploadSection {
+    :global(.ant-upload) {
+        transition: all 0.3s ease;
+        
+        &:hover {
+            transform: translateY(-1px);
+        }
+    }
+}
+
+// Preview card animations
+.previewSection {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

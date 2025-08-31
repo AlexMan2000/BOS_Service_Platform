@@ -11,14 +11,23 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { deleteAccount, getAllAccounts } from "@/services/accountApi"
+import { deleteAccount, getAllAccounts, uploadCSV } from "@/services/accountApi"
 
 export const UserListPage = () => {
 
     const navigate = useNavigate()
 
     const [tableDataSource, setTableDataSource] = useState<User[]>([])
+
+
+    const [batchImportActiveTab, setBatchImportActiveTab] = useState('1')
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
+    const [batchImportLoading, setBatchImportLoading] = useState(false)
+    const [batchImportFile, setBatchImportFile] = useState<File | null>(null)
+
+
+
+    const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
 
@@ -182,15 +191,27 @@ export const UserListPage = () => {
             <Modal
                 open={isBatchImportModalOpen}
                 onCancel={() => setIsBatchImportModalOpen(false)}
-                onOk={() => {
-                    console.log('onOk', importDataSource)
+                onOk={async () => {
+                    if (batchImportActiveTab === '1') {
+                        console.log('onOk', importDataSource)
+                    } else {
+                        console.log('ss')
+                        setBatchImportLoading(true)
+                        const result = await uploadCSV("account", batchImportFile as File)
+                        console.log('result', result)
+                        setBatchImportLoading(false)
+                    }
                 }}
                 title="批量导入"
                 width={1000}
             >
                 <div className={styles.modalContent}>
                     <div className={styles.modalHeader}>
-                        <Tabs items={[
+                        <Tabs 
+                        onChange={(key) => {
+                            setBatchImportActiveTab(key)
+                        }}
+                        items={[
                             {
                                 key: '1',
                                 label: '表格导入',
@@ -215,7 +236,11 @@ export const UserListPage = () => {
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
+                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={async (file: File) => { 
+                                    setBatchImportFile(file)
+                                    //后端接口
+                                    // setIsBatchImportModalOpen(false)
+                                }} type="account" />
                             }
                         ]} />
                     </div>

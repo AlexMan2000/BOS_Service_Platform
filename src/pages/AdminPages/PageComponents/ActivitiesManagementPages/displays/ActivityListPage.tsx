@@ -164,6 +164,7 @@ export const ActivityListPage = () => {
                 open={isBatchImportModalOpen}
                 onCancel={() => setIsBatchImportModalOpen(false)}
                 onOk={() => {
+                    
                     console.log('onOk', batchImportDataSource)
                 }}
                 title="批量导入"
@@ -193,11 +194,11 @@ export const ActivityListPage = () => {
                                     }}
                                 />
                             },
-                            {
-                                key: '2',
-                                label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="activity_import_template.csv" onUpload={() => { }} />
-                            }
+                            // {
+                            //     key: '2',
+                            //     label: 'Excel导入',
+                            //     children: <GenericCSVFileImport file_url={templateUrl} download_name="activity_import_template.csv" onUpload={() => { }} type="activity" />
+                            // }
                         ]}
 
                         />
@@ -238,7 +239,7 @@ export const ActivityListPage = () => {
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="activity_transfer_template.csv" onUpload={() => { }} />
+                                children: <GenericCSVFileImport file_url={templateUrl} download_name="activity_transfer_template.csv" onUpload={() => { }} type="activity" />
                             }
                         ]} />
                     </div>

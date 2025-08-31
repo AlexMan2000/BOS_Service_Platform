@@ -208,11 +208,11 @@ export const RightListPage = () => {
                                     }}
                                 />
                             },
-                            {
-                                key: '2',
-                                label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="right_import_template.csv" onUpload={() => { }} />
-                            }
+                            // {
+                            //     key: '2',
+                            //     label: 'Excel导入',
+                            //     children: <GenericCSVFileImport file_url={templateUrl} download_name="right_import_template.csv" onUpload={() => { }} />
+                            // }
                         ]}
 
                         />

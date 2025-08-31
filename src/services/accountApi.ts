@@ -68,9 +68,9 @@ function getFilename(disposition?: string | null, fallback = "template.xlsx") {
   
 
 
-export const downloadTemplate = async (config?: any) => {
+export const downloadTemplate = async (type: string,config?: any) => {
     try {
-        const res = await getRequest("/account/get-import-template", {
+        const res = await getRequest(`${type}/get-import-template`, {
             responseType: 'blob',
             ...config
         });
@@ -92,6 +92,26 @@ export const downloadTemplate = async (config?: any) => {
         URL.revokeObjectURL(objectUrl);
     } catch (error: any) {
         console.error("Error downloading template:", error);
+        throw error;
+    }
+}
+
+
+export const uploadCSV = async (type: string, file: File, config?: any) => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const res = await postRequest(`${type}/import`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 30000, // 增加超时时间用于文件上传
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error uploading CSV:", error);
         throw error;
     }
 }
