@@ -20,7 +20,14 @@ export const LoginPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-            const commonResult = await loginUser(values) as CommonResult<User>  
+            // const commonResult = await loginUser(values) as CommonResult<User>  
+            const commonResult = {
+                code: ResponseCode.FIRST_LOGIN,
+                message: "成功",
+                data: {
+                    role: "USER"
+                }
+            }
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
             dispatch(setUserInfo({
@@ -71,18 +78,55 @@ export const LoginPage = () => {
     return (
         <div className={styles.container}>
             <Modal 
-            title="修改密码"
-            open={isChangePasswordModalOpen} onCancel={() => {  
-                setIsChangePasswordModalOpen(false) 
-                setNewPassword("")
-            }}
-            footer={[
-                <Button key="cancel" onClick={() => { setIsChangePasswordModalOpen(false);setNewPassword("") }}>取消</Button>,
-                <Button key="submit" type="primary" onClick={handleChangePassword}>确定</Button>,
-            ]}
+                title="修改密码"
+                open={isChangePasswordModalOpen} 
+                onCancel={() => {  
+                    setIsChangePasswordModalOpen(false) 
+                    setNewPassword("")
+                    setConfirmPassword("")
+                }}
+                footer={[
+                    <Button key="cancel" onClick={() => { 
+                        setIsChangePasswordModalOpen(false);
+                        setNewPassword("");
+                        setConfirmPassword("");
+                    }}>
+                        取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={handleChangePassword}>
+                        确定
+                    </Button>,
+                ]}
+                width={500}
             >
-                <Input.Password placeholder="新密码" width={200} style={{ width: "100%" }} onChange={(e) => { setNewPassword(e.target.value) }} />
-                <Input.Password placeholder="确认密码" width={200} style={{ width: "100%" }} onChange={(e) => { setConfirmPassword(e.target.value) }} />
+                <Form
+                    layout="horizontal"
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 18 }}
+                    style={{ marginTop: 20 }}
+                >
+                    <Form.Item
+                        label="新密码"
+                        required
+                    >
+                        <Input.Password 
+                            placeholder="请输入新密码" 
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)} 
+                        />
+                    </Form.Item>
+                    
+                    <Form.Item
+                        label="确认密码"
+                        required
+                    >
+                        <Input.Password 
+                            placeholder="请再次输入新密码" 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)} 
+                        />
+                    </Form.Item>
+                </Form>
             </Modal>
                
             <div className={styles.loginRegion}>
