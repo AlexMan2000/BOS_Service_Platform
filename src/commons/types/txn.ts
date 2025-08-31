@@ -17,3 +17,11 @@ export interface Transaction {
 
 export interface TransactionTableType extends Transaction {
 }
+
+export interface TransferVO {
+    sourceAccountId: string;
+    targetAccountId: string;
+    amount: number;
+    reason: string;
+    createdBy: number; //调用人userId
+}

@@ -31,10 +31,10 @@ export const ActivityCard = (props: ActivityCardType) => {
                     {status}
                 </div>
                 <div className={styles.startTime}>
-                    开始时间: {startTime}
+                    开始时间: {startTime.toLocaleString()}
                 </div>
                 <div className={styles.endTime}>
-                    结束时间: {endTime}
+                    结束时间: {endTime.toLocaleString()}
                 </div>
             </div>
             

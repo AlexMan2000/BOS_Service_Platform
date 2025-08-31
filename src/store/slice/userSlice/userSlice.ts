@@ -4,6 +4,8 @@ import type { RootState } from '@/store/rootReducers'
 interface UserState {
   // Basic user info
   employeeNo: string // 工号
+  // accountId: number // 账号id
+  phone: string; // 手机号
   name: string; // 姓名
   department: string; // 部门
   createdTime: string; // 注册时间
@@ -36,6 +38,8 @@ const getAccessToken = () => {
 const initialState: UserState = {
   // Basic user info
   employeeNo: '',
+  // accountId: 0,
+  phone: '',
   name: '',
   department: '',
   createdTime: '',
@@ -64,6 +68,8 @@ export const userSlice = createSlice({
     initUserInfo: (state) => {
       // Reset basic user info
       state.employeeNo = ''
+      // state.accountId = 0,
+      state.phone = '',
       state.name = ''
       state.department = ''
       state.createdTime = ''

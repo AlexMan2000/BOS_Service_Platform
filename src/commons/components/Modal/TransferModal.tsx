@@ -11,7 +11,6 @@ interface TransferModalProps {
 export const TransferModal = ({ transferOpen, setTransferOpen, title }: TransferModalProps) => {
     
     const [transferForm] = Form.useForm()
-    const [searchOptions, setSearchOptions] = useState<AutoCompleteProps['options']>([]);
 
     const handleConfirm = () => {
         transferForm.submit()
@@ -47,23 +46,23 @@ export const TransferModal = ({ transferOpen, setTransferOpen, title }: Transfer
                     console.log(transferForm.getFieldsValue())
                     setTransferOpen(false)
                 }}>
-                    <Form.Item label="目标账号类型" name="targetType" rules={[{ required: true, message: "请输入目标账号类型" }]}>
+                    {/* <Form.Item label="目标账号类型" name="targetType" rules={[{ required: true, message: "请输入目标账号类型" }]}>
                         <Input placeholder="请输入目标账号类型" />
-                    </Form.Item>
-                    <Form.Item label="目标账号" name="targetAccount" rules={[{ required: true, message: "请输入目标账号" }]}>
-                        <AutoComplete
-                            options={searchOptions}
+                    </Form.Item> */}
+                    <Form.Item label="目标账号" name="targetAccountId" rules={[{ required: true, message: "请输入目标账号" }]}>
+                        <Input
                             placeholder="请输入目标账号"
-                            onSearch={(value) => {
+                            onChange={(e) => {
+                                const value = e.target.value
                                 // 网络请求
-                                setSearchOptions([{ label: value, value: value }])
+                                console.log(value)
                             }}
                         />
                     </Form.Item>
                     <Form.Item label="转账金额" name="amount" rules={[{ required: true, message: "请输入转账金额" }]}>
                         <Input placeholder="请输入转账金额" />
                     </Form.Item>
-                    <Form.Item label="转账事由" name="remark" rules={[{ required: true, message: "请输入转账备注" }]}>
+                    <Form.Item label="转账事由" name="reason" rules={[{ required: true, message: "请输入转账备注" }]}>
                         <Input.TextArea placeholder="请输入转账备注" />
                     </Form.Item>
                 </Form>

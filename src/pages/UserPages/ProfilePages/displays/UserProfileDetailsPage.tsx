@@ -1,6 +1,6 @@
 import { AutoComplete, AutoCompleteProps, Form, Input, Modal } from "antd"
 import styles from "./UserProfileDetailsPage.module.less"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { TransactionOutlined } from "@ant-design/icons"
@@ -14,7 +14,19 @@ export const UserProfileDetailsPage = () => {
     const [edit, setEdit] = useState(false)
     const [transferOpen, setTransferOpen] = useState(false)
 
-    const { employeeNo, name, department, createdTime, createdBy, lastLogin, balance, role, isAuthenticated } = useSelector(selectUser)
+    const { employeeNo, name, department, phone, balance} = useSelector(selectUser)
+    
+
+    useEffect(() => {
+        userForm.setFieldsValue({
+            "employeeNo": employeeNo,
+            "name": name,
+            "department": department,
+            "phone": phone,
+            "balance": balance
+        })
+    }, [])
+    console.log("employeeNo", employeeNo, "name", name, "department", department, "phone", phone, "balance", balance)
 
     return (
         <div className={styles.container}>
@@ -50,32 +62,44 @@ export const UserProfileDetailsPage = () => {
             >
                 <Form.Item
                     label="工号"
-                    name="工号"
+                    name="employeeNo"
                     rules={[{ required: true, message: "请输入用户名" }]}
                     className={styles.formItem}
                 >
 
-                    <Input placeholder="请输入用户名" value={name} />
+                    <Input placeholder="请输入用户名"  />
                 </Form.Item>
                 <Form.Item
                     label="用户名"
-                    name="用户名"
+                    name="name"
                     rules={[{ required: true, message: "请输入用户名" }]}>
-                    <Input placeholder="请输入用户名" value={name} />
+                    <Input placeholder="请输入用户名"  />
                 </Form.Item>
                 <Form.Item
                     label="部门"
-                    name="部门"
+                    name="department"
                     rules={[{ required: true, message: "请输入部门" }]}>
-                    <Input placeholder="请输入部门" value={department} />
+                    <Input placeholder="请输入部门"  />
                 </Form.Item>
                 <Form.Item
                     label="稳定币余额"
-                    name="稳定币余额"
+                    name="balance"
                     rules={[{ required: true, message: "请输入稳定币余额" }]}
                 >
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
-                        <Input placeholder="请输入稳定币余额" value={balance} disabled />
+                        <Input placeholder="请输入稳定币余额" disabled />
+                        <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer" }} onClick={() => {
+                            setTransferOpen(true)
+                        }} />
+                    </div>
+                </Form.Item>
+                <Form.Item
+                    label="手机号"
+                    name="phone"
+                    rules={[{ required: true, message: "请输入手机号" }]}
+                >
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
+                        <Input placeholder="请输入手机号" disabled />
                         <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer" }} onClick={() => {
                             setTransferOpen(true)
                         }} />

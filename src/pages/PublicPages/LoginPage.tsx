@@ -23,6 +23,8 @@ export const LoginPage = () => {
         const commonResult = await loginUser(values) as CommonResult<User>  
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
+
+            console.log(userInfo)
             dispatch(setUserInfo({
                 ...userInfo,
             }))

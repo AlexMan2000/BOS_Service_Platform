@@ -2,11 +2,12 @@ import {  useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import styles from "./SideBar.module.less"
 import { Avatar } from "antd"
-import { MenuFoldOutlined, TransactionOutlined, UserOutlined } from "@ant-design/icons"
+import { LogoutOutlined, MenuFoldOutlined, TransactionOutlined, UserOutlined } from "@ant-design/icons"
 import { useDispatch, useSelector } from "react-redux"
 import { selectGlobalState, setIsSideBarCollapsed } from "@/store/slice/globalSlice/globalSlice";
 import { TransferModal } from "../Modal/TransferModal"
 import logo from "@/assets/icons/platformLogo.png"
+import { initUserInfo, setIsAuthenticated } from "@/store/slice/userSlice/userSlice"
 
 interface SideBarProps {
     menuItems: {
@@ -103,6 +104,16 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                         setTransferOpen(true)
                     }}>
                         <TransactionOutlined /><span>极速转账</span>
+                    </div>
+                    <div className={styles.avatarMenuItem} onClick={(e) => {
+                        e.stopPropagation()
+                        navigate("/")
+                        console.log("退出登录")
+                        dispatch(setIsAuthenticated(false))
+                        dispatch(initUserInfo())
+                        localStorage.clear();
+                    }}>
+                        <LogoutOutlined /><span>退出登录</span>
                     </div>
                 </div>}
             </div>
