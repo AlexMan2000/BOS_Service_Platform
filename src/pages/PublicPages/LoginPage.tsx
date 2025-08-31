@@ -9,6 +9,9 @@ import { useDispatch } from "react-redux"
 import { changePassword } from "@/services/userApi"
 import { message } from "antd"
 import { useState } from "react"
+import { loginUser } from "@/services/userApi"
+import { CommonResult } from "@/commons/types/response"
+import { User } from "@/commons/types/user"
 
 export const LoginPage = () => {
     const navigate = useNavigate()
@@ -16,14 +19,14 @@ export const LoginPage = () => {
     const [newPassword, setNewPassword] = useState("")
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-        // const commonResult = await loginUser(values) as CommonResult<User>
-        const commonResult = {
-            code: ResponseCode.FIRST_LOGIN,
-            message: "成功",
-            data: {
-                role: "USER"
-            }
-        }
+        const commonResult = await loginUser(values) as CommonResult<User>
+        // const commonResult = {
+        //     code: ResponseCode.FIRST_LOGIN,
+        //     message: "成功",
+        //     data: {
+        //         role: "USER"
+        //     }
+        // }
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
             dispatch(setUserInfo({
@@ -38,7 +41,7 @@ export const LoginPage = () => {
             }
             setIsChangePasswordModalOpen(true)
         } else if (commonResult.code === ResponseCode.FIRST_LOGIN) {
-            message.info(commonResult.message + ", 用户首次登录!")
+            message.info(commonResult.message + ", 用户首次登录， 请修改密码!")
             setIsChangePasswordModalOpen(true)
         }
         else if (commonResult.code === ResponseCode.FAILED) {
