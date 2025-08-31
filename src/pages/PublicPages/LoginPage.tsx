@@ -1,21 +1,29 @@
-import { loginUser } from "@/services/userApi"
 
-import { Button, Form, Input } from "antd"
+import { Button, Form, Input, Modal } from "antd"
 import coverImage from '@/assets/loginCover.png'
 import styles from "./LoginPage.module.less"
 import { useNavigate } from "react-router-dom"
-import { CommonResult } from "@/commons/types/response"
-import { User } from "@/commons/types/user"
 import { ResponseCode } from "@/commons/defs/code"
 import { setUserInfo } from "@/store/slice/userSlice/userSlice"
 import { useDispatch } from "react-redux"
+import { changePassword } from "@/services/userApi"
 import { message } from "antd"
+import { useState } from "react"
 
 export const LoginPage = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [newPassword, setNewPassword] = useState("")
+    const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
     const handleLogin = async (values: any) => {
-        const commonResult = await loginUser(values) as CommonResult<User>
+        // const commonResult = await loginUser(values) as CommonResult<User>
+        const commonResult = {
+            code: ResponseCode.FIRST_LOGIN,
+            message: "成功",
+            data: {
+                role: "USER"
+            }
+        }
         if (commonResult.code === ResponseCode.SUCCESS) {
             const userInfo = commonResult.data;
             dispatch(setUserInfo({
@@ -28,13 +36,53 @@ export const LoginPage = () => {
             } else if (role === "ADMIN") {
                 navigate("/admin")
             }
-        } else if (commonResult.code === ResponseCode.FAILED) {
+            setIsChangePasswordModalOpen(true)
+        } else if (commonResult.code === ResponseCode.FIRST_LOGIN) {
+            message.info(commonResult.message + ", 用户首次登录!")
+            setIsChangePasswordModalOpen(true)
+        }
+        else if (commonResult.code === ResponseCode.FAILED) {
             message.error(commonResult.message + ", 用户提供的凭证信息有误!")
         }
     }
 
+    const handleChangePassword = async () => {
+        console.log(newPassword)
+        if (newPassword.length < 6) {
+            message.error("密码长度不能小于6位!")
+            return
+        }
+        if (newPassword.length > 16) {
+            message.error("密码长度不能大于16位!")
+            return
+        }
+        setIsChangePasswordModalOpen(false)
+        const commonResult = await changePassword({newPassword: newPassword});
+        if (commonResult.code === ResponseCode.SUCCESS) {
+            message.success("密码修改成功!")
+            navigate("/")
+        } else if (commonResult.code === ResponseCode.FAILED) {
+            message.error(commonResult.message + ", 密码修改失败!")
+        }
+        
+    }
+
     return (
         <div className={styles.container}>
+            <Modal 
+            title="修改密码"
+            open={isChangePasswordModalOpen} onCancel={() => {  
+                setIsChangePasswordModalOpen(false) 
+                setNewPassword("")
+            }}
+            footer={[
+                <Button key="cancel" onClick={() => { setIsChangePasswordModalOpen(false);setNewPassword("") }}>取消</Button>,
+                <Button key="submit" type="primary" onClick={handleChangePassword}>确定</Button>,
+            ]}
+            >
+                <Input placeholder="新密码" width={200} style={{ width: "100%" }} onChange={(e) => { setNewPassword(e.target.value) }} />
+            </Modal>
+               
             <div className={styles.loginRegion}>
                 <div className={styles.loginTitle}>
                     <span className={styles.loginTitleText}>稳定币奖励平台</span>

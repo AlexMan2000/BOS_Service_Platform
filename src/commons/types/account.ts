@@ -11,6 +11,12 @@ export interface LoginRequest {
     password: string
 }
 
+export interface ChangePasswordRequest {
+    newPassword: string
+}
+
+
+
 export interface ListAllAccountVO {
     pageNum: number,
     pageSize: number
