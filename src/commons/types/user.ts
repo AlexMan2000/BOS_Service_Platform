@@ -30,6 +30,6 @@ export interface UserSubmitType {
  */
 export interface UserTransferSubmitType {
     employeeNo: string,
-    money: string,
+    money: number,
     remark: string,
 }

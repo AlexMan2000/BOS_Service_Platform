@@ -8,7 +8,6 @@ import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
 import templateUrl from "@/assets/templates/user_batch_import_template.csv?url";
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
-import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 import { batchTransfer, createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
@@ -49,7 +48,7 @@ export const UserListPage = () => {
 
     const DEFAULT_NEW_ROW_TRANSFER = {
         employeeNo: '307' + (Math.random() * 1000).toFixed(0),
-        money: '0',
+        money: 0,
         remark: '',
     }
 
@@ -106,6 +105,7 @@ export const UserListPage = () => {
             title: 'money',
             dataIndex: 'money',
             key: 'money',
+            valueType: 'digit',
             width: 100,
         },
         {

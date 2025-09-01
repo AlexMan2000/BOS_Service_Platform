@@ -1,14 +1,12 @@
-import { Right, RightTableType } from "@/commons/types/right"
+import { BenefitCreateVO, Right, RightTableType } from "@/commons/types/right"
 import styles from "./RightListPage.module.less"
 import { Button, Input, Modal, Space, Tag } from "antd"
 import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
-import templateUrl from "@/assets/templates/user_batch_transfer_template.csv?url";
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import { wait } from "@/commons/utils/sys_utils"
-import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 import { deleteBenefit, getAllRights } from "@/services/benefitApi"
 
@@ -20,28 +18,24 @@ export const RightListPage = () => {
     const [tableDataSource, setTableDataSource] = useState<Right[]>([])
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
 
-    const [dataSource, setDataSource] = useState<Right[]>([])
+    const [batchImportDataSource, setBatchImportDataSource] = useState<BenefitCreateVO[]>([])
     // 配置
-    const DEFAULT_NEW_ROW: RightTableType = {
+    const DEFAULT_NEW_ROW: BenefitCreateVO = {
         id: 0,
         name: '',
         description: '',
-        price: 0,
-        image: '',
-        total: 0,
+        price: '0',
+        image: '',  
+        total: '0',
         remain: 0,
         active: true,
-        expDate: new Date().toISOString(),
-        createdTime: new Date().toISOString(),
+        expDate: new Date(),
         createdBy: 'admin',
-        updatedTime: new Date().toISOString(),
-        deleted: false,
-        status: 'active',
     }
 
 
 
-    const PROCOLUMNS_CONFIGS: ProColumns<Right>[] = [
+    const PROCOLUMNS_CONFIGS: ProColumns<BenefitCreateVO>[] = [
         {
             title: 'Name',
             dataIndex: 'name',
@@ -74,11 +68,6 @@ export const RightListPage = () => {
             dataIndex: 'image',
             key: 'image',
             width: 120,
-            valueType: 'select',
-            valueEnum: {
-                admin: { text: 'Admin', status: 'Success' },
-                user: { text: 'User', status: 'Default' },
-            },
         },
         {
             title: 'Total',
@@ -93,33 +82,27 @@ export const RightListPage = () => {
             width: 100,
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
+            title: 'Active',
+            dataIndex: 'active',
+            key: 'active',
             width: 100,
+            valueType: 'select',
+            valueEnum: {
+                true: { text: 'Active', status: 'Success' },
+                false: { text: 'Inactive', status: 'Default' },
+            },
         },
         {
-            title: 'Created Time',
-            dataIndex: 'createdTime',
-            key: 'createdTime',
-            width: 100,
+            title: 'Exp Date',
+            dataIndex: 'expDate',
+            key: 'expDate',
+            width: 120,
+            valueType: 'date',
         },
         {
             title: 'Created By',
             dataIndex: 'createdBy',
             key: 'createdBy',
-            width: 100,
-        },
-        {
-            title: 'Updated Time',
-            dataIndex: 'updatedTime',
-            key: 'updatedTime',
-            width: 100,
-        },
-        {
-            title: 'Deleted',
-            dataIndex: 'deleted',
-            key: 'deleted',
             width: 100,
         },
     ]
@@ -179,7 +162,7 @@ export const RightListPage = () => {
                 open={isBatchImportModalOpen}
                 onCancel={() => setIsBatchImportModalOpen(false)}
                 onOk={() => {
-                    console.log('onOk', dataSource)
+                    console.log('onOk', batchImportDataSource)
                 }}
                 title="批量导入"
                 width={1000}
@@ -190,9 +173,9 @@ export const RightListPage = () => {
                             {
                                 key: '1',
                                 label: '表格导入',
-                                children: <GenericEditableTable<Right>
-                                    dataSource={dataSource}
-                                    setDataSource={setDataSource}
+                                children: <GenericEditableTable<BenefitCreateVO>
+                                    dataSource={batchImportDataSource}
+                                    setDataSource={setBatchImportDataSource}
                                     columns={PROCOLUMNS_CONFIGS}
                                     rowKey="name"
                                     recordCreatorProps={false}
@@ -202,10 +185,11 @@ export const RightListPage = () => {
                                     }}
                                     scroll={{ x: 'max-content', y: 300 }}
                                     size="small"
-                                    onSave={async (rowKey: React.Key, data: Right, row: Right) => {
+                                    onSave={async (rowKey: React.Key, data: BenefitCreateVO, row: BenefitCreateVO) => {
                                         console.log('Saving row:', rowKey, data, row);
                                         await wait(1);
                                     }}
+                                    maxRowLength={1}
                                 />
                             },
                             // {
@@ -231,7 +215,7 @@ export const RightListPage = () => {
                     </div>
                     <div className={styles.addUser}>
                         <Button type="primary" onClick={() => {
-                            setDataSource([])
+                            setBatchImportDataSource([])
                             setIsBatchImportModalOpen(true)}}
                         >新增权益</Button>
                     </div>

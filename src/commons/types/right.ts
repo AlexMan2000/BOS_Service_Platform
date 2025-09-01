@@ -34,6 +34,20 @@ export interface RightUpdateVO {
 }
 
 
+export interface BenefitCreateVO {
+    id: number; // update 时需传入 id；create 时可不传
+    name: string;
+    description: string;
+    price: string; 
+    image: string;
+    total: string;
+    remain: number;
+    active: boolean;
+    expDate: Date;
+    createdBy: string;
+}
+
+
 export interface ListAllBenefitVO {
     pageNum: number,
     pageSize: number
