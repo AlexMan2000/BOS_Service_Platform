@@ -1,6 +1,6 @@
 import { User, UserSubmitType, UserTransferSubmitType } from "@/commons/types/user"
 import styles from "./UserListPage.module.less"
-import { Button, Input, Modal, Space } from "antd"
+import { Button, Input, message, Modal, Space } from "antd"
 import dayjs from "dayjs"
 import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
@@ -11,7 +11,8 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { deleteAccount, getAllAccounts, uploadCSV } from "@/services/accountApi"
+import { deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
+import { ResponseCode } from "@/commons/defs/code"
 
 export const UserListPage = () => {
 
@@ -140,42 +141,73 @@ export const UserListPage = () => {
 
 
     // 默认数据
-    const DEFAULT_DATA_DISPLAY: User[] = [
-        {
-            employeeNo: "1234567890",
-            password: "123456",
-            phone: "1234567890",
-            role: "admin",
-            name: "张三",
-            department: "技术部",
-            balance: "1000",
-            deleted: false,
-            lastLogin: "2021-01-01",
-            createdTime: "2021-01-01",
-            createdBy: "admin",
-            updatedTime: "2021-01-01"
-        },
-        {
-            employeeNo: "1234567891",
-            password: "123456",
-            phone: "1234567891",
-            role: "user",
-            name: "李四",
-            department: "技术部",
-            balance: "1000",
-            deleted: false,
-            lastLogin: "2021-01-01",
-            createdTime: "2021-01-01",
-            createdBy: "admin",
-            updatedTime: "2021-01-01"
-        },
-    ]
+    // const DEFAULT_DATA_DISPLAY: User[] = [
+    //     {
+    //         employeeNo: "1234567890",
+    //         password: "123456",
+    //         phone: "1234567890",
+    //         role: "admin",
+    //         name: "张三",
+    //         department: "技术部",
+    //         balance: "1000",
+    //         deleted: false,
+    //         lastLogin: "2021-01-01",
+    //         createdTime: "2021-01-01",
+    //         createdBy: "admin",
+    //         updatedTime: "2021-01-01"
+    //     },
+    //     {
+    //         employeeNo: "1234567891",
+    //         password: "123456",
+    //         phone: "1234567891",
+    //         role: "user",
+    //         name: "李四",
+    //         department: "技术部",
+    //         balance: "1000",
+    //         deleted: false,
+    //         lastLogin: "2021-01-01",
+    //         createdTime: "2021-01-01",
+    //         createdBy: "admin",
+    //         updatedTime: "2021-01-01"
+    //     },
+    // ]
 
     const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
         const commonResult = await getAllAccounts({pageNum: pageNum, pageSize: pageSize})
-        console.log('data', commonResult.data)
 
-        setTableDataSource(commonResult.data as User[])
+        if (commonResult.code === ResponseCode.SUCCESS) {
+            const accountList = commonResult.data;
+            // 查询每个account对应的用户列表
+            Promise.all(commonResult.data.map(async (item: any) => {
+                const userList = await getUserAccountInfo(item.userId)
+                return userList.data
+            })).then((res) => {
+                console.log('res', res)
+                const userList = res.map((item: any) => {
+                    return {
+                        ...item,
+                        accountId: accountList.find((account: any) => account.userId === item.userId)?.accountId,
+                        userId: item.userId,
+                        employeeNo: item.employeeNo,
+                        name: item.name,
+                        department: item.department,
+                        balance: item.balance,
+                        lastLogin: item.lastLogin,
+                        createdTime: item.createdTime,
+                        createdBy: item.createdBy,
+                        updatedTime: item.updatedTime,
+                    }
+                })
+
+                console.log('userList', userList)
+                setTableDataSource(userList as User[])
+            })
+
+        } else {
+            message.error(commonResult.message + ", 获取用户列表失败!")
+            return
+        }
+        
     }
 
     // Used for fetch data
@@ -334,7 +366,6 @@ export const UserListPage = () => {
                             return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                         }}
                     />
-                    <Column title="Created By" dataIndex="createdBy" key="createdBy" />
                     <Column
                         title="Action"
                         key="action"
