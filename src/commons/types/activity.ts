@@ -19,8 +19,8 @@ export interface ActivityCardType {
     description: string
     cover: string
     status: string
-    startTime: Date
-    endTime: Date
+    startTime: string
+    endTime: string
 }
 
 

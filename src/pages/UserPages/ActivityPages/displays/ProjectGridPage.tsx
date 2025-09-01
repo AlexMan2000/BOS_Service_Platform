@@ -8,12 +8,10 @@ import { Card, Typography, Tag, Space, Divider, Avatar } from "antd"
 import { 
     CalendarOutlined, 
     UserOutlined, 
-    DollarOutlined,
-    InfoCircleOutlined,
-    CheckCircleOutlined,
-    ClockCircleOutlined
+    DollarOutlined
 } from "@ant-design/icons"
 import dayjs from "dayjs"
+import { getActivityStatusColor, getActivityStatusText, getActivityStatusIcon } from "@/commons/utils/formatters/statusFormatter"
 
 const { Title, Text, Paragraph } = Typography
 
@@ -27,12 +25,13 @@ export const ProjectGridPage = () => {
     
     // Mock activity data for demonstration
     const mockActivity: Activity = {
+        id: 1,
         name: "2024年度创新项目大赛",
-        accountId: "ACT2024001",
-        balance: "500000",
+        accountId: 1,
+        freeCredit: 500000,
         cover: "https://via.placeholder.com/400x300",
         description: "本次创新项目大赛旨在鼓励员工发挥创新思维，推动技术进步与业务发展。参赛项目涵盖人工智能、区块链、物联网等前沿技术领域，为公司未来发展储备技术力量。",
-        status: "active",
+        status: 1,
         createdTime: "2024-01-01T09:00:00Z",
         updatedTime: "2024-01-15T14:30:00Z",
         startTime: "2024-01-01T09:00:00Z",
@@ -105,35 +104,7 @@ export const ProjectGridPage = () => {
         }).format(parseInt(amount))
     }
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'active': return 'green'
-            case 'inactive': return 'red'
-            case 'pending': return 'orange'
-            case 'cancelled': return 'default'
-            default: return 'blue'
-        }
-    }
 
-    const getStatusText = (status: string) => {
-        switch (status) {
-            case 'active': return '进行中'
-            case 'inactive': return '已结束'
-            case 'pending': return '待开始'
-            case 'cancelled': return '已取消'
-            default: return status
-        }
-    }
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case 'active': return <CheckCircleOutlined />
-            case 'inactive': return <ClockCircleOutlined />
-            case 'pending': return <ClockCircleOutlined />
-            case 'cancelled': return <ClockCircleOutlined />
-            default: return <InfoCircleOutlined />
-        }
-    }
 
     return (
         <div className={styles.container}>
@@ -164,9 +135,9 @@ export const ProjectGridPage = () => {
                                 {currentActivity.name}
                             </Title>
                             <Space size="small">
-                                {getStatusIcon(currentActivity.status)}
-                                <Tag color={getStatusColor(currentActivity.status)}>
-                                    {getStatusText(currentActivity.status)}
+                                {getActivityStatusIcon(currentActivity.status)}
+                                <Tag color={getActivityStatusColor(currentActivity.status)}>
+                                    {getActivityStatusText(currentActivity.status)}
                                 </Tag>
                             </Space>
                         </div>
@@ -186,7 +157,7 @@ export const ProjectGridPage = () => {
                                 <DollarOutlined style={{ color: '#52c41a', marginRight: 8 }} />
                                 <Text strong>预算余额：</Text>
                                 <Text style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                                    {formatCurrency(currentActivity.balance)}
+                                    {formatCurrency(currentActivity.freeCredit.toString())}
                                 </Text>
                             </div>
 
