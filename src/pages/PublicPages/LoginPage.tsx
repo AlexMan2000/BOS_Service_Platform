@@ -10,8 +10,6 @@ import { changePassword } from "@/services/userApi"
 import { message } from "antd"
 import { useState } from "react"
 import { loginUser } from "@/services/userApi"
-import { CommonResult } from "@/commons/types/response"
-import { User } from "@/commons/types/user"
 
 export const LoginPage = () => {
     const navigate = useNavigate()
