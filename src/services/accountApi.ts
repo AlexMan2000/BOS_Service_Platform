@@ -115,3 +115,21 @@ export const uploadCSV = async (type: string, file: File, config?: any) => {
         throw error;
     }
 }
+
+
+export const getUserAccountInfo = async (userId: string, config?: any) => {
+    try {
+        const res = await postRequest(`/account/getByUserId/${userId}`,
+             {
+            },
+            {
+                timeout: 2000,
+                ...config
+            }
+        );
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting user account info:", error);
+        throw error;
+    }
+}

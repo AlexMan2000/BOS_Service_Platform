@@ -3,8 +3,9 @@ import type { RootState } from '@/store/rootReducers'
 
 interface UserState {
   // Basic user info
+  userId: string; // 用户id
   employeeNo: string // 工号
-  // accountId: number // 账号id
+  accountId: number // 账号id
   phone: string; // 手机号
   name: string; // 姓名
   department: string; // 部门
@@ -37,8 +38,9 @@ const getAccessToken = () => {
 
 const initialState: UserState = {
   // Basic user info
+  userId: '',
   employeeNo: '',
-  // accountId: 0,
+  accountId: 0,
   phone: '',
   name: '',
   department: '',
@@ -67,8 +69,9 @@ export const userSlice = createSlice({
     },
     initUserInfo: (state) => {
       // Reset basic user info
+      state.userId = ''
       state.employeeNo = ''
-      // state.accountId = 0,
+      state.accountId = 0
       state.phone = '',
       state.name = ''
       state.department = ''
