@@ -12,6 +12,7 @@ import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { createBenefit } from "@/services/benefitApi"
 import { ResponseCode } from "@/commons/defs/code"
+import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 export const RightListPage = () => {
 
     const navigate = useNavigate()
@@ -195,7 +196,7 @@ export const RightListPage = () => {
                             total: item.total,
                             remain: item.remain,
                             active: item.active,
-                            expDate: new Date(item.expDate?.toString() ?? '').toISOString(),
+                            expDate: formatDateTime(item.expDate ?? ''),
                             createdBy: employeeNo,
                         }
                     })
