@@ -21,10 +21,8 @@ export interface User {
 export interface UserSubmitType {
     employeeNo: string,
     name: string,
-    phone: string,
-    role: string,
     department: string,
-    balance: string,
+    createdBy: string,
 }
 
 /**

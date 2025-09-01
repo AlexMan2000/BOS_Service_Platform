@@ -11,13 +11,17 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
+import { createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
 import { ResponseCode } from "@/commons/defs/code"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
 
 export const UserListPage = () => {
 
     const navigate = useNavigate()
 
+
+    const { employeeNo } = useSelector(selectUser)
     const [tableDataSource, setTableDataSource] = useState<User[]>([])
 
 
@@ -25,8 +29,8 @@ export const UserListPage = () => {
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [batchImportLoading, setBatchImportLoading] = useState(false)
     const [batchImportFile, setBatchImportFile] = useState<File | null>(null)
-
-
+    const [batchImportSaved, setBatchImportSaved] = useState(false)
+    const [batchTransferSaved, setBatchTransferSaved] = useState(false)
 
     const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
@@ -37,17 +41,14 @@ export const UserListPage = () => {
     const [transferDataSource, setTransferDataSource] = useState<UserTransferSubmitType[]>([])
     // 配置
     const DEFAULT_NEW_ROW_IMPORT = {
-        employeeNo: (Math.random() * 1000000).toFixed(0),
-        password: '',
-        phone: '',
-        role: 'user',
+        employeeNo: '307' + (Math.random() * 1000).toFixed(0),
+        createdBy: '',
         name: '',
         department: '',
-        balance: '0',
     }
 
     const DEFAULT_NEW_ROW_TRANSFER = {
-        employeeNo: (Math.random() * 1000000).toFixed(0),
+        employeeNo: '307' + (Math.random() * 1000).toFixed(0),
         money: '0',
         reason: '',
     }
@@ -77,32 +78,9 @@ export const UserListPage = () => {
             width: 100,
         },
         {
-            title: 'Phone',
-            dataIndex: 'phone',
-            key: 'phone',
-            width: 120,
-        },
-        {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
-            width: 120,
-            valueType: 'select',
-            valueEnum: {
-                admin: { text: 'Admin', status: 'Success' },
-                user: { text: 'User', status: 'Default' },
-            },
-        },
-        {
             title: 'Department',
             dataIndex: 'department',
             key: 'department',
-            width: 100,
-        },
-        {
-            title: 'Balance',
-            dataIndex: 'balance',
-            key: 'balance',
             width: 100,
         },
     ]
@@ -173,7 +151,7 @@ export const UserListPage = () => {
     // ]
 
     const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
-        const commonResult = await getAllAccounts({pageNum: pageNum, pageSize: pageSize})
+        const commonResult = await getAllAccounts({ pageNum: pageNum, pageSize: pageSize })
 
         if (commonResult.code === ResponseCode.SUCCESS) {
             const accountList = commonResult.data;
@@ -207,12 +185,12 @@ export const UserListPage = () => {
             message.error(commonResult.message + ", 获取用户列表失败!")
             return
         }
-        
+
     }
 
     // Used for fetch data
     useEffect(() => {
-        
+
         fetchData(0, 10)
     }, [])
 
@@ -222,10 +200,35 @@ export const UserListPage = () => {
             {/* Modals */}
             <Modal
                 open={isBatchImportModalOpen}
-                onCancel={() => setIsBatchImportModalOpen(false)}
+                onCancel={() => {
+                    setIsBatchImportModalOpen(false)
+                    setBatchImportSaved(false)
+                }}
                 onOk={async () => {
                     if (batchImportActiveTab === '1') {
                         console.log('onOk', importDataSource)
+                        if (!batchImportSaved) {
+                            message.info("提交任何一行前请先保存！")
+                            return
+                        }
+                        const accountCreateVO: UserSubmitType = {
+                            employeeNo: importDataSource[0].employeeNo,
+                            name: importDataSource[0].name,
+                            department: importDataSource[0].department,
+                            createdBy: employeeNo,
+                        }
+
+                        const result: any = await createAccount(accountCreateVO)
+                        if (result.code === ResponseCode.SUCCESS) {
+                            message.success("提交成功！")
+                            setBatchImportSaved(false)
+                            setIsBatchImportModalOpen(false)
+                            fetchData(0, 10)
+                        } else {
+                            message.error(result.message + ", 提交失败!")
+                        }
+
+                        console.log('accountCreateVO', accountCreateVO)
                     } else {
                         console.log('ss')
                         setBatchImportLoading(true)
@@ -239,55 +242,57 @@ export const UserListPage = () => {
             >
                 <div className={styles.modalContent}>
                     <div className={styles.modalHeader}>
-                        <Tabs 
-                        onChange={(key) => {
-                            setBatchImportActiveTab(key)
-                            setBatchImportFile(null)
-                            setImportDataSource([])
-                        }}
-                        items={[
-                            {
-                                key: '1',
-                                label: '表格导入',
-                                children: <GenericEditableTable<UserSubmitType>
-                                    dataSource={importDataSource}
-                                    setDataSource={setImportDataSource}
-                                    columns={PROCOLUMNS_IMPORT_CONFIGS}
-                                    rowKey="employeeNo"
-                                    recordCreatorProps={false}
-                                    defaultNewRow={DEFAULT_NEW_ROW_IMPORT}
-                                    editable={{
-                                        type: 'multiple',
-                                    }}
-                                    scroll={{ x: 'max-content', y: 300 }}
-                                    size="small"
-                                    onSave={async (rowKey: React.Key, data: UserSubmitType, row: UserSubmitType) => {
-                                        console.log('Saving row:', rowKey, data, row);
-                                        await wait(1);
-                                    }}
-                                />
-                            },
-                            {
-                                key: '2',
-                                label: 'Excel导入',
-                                children: <GenericCSVFileImport 
-                                file_url={templateUrl} 
-                                download_name="user_import_template.csv" 
-                                previewTrigger={batchImportActiveTab}
-                                onUpload={async (file: File) => { 
-                                    setBatchImportFile(file)
-                                    //后端接口
-                                    // setIsBatchImportModalOpen(false)
-                                }} type="account" />
-                            }
-                        ]} />
+                        <Tabs
+                            onChange={(key) => {
+                                setBatchImportActiveTab(key)
+                                setBatchImportFile(null)
+                                setImportDataSource([])
+                            }}
+                            items={[
+                                {
+                                    key: '1',
+                                    label: '表格导入',
+                                    children: <GenericEditableTable<UserSubmitType>
+                                        dataSource={importDataSource}
+                                        setDataSource={setImportDataSource}
+                                        columns={PROCOLUMNS_IMPORT_CONFIGS}
+                                        rowKey="employeeNo"
+                                        recordCreatorProps={false}
+                                        defaultNewRow={DEFAULT_NEW_ROW_IMPORT}
+                                        editable={{
+                                            type: 'multiple',
+                                        }}
+                                        scroll={{ x: 'max-content', y: 300 }}
+                                        size="small"
+                                        onSave={async (rowKey: React.Key, data: UserSubmitType, row: UserSubmitType) => {
+                                            console.log('Saving row:', rowKey, data, row);
+                                            // await wait(1);
+                                            setBatchImportSaved(true)
+                                        }}
+                                    />
+                                },
+                                {
+                                    key: '2',
+                                    label: 'Excel导入',
+                                    children: <GenericCSVFileImport
+                                        file_url={templateUrl}
+                                        download_name="user_import_template.csv"
+                                        previewTrigger={batchImportActiveTab}
+                                        onUpload={async (file: File) => {
+                                            setBatchImportFile(file)
+                                            //后端接口
+                                            // setIsBatchImportModalOpen(false)
+                                            setBatchImportSaved(false)
+                                        }} type="account" />
+                                }
+                            ]} />
                     </div>
 
                 </div>
             </Modal>
 
 
-            
+
 
             <Modal
                 open={isBatchTransferModalOpen}
@@ -315,7 +320,7 @@ export const UserListPage = () => {
                                     }}
                                     scroll={{ x: 'max-content', y: 300 }}
                                     size="small"
-                                    onSave={async (rowKey: React.Key, data: UserTransferSubmitType, row: UserTransferSubmitType ) => {
+                                    onSave={async (rowKey: React.Key, data: UserTransferSubmitType, row: UserTransferSubmitType) => {
                                         console.log('Saving row:', rowKey, data, row);
                                         await wait(1);
                                     }}
@@ -341,7 +346,8 @@ export const UserListPage = () => {
                     <div className={styles.addUser}>
                         <Button type="primary" onClick={() => {
                             setImportDataSource([])
-                            setIsBatchImportModalOpen(true)}}
+                            setIsBatchImportModalOpen(true)
+                        }}
                         >新增用户</Button>
                         <Button type="primary" onClick={() => {
                             setTransferDataSource([])
@@ -351,7 +357,7 @@ export const UserListPage = () => {
                 </div>
                 <Table<User> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
-                    >
+                >
                     <Column title="Name" dataIndex="name" key="name" />
                     <Column title="Employee No" dataIndex="employeeNo" key="employeeNo" />
                     <Column title="Department" dataIndex="department" key="department" />
@@ -375,13 +381,13 @@ export const UserListPage = () => {
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
                                     navigate("/admin/user-management/user-detail", { state: record })
                                 }}>查看</Button>
-                                <Button type="link" size="small" style={{ color: "#ff4d4f" }} 
-                                onClick={async () => {
-                                    //删除用户
-                                    await deleteAccount(record.employeeNo)
-                                    // 重新获取数据
-                                    await fetchData(0, 10)
-                                }}
+                                <Button type="link" size="small" style={{ color: "#ff4d4f" }}
+                                    onClick={async () => {
+                                        //删除用户
+                                        await deleteAccount(record.employeeNo)
+                                        // 重新获取数据
+                                        await fetchData(0, 10)
+                                    }}
                                 >删除</Button>
                             </Space>
                         )}

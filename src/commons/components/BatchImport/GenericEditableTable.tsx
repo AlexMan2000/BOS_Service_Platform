@@ -1,5 +1,5 @@
 import { EditableProTable, ProColumns } from "@ant-design/pro-components"
-import { Button } from "antd"
+import { Button, message } from "antd"
 import React, { useState } from "react"
 
 export type GenericEditableTableProps<T extends object> = {
@@ -22,6 +22,7 @@ export type GenericEditableTableProps<T extends object> = {
     onSave?: (rowKey: React.Key, data: T, row: T) => Promise<void>
     size?: 'small' | 'middle' | 'large'
     pagination?: false | object
+    maxRowLength?: number
 }
 
 export const GenericEditableTable = <T extends object>(props: GenericEditableTableProps<T>) => {
@@ -39,6 +40,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         onSave,
         size,
         pagination,
+        maxRowLength,
         } = props
 
 
@@ -76,9 +78,13 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
     const addMultipleRows = (count: number) => {
         console.log(`Adding ${count} rows, current dataSource length:`, dataSource.length);
 
+        if (dataSource.length + count > (maxRowLength ?? 1)) {
+            message.error("最多添加1行");
+            return;
+        }
         const newRows: T[] = [];
         for (let i = 0; i < count; i++) {
-            newRows.push({ ...defaultNewRow, [rowKey]: (Math.random() * 1000000).toFixed(0) });
+            newRows.push({ ...defaultNewRow, [rowKey]: '307' + (Math.random() * 1000).toFixed(0) });
         }
 
         // Always add to bottom
