@@ -1,3 +1,4 @@
+import { UserTransferSubmitType } from "@/commons/types/user";
 import { deleteRequest, getRequest, postRequest } from "./axiosInstance";
 import { AccountCreateVO, ListAllAccountVO } from "@/commons/types/account";
 
@@ -130,6 +131,19 @@ export const getUserAccountInfo = async (userId: string, config?: any) => {
         return res.data;
     } catch (error: any) {
         console.error("Error getting user account info:", error);
+        throw error;
+    }
+}
+
+export const batchTransfer = async (body: UserTransferSubmitType[], config?: any) => {
+    try {
+        const res = await postRequest(`/transaction/import-list`, body, {
+            timeout: 2000,
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error batch transferring:", error);
         throw error;
     }
 }

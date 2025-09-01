@@ -11,7 +11,7 @@ import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEd
 import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
+import { batchTransfer, createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
 import { ResponseCode } from "@/commons/defs/code"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
@@ -50,7 +50,7 @@ export const UserListPage = () => {
     const DEFAULT_NEW_ROW_TRANSFER = {
         employeeNo: '307' + (Math.random() * 1000).toFixed(0),
         money: '0',
-        reason: '',
+        remark: '',
     }
 
 
@@ -109,46 +109,12 @@ export const UserListPage = () => {
             width: 100,
         },
         {
-            title: 'reason',
-            dataIndex: 'reason',
-            key: 'reason',
+            title: 'remark',
+            dataIndex: 'remark',
+            key: 'remark',
             width: 120,
         }
     ]
-
-
-
-    // 默认数据
-    // const DEFAULT_DATA_DISPLAY: User[] = [
-    //     {
-    //         employeeNo: "1234567890",
-    //         password: "123456",
-    //         phone: "1234567890",
-    //         role: "admin",
-    //         name: "张三",
-    //         department: "技术部",
-    //         balance: "1000",
-    //         deleted: false,
-    //         lastLogin: "2021-01-01",
-    //         createdTime: "2021-01-01",
-    //         createdBy: "admin",
-    //         updatedTime: "2021-01-01"
-    //     },
-    //     {
-    //         employeeNo: "1234567891",
-    //         password: "123456",
-    //         phone: "1234567891",
-    //         role: "user",
-    //         name: "李四",
-    //         department: "技术部",
-    //         balance: "1000",
-    //         deleted: false,
-    //         lastLogin: "2021-01-01",
-    //         createdTime: "2021-01-01",
-    //         createdBy: "admin",
-    //         updatedTime: "2021-01-01"
-    //     },
-    // ]
 
     const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
         const commonResult = await getAllAccounts({ pageNum: pageNum, pageSize: pageSize })
@@ -296,10 +262,31 @@ export const UserListPage = () => {
 
             <Modal
                 open={isBatchTransferModalOpen}
-                onCancel={() => setIsBatchTransferModalOpen(false)}
+                onCancel={() => {
+                    setIsBatchTransferModalOpen(false)
+                    setBatchTransferSaved(false)
+                }}
                 title="批量发放"
-                onOk={() => {
+                onOk={async () => {
+                    if (!batchTransferSaved) {
+                        message.info("提交任何一行前请先保存！")
+                        return
+                    }
                     console.log('onOk', transferDataSource)
+                    const userTransferVO: UserTransferSubmitType[] = transferDataSource.map((item) => { return {
+                        employeeNo: item.employeeNo,
+                        money: item.money,
+                        remark: item.remark,
+                    }});
+                    const result: any = await batchTransfer(userTransferVO);
+                    if (result.code === ResponseCode.SUCCESS) {
+                        message.success("提交成功！")
+                        setBatchTransferSaved(false)
+                        setIsBatchTransferModalOpen(false)
+                        fetchData(0, 10)
+                    } else {
+                        message.error(result.message + ", 提交失败!")
+                    }
                 }}
             >
                 <div className={styles.modalContent}>
@@ -322,8 +309,9 @@ export const UserListPage = () => {
                                     size="small"
                                     onSave={async (rowKey: React.Key, data: UserTransferSubmitType, row: UserTransferSubmitType) => {
                                         console.log('Saving row:', rowKey, data, row);
-                                        await wait(1);
+                                        setBatchTransferSaved(true)
                                     }}
+                                    maxRowLength={10}
                                 />
                             },
                             {
