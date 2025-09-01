@@ -1,43 +1,134 @@
 
-
 .container {
-
     display: flex;
     flex-direction: column;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-self: flex-end;
-
-        .edit {
-            font-size: 16px;
-            font-weight: 600;
-            color: #006cbe;
-            border: 1px solid #006cbe;
-            border-radius: 5px;
-            padding: 5px 20px;
-            cursor: pointer;
-        }
-
-
-      
-    }
-
-    .form {
-        margin-top: 50px;
-    }
-
-
-    .submit {
-        align-self: flex-end;
-        font-size: 16px;
-        font-weight: 600;
-        color: #006cbe;
-        border: 1px solid #006cbe;
-        border-radius: 5px;
-        padding: 5px 20px;
-        cursor: pointer;
-    }
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
     
+    .profileCard {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: none;
+        overflow: hidden;
+        
+        .profileHeader {
+            display: flex;
+            align-items: center;
+            padding: 32px 0 24px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 24px;
+            
+            .avatar {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                margin-right: 20px;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+            
+            .userInfo {
+                flex: 1;
+                
+                .userName {
+                    margin-bottom: 4px !important;
+                    color: #1a1a1a;
+                    font-weight: 600;
+                }
+            }
+        }
+        
+        .userInfoList {
+            .listItem {
+                padding: 16px 0;
+                border-bottom: 1px solid #f5f5f5;
+                transition: all 0.3s ease;
+                
+                &:last-child {
+                    border-bottom: none;
+                }
+                
+                &:hover {
+                    background-color: #fafafa;
+                    border-radius: 8px;
+                    padding-left: 12px;
+                    padding-right: 12px;
+                }
+                
+                .iconWrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    font-size: 16px;
+                    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+                }
+                
+                .itemTitle {
+                    color: #666;
+                    font-size: 14px;
+                    margin-bottom: 4px;
+                }
+                
+                .itemValue {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    
+                    .valueText {
+                        color: #1a1a1a;
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+                    
+                    .actionIcon {
+                        color: #1890ff;
+                        font-size: 18px;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        transition: all 0.3s ease;
+                        
+                        &:hover {
+                            background-color: #e6f7ff;
+                            color: #096dd9;
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+        
+        .profileCard {
+            .profileHeader {
+                padding: 24px 0 16px 0;
+                flex-direction: column;
+                text-align: center;
+                
+                .avatar {
+                    margin-right: 0;
+                    margin-bottom: 16px;
+                }
+            }
+            
+            .userInfoList {
+                .listItem {
+                    .itemValue {
+                        .valueText {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

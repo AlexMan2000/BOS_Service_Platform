@@ -57,6 +57,7 @@ export const LoginPage = () => {
             dispatch(setAccessToken(commonResult.data.token))
 
             localStorage.setItem("access_token", commonResult.data.token);
+            console.log("commonResult.data.token", commonResult.data.token)
 
             message.info(commonResult.message + ", 用户首次登录， 请修改密码!")
             setIsChangePasswordModalOpen(true)

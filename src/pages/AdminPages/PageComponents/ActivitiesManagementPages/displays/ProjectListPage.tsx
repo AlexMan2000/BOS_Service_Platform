@@ -16,7 +16,7 @@ import { ResponseCode } from "@/commons/defs/code"
 
 export const ProjectListPage = () => {
     const navigate = useNavigate()
-    const { id } = useOutletContext<Activity>();
+    const { id, status } = useOutletContext<Activity>();
     console.log("accountId", id)
 
     const [tableDataSource, setTableDataSource] = useState<ProjectTableType[]>([])
@@ -236,7 +236,7 @@ export const ProjectListPage = () => {
                             render={(_: any, record: ProjectTableType) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
-                                    navigate("/admin/activities-management/activity-detail/project-detail", { state: record })
+                                    navigate("/admin/activities-management/activity-detail/project-detail", { state: {...record, activityStatus: status} })
                                 }}>作品详情</Button>
                                 <Popconfirm title="确定删除吗？" onConfirm={async () => {
                                     console.log("删除", record)

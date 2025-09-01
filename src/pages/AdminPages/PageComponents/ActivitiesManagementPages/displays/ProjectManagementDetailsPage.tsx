@@ -1,7 +1,7 @@
 
 import { Outlet, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { Form, Input, Button, InputNumber } from "antd"
+import { Form, Input, Button, InputNumber, message } from "antd"
 import styles from "./ProjectManagementDetailsPage.module.less"
 import { Project } from "@/commons/types/activity"
 
@@ -12,8 +12,10 @@ export const ProjectManagementDetailsPage = () => {
     const [projectForm] = Form.useForm()
 
     const location = useLocation()
-    const state = location.state as Project
+    const state = location.state as Project & { activityStatus: number }
 
+
+    console.log("projectdetails page state", state)
     useEffect(() => {
         if (state) {
             projectForm.setFieldsValue({
@@ -41,7 +43,13 @@ export const ProjectManagementDetailsPage = () => {
                     <div className={styles.formControls}>
                         <Button 
                             type="primary" 
-                            onClick={() => setEdit(!edit)}
+                            onClick={() => {
+                                if (state.activityStatus !== 0) {
+                                    message.error("活动已开始，无法编辑作品")
+                                    return
+                                }
+                                setEdit(!edit)
+                            }}
                             style={{ marginBottom: 16 }}
                         >
                             {edit ? "取消" : "编辑"}

@@ -17,6 +17,8 @@ export const ActivityManagementDetailsPage = () => {
     const location = useLocation()
     const state = location.state as Activity
 
+    console.log("actibitydetails page state", state)
+
     useEffect(() => {
 
         if (state) {
@@ -46,7 +48,7 @@ export const ActivityManagementDetailsPage = () => {
 
     }
 
-    const stateToChild = state;
+    const stateToChild = {...state, status: state.status};
 
     console.log("stateToChild", stateToChild)
 
@@ -61,8 +63,8 @@ export const ActivityManagementDetailsPage = () => {
                                 if (edit) {
                                     setEdit(!edit)
                                 } else {
-                                    if (state.status === 2) {
-                                        message.error("活动已结束，无法编辑")
+                                    if (state.status !== 0) {
+                                        message.error("活动已开始，无法编辑活动")
                                         return
                                     }
                                     const commonResult = await getActivityById(state.id)

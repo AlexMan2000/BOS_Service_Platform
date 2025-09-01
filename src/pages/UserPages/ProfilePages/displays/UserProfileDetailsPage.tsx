@@ -1,32 +1,54 @@
-import { AutoComplete, AutoCompleteProps, Form, Input, Modal } from "antd"
+import { List, Card, Typography, Avatar } from "antd"
+import { UserOutlined, PhoneOutlined, BankOutlined, IdcardOutlined, DollarOutlined, TransactionOutlined } from "@ant-design/icons"
 import styles from "./UserProfileDetailsPage.module.less"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
-import { TransactionOutlined } from "@ant-design/icons"
-import { useNavigate } from "react-router-dom"
 import { TransferModal } from "@/commons/components/Modal/TransferModal"
 
-export const UserProfileDetailsPage = () => {
-    const navigate = useNavigate()
+const { Title, Text } = Typography
 
-    const [userForm] = Form.useForm()
-    const [edit, setEdit] = useState(false)
+export const UserProfileDetailsPage = () => {
     const [transferOpen, setTransferOpen] = useState(false)
 
-    const { employeeNo, name, department, phone, balance} = useSelector(selectUser)
+    const { employeeNo, name, department, phone, balance } = useSelector(selectUser)
     
-
-    useEffect(() => {
-        userForm.setFieldsValue({
-            "employeeNo": employeeNo,
-            "name": name,
-            "department": department,
-            "phone": phone,
-            "balance": balance
-        })
-    }, [])
     console.log("employeeNo", employeeNo, "name", name, "department", department, "phone", phone, "balance", balance)
+
+    // 构建用户信息数据
+    const userInfoData = [
+        {
+            title: '工号',
+            value: employeeNo || '--',
+            icon: <IdcardOutlined />,
+            key: 'employeeNo'
+        },
+        {
+            title: '用户名',
+            value: name || '--',
+            icon: <UserOutlined />,
+            key: 'name'
+        },
+        {
+            title: '部门',
+            value: department || '--',
+            icon: <BankOutlined />,
+            key: 'department'
+        },
+        {
+            title: '余额',
+            value: balance ? `¥${balance.toLocaleString()}` : '--',
+            icon: <DollarOutlined />,
+            key: 'balance',
+            hasAction: true
+        },
+        {
+            title: '手机号',
+            value: phone || '--',
+            icon: <PhoneOutlined />,
+            key: 'phone'
+        }
+    ]
 
     return (
         <div className={styles.container}>
@@ -35,73 +57,41 @@ export const UserProfileDetailsPage = () => {
                 transferOpen={transferOpen}
                 setTransferOpen={setTransferOpen}
             />
-            <div className={styles.header}>
-                <div className={styles.edit} onClick={() => {
-                    if (edit) {
-                        console.log(userForm.getFieldValue("用户名"))
-                        userForm.submit()
-                    } else {
-                        setEdit(!edit)
-                    }
-                }
-                }>
-                    {edit ? "保存" : "编辑"}
+            
+            <Card className={styles.profileCard}>
+                <div className={styles.profileHeader}>
+                    <Avatar size={64} icon={<UserOutlined />} className={styles.avatar} />
+                    <div className={styles.userInfo}>
+                        <Title level={3} className={styles.userName}>{name || '未知用户'}</Title>
+                        <Text type="secondary">{department || '未知部门'}</Text>
+                    </div>
                 </div>
-            </div>
-            <Form
-                disabled={!edit}
-                form={userForm}
-                className={styles.form}
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}
-                style={{ maxWidth: 800 }}
-                onFinish={() => {
-                    console.log(userForm.getFieldsValue())
-                    setEdit(!edit)
-                }}
-            >
-                <Form.Item
-                    label="工号"
-                    name="employeeNo"
-                    rules={[{ required: true, message: "请输入用户名" }]}
-                >
-
-                    <Input placeholder="请输入用户名"  />
-                </Form.Item>
-                <Form.Item
-                    label="用户名"
-                    name="name"
-                    rules={[{ required: true, message: "请输入用户名" }]}
-
-                    >
-                    <Input placeholder="请输入用户名"  />
-                </Form.Item>
-                <Form.Item
-                    label="部门"
-                    name="department"
-                    rules={[{ required: true, message: "请输入部门" }]}
-                    >
-                    <Input placeholder="请输入部门"  />
-                </Form.Item>
-                <Form.Item
-                    label="余额"
-                    name="balance"
-                    rules={[{ required: true, message: "请输入稳定币余额" }]}
-                    style={{position: "relative"}}
-                >
-                    <Input placeholder="请输入稳定币余额" disabled />
-                    <TransactionOutlined style={{ fontSize: "20px", cursor: "pointer", position: "absolute", right: "10px", top: "6px" }} onClick={() => {
-                        setTransferOpen(true)
-                    }} />
-                </Form.Item>
-                <Form.Item
-                    label="手机号"
-                    name="phone"
-                    rules={[{ required: true, message: "请输入手机号" }]}
-                >
-                        <Input placeholder="请输入手机号" disabled />
-                </Form.Item>
-            </Form>
+                
+                <List
+                    className={styles.userInfoList}
+                    dataSource={userInfoData}
+                    renderItem={(item) => (
+                        <List.Item className={styles.listItem}>
+                            <List.Item.Meta
+                                avatar={<div className={styles.iconWrapper}>{item.icon}</div>}
+                                title={<Text strong className={styles.itemTitle}>{item.title}</Text>}
+                                description={
+                                    <div className={styles.itemValue}>
+                                        <Text className={styles.valueText}>{item.value}</Text>
+                                        {item.hasAction && (
+                                            <TransactionOutlined 
+                                                className={styles.actionIcon}
+                                                onClick={() => setTransferOpen(true)}
+                                                title="转账"
+                                            />
+                                        )}
+                                    </div>
+                                }
+                            />
+                        </List.Item>
+                    )}
+                />
+            </Card>
         </div>
     )
 }
