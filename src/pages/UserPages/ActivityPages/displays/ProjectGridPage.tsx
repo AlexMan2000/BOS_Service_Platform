@@ -12,16 +12,21 @@ import {
 } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { getActivityStatusColor, getActivityStatusText, getActivityStatusIcon } from "@/commons/utils/formatters/statusFormatter"
+import { getAllWorks } from "@/services/workApi"
+import { ResponseCode } from "@/commons/defs/code"
+import { useEffect, useState } from "react"
 
 const { Title, Text, Paragraph } = Typography
 
 export const ProjectGridPage = () => {
 
     const { state } = useLocation()
-    console.log(state)
+    const [projectCards, setProjectCards] = useState<ProjectCardType[]>([])
+    console.log("avtivity State", state)
     
     // Get activity data from state or use mock data
     const activityData = state as Activity
+    const id = activityData.id
     
     // Mock activity data for demonstration
     const mockActivity: Activity = {
@@ -40,30 +45,34 @@ export const ProjectGridPage = () => {
     
     const currentActivity = activityData || mockActivity
 
-    const PROJECT_CARDS: ProjectCardType[] = [
-        {
-            title: "作品1",
-            description: "作品1描述，这个作品旨在帮助员工熟悉投票流程, 所有员工都可以参与, 投票时间截止到2021-01-01 12:00:00",
-            cover: "https://picsum.photos/400/500",
-            authors: "作者1",
-            activityId: "1",
-            link: "https://www.baidu.com",
-            createdTime: "2021-01-01 11:00:00",
-            updatedTime: "2021-01-01 12:00:00",
-            amount: 100,
-        },
-        {
-            title: "作品2",
-            description: "作品2描述，这个作品旨在帮助员工熟悉投票流程, 所有员工都可以参与, 投票时间截止到2021-01-01 12:00:00",
-            cover: "https://picsum.photos/400/400",
-            authors: "作者2",
-            activityId: "2",
-            link: "https://www.baidu.com",
-            createdTime: "2021-01-01 11:00:00",
-            updatedTime: "2021-01-01 12:00:00",
-            amount: 200,
-        },
-    ]
+    const fetchData = async () => {
+        try {
+            const commonResult: any = await getAllWorks({ freeCredit: 1321321, accountId: 122, activityId: id })
+            if (commonResult.code === ResponseCode.SUCCESS) {
+                const data = commonResult.data.workList
+                // 确保data是数组
+                console.log('data', data)
+                setProjectCards(data as ProjectCardType[])
+            } else {
+                console.warn('获取项目数据失败:', commonResult)
+                setProjectCards([])
+            }
+        } catch (error) {
+            console.error('获取项目数据失败:', error)
+            setProjectCards([])
+        }
+    }
+
+    useEffect(() => {
+       
+        
+        if (id && id !== 0) {
+            fetchData()
+        } else {
+            // 如果没有有效的活动ID，清空数据
+            setProjectCards([])
+        }
+    }, [id])
 
 
     const PIE_CONFIG = {
@@ -217,7 +226,7 @@ export const ProjectGridPage = () => {
                 </div> */}
             </div>
             <div className={styles.grid}>
-                {PROJECT_CARDS.map((project) => (
+                {projectCards.map((project) => (
                     <ProjectCard key={project.title} {...project} />
                 ))}
             </div>

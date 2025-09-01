@@ -1,18 +1,49 @@
 import styles from "./ProjectCard.module.less"
-import { ProjectCardType } from "@/commons/types/activity"
+import { Activity, ProjectCardType } from "@/commons/types/activity"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber, Popconfirm } from "antd"
+import { useLocation, useNavigate } from "react-router-dom"
+import { Modal, Button, InputNumber, Popconfirm, Tag } from "antd"
 import { InfoCircleOutlined } from "@ant-design/icons"
+import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
+import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
 
 export const ProjectCard = (props: ProjectCardType) => {
-    const { title, amount, authors, activityId, description, cover, link, createdTime, updatedTime } = props
+    const { title, amount, authors, description, cover, createdTime, updatedTime } = props
     const navigate = useNavigate()
 
+    const { state } = useLocation()
+    const activity = state as Activity
+
     const [isModalOpen, setIsModalOpen] = useState(false)
-
-
     const [money, setMoney] = useState<number>(0)
+    
+    // 图片错误处理
+    const [imgSrc, setImgSrc] = useState(cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    
+    // 备用图片列表
+    const fallbackImages = [
+        "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
+        "https://picsum.photos/400/300?random=1",
+        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
+    ]
+    
+    const [fallbackIndex, setFallbackIndex] = useState(0)
+
+    const handleImageError = () => {
+        console.log("Image load error for:", imgSrc)
+        if (fallbackIndex < fallbackImages.length - 1) {
+            const nextIndex = fallbackIndex + 1
+            setFallbackIndex(nextIndex)
+            setImgSrc(fallbackImages[nextIndex])
+        }
+    }
+
+    const handleImageLoad = () => {
+        console.log("Image loaded successfully:", imgSrc)
+    }
+
+    // 获取活动状态信息（如果活动有状态的话）
+    const statusInfo = activity ? getActivityStatusInfo(activity.status) : null
     return (
         <div className={styles.container} onClick={() => {
             navigate(`/home/activities/projects/detail`, {
@@ -89,7 +120,13 @@ export const ProjectCard = (props: ProjectCardType) => {
                 </div>
             </Modal>
             <div className={styles.cover}>
-                <img src={cover} alt={title} />
+                <img 
+                    src={imgSrc}
+                    onError={handleImageError}
+                    onLoad={handleImageLoad}
+                    alt={title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
             </div>
             <div className={styles.content}>
                 <div className={styles.name}>
@@ -98,14 +135,24 @@ export const ProjectCard = (props: ProjectCardType) => {
                 <div className={styles.description}>
                     {description}
                 </div>
-                <div className={styles.status}>
-                    {authors}
+                <div className={styles.authors}>
+                    作者: {authors}
                 </div>
+                {amount && (
+                    <div className={styles.amount}>
+                        金额: ¥{amount.toLocaleString()}
+                    </div>
+                )}
+                {statusInfo && (
+                    <div className={styles.status}>
+                        <Tag color={statusInfo.color}>{statusInfo.text}</Tag>
+                    </div>
+                )}
                 <div className={styles.startTime}>
-                    创建时间: {createdTime}
+                    创建时间: {formatDateTime(createdTime)}
                 </div>
                 <div className={styles.endTime}>
-                    更新时间: {updatedTime}
+                    更新时间: {formatDateTime(updatedTime)}
                 </div>
             </div>
 
