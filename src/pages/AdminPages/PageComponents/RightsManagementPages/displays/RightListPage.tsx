@@ -27,12 +27,12 @@ export const RightListPage = () => {
     // 配置
     const DEFAULT_NEW_ROW: BenefitCreateVO = {
         id: 0,
-        name: '',
-        description: '',
-        price: 0,
+        name: '权益1',
+        description: '权益1',
+        price: 30,
         image: '',  
-        total: 0,
-        remain: 0,
+        total: 100,
+        remain: 100,
         active: true,
         expDate: null,
     }
@@ -117,47 +117,10 @@ export const RightListPage = () => {
         }
     ]
 
-
-
-    // 默认数据, 到时候可以删掉
-    const DEFAULT_DATA_DISPLAY: RightTableType[] = [
-        {
-            id: 1,
-            name: "权益1",
-            description: "权益1描述",
-            price: 100,
-            image: "权益1图片",
-            total: 100,
-            remain: 100,
-            active: true,
-            expDate: "2021-01-01",
-            createdTime: "2021-01-01",
-            createdBy: "admin",
-            updatedTime: "2021-01-01",
-            deleted: false,
-            status: 'active',
-        },
-        {
-            id: 2,
-            name: "权益2",
-            description: "权益2描述",
-            price: 200,
-            image: "权益2图片",
-            total: 200,
-            remain: 200,
-            active: true,
-            expDate: "2021-01-01",
-            createdTime: "2021-01-01",
-            createdBy: "admin",
-            updatedTime: "2021-01-01",
-            deleted: false,
-            status: 'active',
-        },
-    ]
-
     const fetchData = async (pageNum: number = 0, pageSize: number = 10) => {
-        const data = await getAllRights({pageNum: pageNum, pageSize: pageSize})
-        console.log('data', data)
+        const commonResults = await getAllRights({pageNum: pageNum, pageSize: pageSize})
+        console.log('data', commonResults)
+        const data = commonResults.data as Right[]
         setTableDataSource(data as Right[])
     }
     useEffect(() => {
@@ -272,7 +235,7 @@ export const RightListPage = () => {
                         >新增权益</Button>
                     </div>
                 </div>
-                <Table<Right> dataSource={DEFAULT_DATA_DISPLAY}
+                <Table<Right> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                 >
                     <Column title="Name" dataIndex="name" key="name" />

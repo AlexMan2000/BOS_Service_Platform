@@ -121,8 +121,10 @@ export const UserListPage = () => {
 
         if (commonResult.code === ResponseCode.SUCCESS) {
             const accountList = commonResult.data;
+
+            const filteredAccountList = accountList.filter((item: any) => item.userId !== null)
             // 查询每个account对应的用户列表
-            Promise.all(commonResult.data.map(async (item: any) => {
+            Promise.all(filteredAccountList.map(async (item: any) => {
                 const userList = await getUserAccountInfo(item.userId)
                 return userList.data
             })).then((res) => {
