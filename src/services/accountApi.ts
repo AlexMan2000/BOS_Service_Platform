@@ -75,11 +75,11 @@ export const downloadTemplate = async (type: string,config?: any) => {
             ...config
         });
         const contentDisposition = res.headers["content-disposition"];
-        const filename = getFilename(contentDisposition, "批量导入用户模板.xls");
+        const filename = getFilename(contentDisposition, "批量导入用户模板.xlsx");
 
         const blob = new Blob([res.data], {
-            // match your backend's contentType; either is fine for most browsers
-            type: "application/vnd.ms-excel;charset=UTF-8",
+            // Use correct MIME type for Excel files to ensure they open properly
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
         const objectUrl = URL.createObjectURL(blob);
 
