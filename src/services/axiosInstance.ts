@@ -2,25 +2,6 @@
 
 import axios from "axios";
 import ENDPOINT from "./config";
-import {  message } from 'antd';
-import store from '../store/store';
-import { initUserInfo, setIsAuthenticated } from '@/store/slice/userSlice/userSlice';
-// import { handleResetUserInfo } from "@/store/slices/userSlice";
-import { notification } from 'antd';
-
-const ROUTE_WHITE_LIST = [
-  "/",
-   "/mangrove-ai",
-   "/privacy",
-   "/terms-of-service",
-   "/contact",
-   "/about",
-   "/product",
-]
-
-// Track if modal is already shown
-let isModalVisible = false;
-// let isConnectionErrorModalVisible = false;
 
 // Create an axios instance
 const axiosInstance = axios.create({
@@ -70,64 +51,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Network or server connectivity errors
-    // if (
-    //   error?.code === "ERR_NETWORK" || 
-    //   error?.code === "ERR_INTERNET_DISCONNECTED" ||
-    //   error?.code === "ECONNABORTED" ||
-    //   !error.response
-    // ) {
-    //   // Only show the connection error modal if it's not already visible
-    //   if (!isConnectionErrorModalVisible && window.location.pathname !== "/login/email") {
-    //     isConnectionErrorModalVisible = true;
-    //     Modal.error({
-    //       title: 'Connection Error',
-    //       content: 'Unable to connect to the server. Please check your internet connection and try again.',
-    //       onOk: () => {
-    //         isConnectionErrorModalVisible = false;
-    //         // Optionally redirect to an error page or retry mechanism
-    //         if (window.location.pathname !== "/login/email") {
-    //           localStorage.clear();
-    //           // Dispatch action to reset user state
-    //           store.dispatch(setIsAuthenticated(false));
-    //           store.dispatch(initUserInfo());
-    //           window.location.href = "/login/email";
-    //         }
-    //       },
-    //       afterClose: () => {
-    //         isConnectionErrorModalVisible = false;
-    //       }
-    //     });
-    //   }
-    //   return Promise.reject(error);
-    // }
-
-    // Authentication errors (401)
-    // if (error.response?.status === 401 && !isModalVisible 
-    //   && !ROUTE_WHITE_LIST.includes(window.location.pathname)
-    // ) {
-    //   notification.error({
-    //     message: 'Session Expired',
-    //     description: 'Your session has expired. Please log in again.',
-    //     placement: 'topRight', // or 'bottomRight'
-    //     duration: 4.5, // seconds, 0 = never auto close
-    //   });
-    //   localStorage.clear();
-    //   // Dispatch action to reset user state
-    //   store.dispatch(setIsAuthenticated(false));
-    //   store.dispatch(initUserInfo());
-
-    //     if (!ROUTE_WHITE_LIST.includes(window.location.pathname)) {
-    //       window.location.href = "/";
-    //     }
-    //     return Promise.reject(error);
-    // }
-
-    // Server errors (500, etc.)
-    if (error.response?.status >= 500) {
-      message.error('Server error. Please try again later.');
-    }
-
     return Promise.reject(error);
   }
 );
