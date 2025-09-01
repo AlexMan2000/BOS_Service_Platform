@@ -28,33 +28,27 @@ export const LoginPage = () => {
                 userId: userInfo.id,
                 ...userInfo,
             }))
-
-
             localStorage.setItem("access_token", commonResult.data.token);
-
-
-            const commonResultAccountInfo = await getUserAccountInfo(userInfo.id)
-            if (commonResultAccountInfo.code === ResponseCode.SUCCESS) {
-                const userAccount = commonResultAccountInfo.data;
-                dispatch(setUserInfo({
-                        accountId: userAccount.accountId,
-                        balance: userAccount.balance,
-                        lastLogin: userAccount.lastLogin,
-                        createdTime: userAccount.createdTime,
-                        createdBy: userAccount.createdBy,
-                }))
-                dispatch(setAccessToken(commonResult.data.token))
-
-                localStorage.setItem("access_token", commonResult.data.token);
-
-            } else {
-                message.error(commonResultAccountInfo.message + ", 获取用户账号信息失败!")
-                return
-            }
-
-            
             const role = userInfo.role;
             if (role === "NORMAL") {
+                const commonResultAccountInfo = await getUserAccountInfo(userInfo.id)
+                if (commonResultAccountInfo.code === ResponseCode.SUCCESS) {
+                    const userAccount = commonResultAccountInfo.data;
+                    dispatch(setUserInfo({
+                            accountId: userAccount.accountId,
+                            balance: userAccount.balance,
+                            lastLogin: userAccount.lastLogin,
+                            createdTime: userAccount.createdTime,
+                            createdBy: userAccount.createdBy,
+                    }))
+                    dispatch(setAccessToken(commonResult.data.token))
+    
+                    localStorage.setItem("access_token", commonResult.data.token);
+    
+                } else {
+                    message.error(commonResultAccountInfo.message + ", 获取用户账号信息失败!")
+                    return
+                }
                 navigate("/home")
             } else if (role === "ADMIN") {
                 navigate("/admin")

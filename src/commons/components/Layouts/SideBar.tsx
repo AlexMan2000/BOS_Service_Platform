@@ -22,7 +22,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
     const navigate = useNavigate()
 
-    const { employeeNo, name, department, phone, balance} = useSelector(selectUser)
+    const { name, balance, role} = useSelector(selectUser)
 
     // 当前选中的菜单项
     const [selectedKey, setSelectedKey] = useState<string>(defaultSelectedKey)
@@ -90,7 +90,8 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
 
                 <div className={styles.footerText}>
                     <span>用户名: {name}</span>
-                    <span>余额: {balance}</span>
+                    {role === "NORMAL" && <span>余额: {balance}</span>}
+                    {role === "ADMIN" && <span>管理员</span>}
                 </div>
 
                 {avatarMenuOpen && <div className={styles.avatarMenu}>
