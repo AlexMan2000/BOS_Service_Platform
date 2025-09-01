@@ -13,6 +13,9 @@ import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { createBenefit } from "@/services/benefitApi"
 import { ResponseCode } from "@/commons/defs/code"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
+import dayjs from "dayjs"
+
+
 export const RightListPage = () => {
 
     const navigate = useNavigate()
@@ -173,6 +176,9 @@ export const RightListPage = () => {
 
                     if (commonResult.code === ResponseCode.SUCCESS) {
                         message.success('新增权益成功')
+                        setIsBatchImportModalOpen(false)
+                        setBatchImportSaved(false)
+                        fetchData(0, 10)
                     } else {
                         message.error('新增权益失败')
                     }
@@ -244,11 +250,25 @@ export const RightListPage = () => {
                     <Column title="Image" dataIndex="image" key="image" />
                     <Column title="Total" dataIndex="total" key="total" />
                     <Column title="Remaining" dataIndex="remain" key="remain" />
-                    <Column title="Status" dataIndex="status" key="status" />
-                    <Column title="Exp Date" dataIndex="expDate" key="expDate" />
-                    <Column title="Created Time" dataIndex="createdTime" key="createdTime" />
+                    <Column title="Status" dataIndex="active" key="active" render={(text: boolean) => {
+                        return <Tag color={text ? "green" : "red"}>{text ? "Active" : "Inactive"}</Tag>
+                    }} />
+                    <Column title="Exp Date" dataIndex="expDate" key="expDate" 
+                    render={(text: string) => {
+                        return dayjs(text).format("YYYY-MM-DD HH:mm:ss") 
+                    }}
+                    />
+                    <Column title="Created Time" dataIndex="createdTime" key="createdTime" 
+                    render={(text: string) => {
+                        return dayjs(text).format("YYYY-MM-DD HH:mm:ss") 
+                    }}
+                    />
                     <Column title="Created By" dataIndex="createdBy" key="createdBy" />
-                    <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime" />
+                    <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime" 
+                    render={(text: string) => {
+                        return dayjs(text).format("YYYY-MM-DD HH:mm:ss") 
+                    }}
+                    />
                     <Column title="Deleted" dataIndex="deleted" key="deleted" render={(text: boolean) => {
                         return <Tag color={text ? "red" : "green"}>{text ? "是" : "否"}</Tag>
                     }} />
@@ -256,6 +276,7 @@ export const RightListPage = () => {
                         title="Action"
                         key="action"
                         width={150}
+                        fixed="right"
                         render={(_: any, record: Right) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {

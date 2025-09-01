@@ -30,9 +30,9 @@ export const deleteBenefit = async (id: number, config?:any) => {
     }
 }
 
-export const updateBenefit = async (body: RightUpdateVO, config?:any) => {
+export const updateBenefit = async (body: BenefitCreateVO, config?:any) => {
     try {
-        const res = await putRequest("/benefit/update/" + body.id, body, {
+        const res = await postRequest("/benefit/update", body, {
             ...config
         });
         return res.data;

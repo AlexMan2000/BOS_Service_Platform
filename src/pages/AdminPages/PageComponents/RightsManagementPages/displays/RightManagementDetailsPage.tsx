@@ -4,6 +4,7 @@ import { Right } from "@/commons/types/right"
 import { useEffect, useState } from "react"
 import { Form, Input, message } from "antd"
 import { updateBenefit } from "@/services/benefitApi"
+import { ResponseCode } from "@/commons/defs/code"
 
 export const RightManagementDetailsPage = () => {
     const {id,name, description, price, image, total, remain, active, expDate } = useLocation().state as Right
@@ -53,7 +54,7 @@ export const RightManagementDetailsPage = () => {
                 onFinish={async () => {
                     console.log(userForm.getFieldsValue())
                     const commonResult = await updateBenefit({...userForm.getFieldsValue(), id: id})
-                    if (commonResult.code === 200) {
+                    if (commonResult.code === ResponseCode.SUCCESS) {
                         message.success("更新成功")
                     } else {
                         message.error("更新失败")
@@ -85,7 +86,7 @@ export const RightManagementDetailsPage = () => {
                 <Form.Item
                     label="权益图片"
                     name="image"
-                    rules={[{ required: true, message: "请输入权益图片" }]}
+                    rules={[{ required: false, message: "请输入权益图片" }]}
                 >
                     <Input placeholder="请输入权益图片连接" />
                 </Form.Item>

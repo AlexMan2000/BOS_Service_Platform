@@ -31,7 +31,7 @@ export const ActivityListPage = () => {
         status: 0,
         createdTime: new Date().toISOString(),
         updatedTime: new Date().toISOString(),
-        name: '',
+        name: '活动1',
         freeCredit: '',
         cover: '',
         description: '',

@@ -84,7 +84,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         }
         const newRows: T[] = [];
         for (let i = 0; i < count; i++) {
-            newRows.push({ ...defaultNewRow, [rowKey]: '307' + (Math.random() * 1000).toFixed(0) });
+            newRows.push({ ...defaultNewRow, [rowKey]: `${rowKey}${i + 1}` });
         }
 
         // Always add to bottom
