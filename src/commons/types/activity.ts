@@ -87,17 +87,28 @@ export interface ProjectCardType {
 export interface ProjectSubmitType {
     title: string,
     authors: string,
-    activityId: string,
+    activityId: number,
+    description: string,
+    cover: string,
+    link: string
+}
+
+export interface ProjectUpdateType {
+    id: number,
+    title: string,
+    authors: string,
+    activityId: number,
     description: string,
     cover: string,
     link: string
 }
 
 export interface ProjectTableType {
+    id: number,
     title: string,
     amount: number,
     authors: string,
-    activityId: string,
+    activityId: number,
     description: string,
     cover: string,
     link: string,

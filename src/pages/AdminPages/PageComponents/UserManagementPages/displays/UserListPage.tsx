@@ -129,10 +129,10 @@ export const UserListPage = () => {
                 return userList.data
             })).then((res) => {
                 console.log('res', res)
-                const userList = res.map((item: any) => {
+                const userList = res.filter((item: any) => item !=null && item.userId !== null).map((item: any) => {
                     return {
                         ...item,
-                        accountId: accountList.find((account: any) => account.userId === item.userId)?.accountId,
+                        accountId: item.accountId,
                         userId: item.userId,
                         employeeNo: item.employeeNo,
                         name: item.name,

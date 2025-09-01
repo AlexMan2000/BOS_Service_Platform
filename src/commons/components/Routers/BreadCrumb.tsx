@@ -9,15 +9,25 @@ export const BreadCrumb = ({ items }: { items: { pathname: string, crumb: string
     const currentIndex = items.findIndex(item => item.pathname === location.pathname);
     const visibleItems = currentIndex >= 0 ? items.slice(0, currentIndex + 1) : items.slice(0, 1);
 
+    // 判断当前是否在project-detail页面
+    const isInProjectDetail = location.pathname.includes('/project-detail');
+    
     // 构建新的items格式
     const breadcrumbItems = visibleItems.map((it, i) => {
         const isLast = i === visibleItems.length - 1;
         const isActive = location.pathname === it.pathname;
         
+        // 判断是否应该禁用链接：在project-detail页面时，禁用"活动详情"链接
+        const shouldDisableLink = isInProjectDetail && 
+                                 it.crumb === "活动详情" && 
+                                 it.pathname.includes("activity-detail");
+        
         return {
             key: it.pathname,
-            title: isLast || isActive ? (
-                <span className={isActive ? styles.active : ''}>{it.crumb}</span>
+            title: isLast || isActive || shouldDisableLink ? (
+                <span className={`${isActive ? styles.active : ''} ${shouldDisableLink ? styles.disabled : ''}`}>
+                    {it.crumb}
+                </span>
             ) : (
                 <Link to={it.pathname} className={styles.link}>{it.crumb}</Link>
             ),

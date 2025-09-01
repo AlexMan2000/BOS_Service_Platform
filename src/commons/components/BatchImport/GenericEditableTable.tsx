@@ -43,6 +43,9 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         maxRowLength,
         } = props
 
+    // 确保dataSource始终是数组
+    const safeDataSource = Array.isArray(dataSource) ? dataSource : []
+
 
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
 
@@ -65,7 +68,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                 <a
                     key="delete"
                     onClick={() => {
-                        setDataSource(dataSource.filter((item) => item[rowKey] !== record[rowKey]));
+                        setDataSource(safeDataSource.filter((item) => item[rowKey] !== record[rowKey]));
                     }}
                 >
                     删除
@@ -76,9 +79,9 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
 
 
     const addMultipleRows = (count: number) => {
-        console.log(`Adding ${count} rows, current dataSource length:`, dataSource.length);
+        console.log(`Adding ${count} rows, current dataSource length:`, safeDataSource.length);
 
-        if (dataSource.length + count > (maxRowLength ?? 1)) {
+        if (safeDataSource.length + count > (maxRowLength ?? 1)) {
             message.error("最多添加1行");
             return;
         }
@@ -88,7 +91,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
         }
 
         // Always add to bottom
-        const newDataSource = [...dataSource, ...newRows];
+        const newDataSource = [...safeDataSource, ...newRows];
         console.log('New dataSource length:', newDataSource.length);
         setDataSource(newDataSource);
 
@@ -129,8 +132,16 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                 </Button>,
             ]}
             columns={PROCOLUMNS_CONFIGS}
-            value={dataSource}
-            onChange={(value) => setDataSource([...value])}
+            value={safeDataSource}
+            onChange={(value) => {
+                // 确保value是数组
+                if (Array.isArray(value)) {
+                    setDataSource([...value])
+                } else {
+                    console.warn('EditableProTable onChange 收到非数组值:', value)
+                    setDataSource([])
+                }
+            }}
             editable={{
                 type: editable?.type ?? "multiple",
                 editableKeys: editableKeys,
@@ -148,7 +159,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                         size="small"
                         danger
                         onClick={() => {
-                            setDataSource(dataSource.filter(item => item[rowKey] !== row[rowKey]));
+                            setDataSource(safeDataSource.filter(item => item[rowKey] !== row[rowKey]));
                             setEditableRowKeys(editableKeys.filter(key => key !== row[rowKey]));
                         }}
                     >
@@ -157,8 +168,8 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
                 ],
             }}
             request={async () => ({
-                data: dataSource,
-                total: dataSource.length,
+                data: safeDataSource,
+                total: safeDataSource.length,
                 success: true,
             })}
             onSubmit={async (values) => {

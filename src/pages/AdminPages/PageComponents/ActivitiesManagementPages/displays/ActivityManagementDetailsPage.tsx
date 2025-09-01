@@ -46,6 +46,10 @@ export const ActivityManagementDetailsPage = () => {
 
     }
 
+    const stateToChild = state;
+
+    console.log("stateToChild", stateToChild)
+
     return (
         <div className={styles.container}>
             {location.pathname === "/admin/activities-management/activity-detail" && <div className={styles.activityDetails}>
@@ -198,7 +202,7 @@ export const ActivityManagementDetailsPage = () => {
                 </div>
             </div>}
             <div className={styles.content}>
-                <Outlet />
+                <Outlet context={stateToChild} />
             </div>
         </div>
     )

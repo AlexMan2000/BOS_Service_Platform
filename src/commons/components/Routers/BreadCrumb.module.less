@@ -1,4 +1,28 @@
+.container {
+    padding: 8px 0;
+}
+
 .active {
     font-weight: 600;
     color: #1890ff;
+}
+
+.link {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    
+    &:hover {
+        color: #1890ff;
+    }
+}
+
+.disabled {
+    color: #bbb;
+    cursor: not-allowed;
+    user-select: none;
+    
+    &:hover {
+        color: #bbb;
+    }
 }
