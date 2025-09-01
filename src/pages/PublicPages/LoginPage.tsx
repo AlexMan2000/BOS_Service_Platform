@@ -4,7 +4,7 @@ import coverImage from '@/assets/loginCover.png'
 import styles from "./LoginPage.module.less"
 import { useNavigate } from "react-router-dom"
 import { ResponseCode } from "@/commons/defs/code"
-import { setUserInfo } from "@/store/slice/userSlice/userSlice"
+import { setAccessToken, setUserInfo } from "@/store/slice/userSlice/userSlice"
 import { useDispatch } from "react-redux"
 import { changePassword } from "@/services/userApi"
 import { message } from "antd"
@@ -29,6 +29,8 @@ export const LoginPage = () => {
                 ...userInfo,
             }))
 
+            dispatch(setAccessToken(commonResult.data.token))
+
             localStorage.setItem("access_token", commonResult.data.token);
 
             const role = userInfo.role;
@@ -38,6 +40,10 @@ export const LoginPage = () => {
                 navigate("/admin")
             }
         } else if (commonResult.code === ResponseCode.FIRST_LOGIN) {
+            dispatch(setAccessToken(commonResult.data.token))
+
+            localStorage.setItem("access_token", commonResult.data.token);
+
             message.info(commonResult.message + ", 用户首次登录， 请修改密码!")
             setIsChangePasswordModalOpen(true)
         }
