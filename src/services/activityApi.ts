@@ -1,10 +1,13 @@
 import { ActivitySubmitType } from "@/commons/types/activity"
-import { deleteRequest, getRequest, putRequest } from "./axiosInstance";
+import { deleteRequest, getRequest, postRequest, putRequest } from "./axiosInstance";
 
 
 export const createActivity = async (body: ActivitySubmitType, config?:any) => {
 
-
+    const res = await postRequest("/activity/create", body, {
+        ...config
+    });
+    return res.data;
 }
 
 

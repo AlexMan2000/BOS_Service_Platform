@@ -9,19 +9,24 @@ export const BreadCrumb = ({ items }: { items: { pathname: string, crumb: string
     const currentIndex = items.findIndex(item => item.pathname === location.pathname);
     const visibleItems = currentIndex >= 0 ? items.slice(0, currentIndex + 1) : items.slice(0, 1);
 
+    // 构建新的items格式
+    const breadcrumbItems = visibleItems.map((it, i) => {
+        const isLast = i === visibleItems.length - 1;
+        const isActive = location.pathname === it.pathname;
+        
+        return {
+            key: it.pathname,
+            title: isLast || isActive ? (
+                <span className={isActive ? styles.active : ''}>{it.crumb}</span>
+            ) : (
+                <Link to={it.pathname} className={styles.link}>{it.crumb}</Link>
+            ),
+        };
+    });
+
     return (
         <div className={styles.container}>
-            <Breadcrumb>
-                {visibleItems.map((it, i) => {
-                    const isLast = i === visibleItems.length - 1;
-                    const isActive = location.pathname === it.pathname;
-                    return (
-                        <Breadcrumb.Item key={it.pathname} className={isActive ? styles.active : ''}>
-                            {isLast || isActive ? it.crumb : <Link to={it.pathname}>{it.crumb}</Link>}
-                        </Breadcrumb.Item>
-                    );
-                })}
-            </Breadcrumb>
+            <Breadcrumb items={breadcrumbItems} />
         </div>
     )
 }

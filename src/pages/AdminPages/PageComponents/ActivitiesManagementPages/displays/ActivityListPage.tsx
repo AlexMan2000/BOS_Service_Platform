@@ -10,33 +10,34 @@ import { wait } from "@/commons/utils/sys_utils"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
 import { ActivitySubmitType, ActivityTableType, ActivityTransferSubmitType } from "@/commons/types/activity"
-import { deleteActivity, getAllActivities, updateActivity } from "@/services/activityApi"
+import { createActivity, deleteActivity, getAllActivities, updateActivity } from "@/services/activityApi"
 import dayjs from "dayjs"
-
+import { ResponseCode } from "@/commons/defs/code"
+import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 export const ActivityListPage = () => {
     const navigate = useNavigate()
 
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
     const [tableDataSource, setTableDataSource] = useState<ActivityTableType[]>([])
-
+    const [batchImportSaved, setBatchImportSaved] = useState(false)
     const [batchImportDataSource, setBatchImportDataSource] = useState<ActivitySubmitType[]>([])
     const [batchTransferDataSource, setBatchTransferDataSource] = useState<ActivityTransferSubmitType[]>([])
-    // 配置
+    // 配置 
     const DEFAULT_NEW_ROW: ActivitySubmitType = {
         id: 0,
         accountId: 0,
         balance: '',
         status: 0,
-        createdTime: new Date(),
-        updatedTime: new Date(),
+        createdTime: new Date().toISOString(),
+        updatedTime: new Date().toISOString(),
         name: '',
         freeCredit: '',
         cover: '',
         description: '',
         link: '',
-        startTime: new Date(),  
-        endTime: new Date(),
+        startTime: new Date().toISOString(),  
+        endTime: new Date().toISOString(),
     }
 
     const DEFAULT_NEW_ROW_TRANSFER: ActivityTransferSubmitType = {
@@ -111,49 +112,27 @@ export const ActivityListPage = () => {
         },
     ]
 
-//0-未开始；1-进行中；2-已结束
-    // 默认数据
-    const DEFAULT_DATA_DISPLAY: ActivityTableType[] = [
-        {
-            id: 1,
-            name: "活动1",
-            accountId: 1,
-            balance: "100",
-            createdTime: new Date(),
-            updatedTime: new Date(),
-            description: "活动1描述",
-            freeCredit: "100",
-            cover: "活动1图片",
-            link: "活动1链接",
-            startTime: new Date(),
-            endTime: new Date(),
-            status: 0,
-        },
-        {
-            id: 2,
-            name: "活动2",
-            accountId: 2,
-            balance: "200",
-            createdTime: new Date(),
-            updatedTime: new Date(),
-            description: "活动2描述",
-            freeCredit: "200",
-            cover: "活动2图片",
-            link: "活动2链接",
-            startTime: new Date(),
-            endTime: new Date(),
-            status: 1,
-        },
-    ]
+
     const fetchData = async () => {
-        const data = await getAllActivities()
-        console.log('data', data)
-        setTableDataSource(data as ActivityTableType[])
+        try {
+            const data = await getAllActivities()
+            console.log('data', data)
+            // 确保data是数组
+            if (Array.isArray(data)) {
+                setTableDataSource(data as ActivityTableType[])
+            } else {
+                console.warn('API返回的数据不是数组:', data)
+                setTableDataSource([])
+            }
+        } catch (error) {
+            console.error('获取活动数据失败:', error)
+            setTableDataSource([])
+        }
     }
     useEffect(() => {
         
         fetchData()
-        console.log("reload table data", DEFAULT_DATA_DISPLAY)
+        console.log("reload table data", tableDataSource)
     }, [])
 
 
@@ -162,9 +141,44 @@ export const ActivityListPage = () => {
             {/* Modals */}
             <Modal
                 open={isBatchImportModalOpen}
-                onCancel={() => setIsBatchImportModalOpen(false)}
-                onOk={() => {
-                    
+                onCancel={() => {
+                    setBatchImportSaved(false)
+                    setIsBatchImportModalOpen(false)
+                }}
+                onOk={async () => {
+                    if (!batchImportSaved) {
+                        message.error('请先保存行，才能正常提交')
+                        return
+                    }
+                    if (batchImportDataSource.length === 0) {
+                        message.error('请先导入数据')
+                        return
+                    }
+                    const sumitActivityVOs: ActivitySubmitType[] = (Array.isArray(batchImportDataSource) ? batchImportDataSource : []).map((item) => {
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            freeCredit: item.freeCredit,
+                            cover: item.cover,
+                            description: item.description,
+                            link: item.link,
+                            startTime: formatDateTime(item.startTime),
+                            endTime: formatDateTime(item.endTime),
+                            accountId: item.accountId,
+                            balance: item.balance,
+                            status: item.status,
+                            createdTime: formatDateTime(item.createdTime),
+                            updatedTime: formatDateTime(item.updatedTime),
+                        }
+                    })
+
+                    const sumitActivityVO = sumitActivityVOs[0];
+                    const commonResult = await createActivity(sumitActivityVO)
+                    if (commonResult.code === ResponseCode.SUCCESS) {
+                        message.success('新增活动成功')
+                    } else {
+                        message.error('新增活动失败')
+                    }
                     console.log('onOk', batchImportDataSource)
                 }}
                 title="批量导入"
@@ -190,7 +204,7 @@ export const ActivityListPage = () => {
                                     size="small"
                                     onSave={async (rowKey: React.Key, data: ActivitySubmitType, row: ActivitySubmitType) => {
                                         console.log('Saving row:', rowKey, data, row);
-                                        await wait(1);
+                                        setBatchImportSaved(true)
                                     }}
                                 />
                             },
@@ -267,7 +281,7 @@ export const ActivityListPage = () => {
                         >批量发放</Button>
                     </div>
                 </div>
-                <Table<ActivityTableType> dataSource={DEFAULT_DATA_DISPLAY}
+                <Table<ActivityTableType> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                 >
                     <Column title="Name" dataIndex="name" key="name" />

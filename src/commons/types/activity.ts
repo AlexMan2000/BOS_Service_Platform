@@ -8,10 +8,10 @@ export interface Activity {
     cover: string
     description: string
     status: number
-    createdTime: Date
-    updatedTime: Date
-    startTime: Date
-    endTime: Date
+    createdTime: string
+    updatedTime: string
+    startTime: string
+    endTime: string
 }
 
 export interface ActivityCardType {
@@ -31,8 +31,8 @@ export interface ActivityTableType extends Activity {
     cover: string
     description: string
     link: string
-    startTime: Date
-    endTime: Date
+    startTime: string
+    endTime: string
     status: number
 }
 
@@ -43,8 +43,8 @@ export interface ActivitySubmitType extends Activity {
     cover: string,
     description: string,
     link: string,
-    startTime: Date,
-    endTime: Date
+    startTime: string,
+    endTime: string
 }
 
 export interface ActivityTransferSubmitType {
@@ -66,8 +66,8 @@ export interface Project {
     description: string
     cover: string
     link: string
-    createdTime: Date
-    updatedTime: Date
+    createdTime: string
+    updatedTime: string
     deleted: boolean
 }
 
@@ -80,8 +80,8 @@ export interface ProjectCardType {
     description: string
     cover: string
     link: string
-    createdTime: Date
-    updatedTime: Date
+    createdTime: string
+    updatedTime: string
 }
 
 
@@ -102,6 +102,6 @@ export interface ProjectTableType {
     description: string,
     cover: string,
     link: string,
-    createdTime: Date,
-    updatedTime: Date
+    createdTime: string,
+    updatedTime: string
 }
