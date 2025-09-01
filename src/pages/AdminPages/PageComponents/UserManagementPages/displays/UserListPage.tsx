@@ -48,7 +48,7 @@ export const UserListPage = () => {
 
     const DEFAULT_NEW_ROW_TRANSFER = {
         employeeNo: '307' + (Math.random() * 1000).toFixed(0),
-        money: 0,
+        amount: 0,
         remark: '',
     }
 
@@ -103,8 +103,8 @@ export const UserListPage = () => {
         },
         {
             title: 'money',
-            dataIndex: 'money',
-            key: 'money',
+            dataIndex: 'amount',
+            key: 'amount',
             valueType: 'digit',
             width: 100,
         },
@@ -275,7 +275,7 @@ export const UserListPage = () => {
                     console.log('onOk', transferDataSource)
                     const userTransferVO: UserTransferSubmitType[] = transferDataSource.map((item) => { return {
                         employeeNo: item.employeeNo,
-                        money: item.money,
+                        amount: item.amount,
                         remark: item.remark,
                     }});
                     const result: any = await batchTransfer(userTransferVO);

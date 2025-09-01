@@ -1,22 +1,26 @@
 import { BenefitCreateVO, Right, RightTableType } from "@/commons/types/right"
 import styles from "./RightListPage.module.less"
-import { Button, Input, Modal, Space, Tag } from "antd"
+import { Button, Input, message, Modal, Space, Tag } from "antd"
 import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
-import { wait } from "@/commons/utils/sys_utils"
 import { useNavigate } from "react-router-dom"
 import { deleteBenefit, getAllRights } from "@/services/benefitApi"
-
-
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { createBenefit } from "@/services/benefitApi"
+import { ResponseCode } from "@/commons/defs/code"
 export const RightListPage = () => {
 
     const navigate = useNavigate()
 
+    const { employeeNo } = useSelector(selectUser)
     const [tableDataSource, setTableDataSource] = useState<Right[]>([])
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
+
+    const [batchImportSaved, setBatchImportSaved] = useState(false)
 
     const [batchImportDataSource, setBatchImportDataSource] = useState<BenefitCreateVO[]>([])
     // 配置
@@ -24,13 +28,12 @@ export const RightListPage = () => {
         id: 0,
         name: '',
         description: '',
-        price: '0',
+        price: 0,
         image: '',  
-        total: '0',
+        total: 0,
         remain: 0,
         active: true,
-        expDate: new Date(),
-        createdBy: 'admin',
+        expDate: null,
     }
 
 
@@ -61,6 +64,7 @@ export const RightListPage = () => {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
+            valueType: 'digit',
             width: 120,
         },
         {
@@ -68,17 +72,20 @@ export const RightListPage = () => {
             dataIndex: 'image',
             key: 'image',
             width: 120,
+            valueType: 'text',
         },
         {
             title: 'Total',
             dataIndex: 'total',
             key: 'total',
+            valueType: 'digit',
             width: 100,
         },
         {
             title: 'Remaining',
             dataIndex: 'remain',
             key: 'remain',
+            valueType: 'digit',
             width: 100,
         },
         {
@@ -98,13 +105,15 @@ export const RightListPage = () => {
             key: 'expDate',
             width: 120,
             valueType: 'date',
-        },
-        {
-            title: 'Created By',
-            dataIndex: 'createdBy',
-            key: 'createdBy',
-            width: 100,
-        },
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项是必填项',
+                    },
+                ],
+            },
+        }
     ]
 
 
@@ -160,9 +169,51 @@ export const RightListPage = () => {
             {/* Modals */}
             <Modal
                 open={isBatchImportModalOpen}
-                onCancel={() => setIsBatchImportModalOpen(false)}
-                onOk={() => {
+                onCancel={() => {
+                    setBatchImportSaved(false)
+                    setIsBatchImportModalOpen(false)
+                }}
+                onOk={async () => {
+                    if (!batchImportSaved) {
+                        message.error('请先保存行，才能正常提交')
+                        return
+                    }
+                    if (batchImportDataSource.length === 0) {
+                        message.error('请先导入数据')
+                        return
+                    }
+
+                    
+                    const benefitCreateVOs: BenefitCreateVO[] = batchImportDataSource.map((item) => {
+
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            description: item.description,
+                            price: item.price,
+                            image: item.image,
+                            total: item.total,
+                            remain: item.remain,
+                            active: item.active,
+                            expDate: new Date(item.expDate?.toString() ?? '').toISOString(),
+                            createdBy: employeeNo,
+                        }
+                    })
+
+                    const benefitCreateVO = benefitCreateVOs[0];
+                    if (benefitCreateVO.total !== benefitCreateVO.remain) {
+                        message.error('总数量和剩余数量不一致')
+                        return
+                    }
+                    const commonResult = await createBenefit(benefitCreateVO)
+
+                    if (commonResult.code === ResponseCode.SUCCESS) {
+                        message.success('新增权益成功')
+                    } else {
+                        message.error('新增权益失败')
+                    }
                     console.log('onOk', batchImportDataSource)
+                    
                 }}
                 title="批量导入"
                 width={1000}
@@ -187,7 +238,7 @@ export const RightListPage = () => {
                                     size="small"
                                     onSave={async (rowKey: React.Key, data: BenefitCreateVO, row: BenefitCreateVO) => {
                                         console.log('Saving row:', rowKey, data, row);
-                                        await wait(1);
+                                        setBatchImportSaved(true)
                                     }}
                                     maxRowLength={1}
                                 />

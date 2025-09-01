@@ -1,4 +1,4 @@
-import { ListAllBenefitVO, RightUpdateVO } from "@/commons/types/right";
+import { BenefitCreateVO, ListAllBenefitVO, RightUpdateVO } from "@/commons/types/right";
 import { deleteRequest, postRequest, putRequest } from "./axiosInstance";
 
 export const getAllRights = async (body: ListAllBenefitVO, config?:any) => {
@@ -38,6 +38,18 @@ export const updateBenefit = async (body: RightUpdateVO, config?:any) => {
         return res.data;
     } catch (error: any) {
         console.error("Error updating right:", error);
+        throw error;
+    }
+}
+
+export const createBenefit = async (body: BenefitCreateVO, config?:any) => {
+    try {
+        const res = await postRequest("/benefit/create", body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error creating right:", error);
         throw error;
     }
 }

@@ -38,13 +38,13 @@ export interface BenefitCreateVO {
     id: number; // update 时需传入 id；create 时可不传
     name: string;
     description: string;
-    price: string; 
+    price: number; 
     image: string;
-    total: string;
+    total: number;
     remain: number;
     active: boolean;
-    expDate: Date;
-    createdBy: string;
+    expDate: string | null;
+    createdBy?: string;
 }
 
 
