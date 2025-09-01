@@ -1,11 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { Form, Input, Button, DatePicker, Select } from "antd"
+import { Form, Input, Button, DatePicker, Select, InputNumber } from "antd"
 import dayjs from "dayjs"
 import styles from "./ActivityManagementDetailsPage.module.less"
 import { Activity } from "@/commons/types/activity"
-import { updateActivity } from "@/services/activityApi"
+import { getActivityById, updateActivity } from "@/services/activityApi"
 import { message } from "antd"
+import { ResponseCode } from "@/commons/defs/code"
 const { TextArea } = Input
 const { Option } = Select
 
@@ -17,6 +18,7 @@ export const ActivityManagementDetailsPage = () => {
     const state = location.state as Activity
 
     useEffect(() => {
+
         if (state) {
             activityForm.setFieldsValue({
                 name: state.name,
@@ -26,17 +28,17 @@ export const ActivityManagementDetailsPage = () => {
                 description: state.description,
                 cover: state.cover,
                 accountId: state.accountId,
-                balance: state.balance
+                freeCredit: state.freeCredit
             })
         }
-    }, [state, activityForm])
+    }, [state])
 
     const handleSubmit = async (values: any) => {
         console.log('Activity form values:', values)
         setEdit(false)
         // Add your form submission logic here
-        const commonResult = await updateActivity({...values, id: values.id})
-        if (commonResult.code === 200) {
+        const commonResult = await updateActivity({...values, id: state.id})
+        if (commonResult.code === ResponseCode.SUCCESS) {
             message.success("更新成功")
         } else {
             message.error("更新失败")
@@ -51,7 +53,31 @@ export const ActivityManagementDetailsPage = () => {
                     <div className={styles.formControls}>
                         <Button 
                             type="primary" 
-                            onClick={() => setEdit(!edit)}
+                            onClick={async () =>  {
+                                if (edit) {
+                                    setEdit(!edit)
+                                } else {
+                                    if (state.status === 2) {
+                                        message.error("活动已结束，无法编辑")
+                                        return
+                                    }
+                                    const commonResult = await getActivityById(state.id)
+                                    if (commonResult.code === ResponseCode.SUCCESS) {
+                                        const data = commonResult.data as Activity
+                                        activityForm.setFieldsValue({
+                                            name: data.name,
+                                            status: data.status,
+                                            startTime: data.startTime ? dayjs(data.startTime) : null,
+                                            endTime: data.endTime ? dayjs(data.endTime) : null,
+                                            description: data.description,
+                                            cover: data.cover,
+                                            accountId: data.accountId,
+                                            freeCredit: data.freeCredit
+                                        })
+                                    }
+                                    setEdit(!edit)
+                                }
+                            }}
                             style={{ marginBottom: 16 }}
                         >
                             {edit ? "取消" : "编辑"}
@@ -119,7 +145,7 @@ export const ActivityManagementDetailsPage = () => {
                         <Form.Item
                             label="活动描述"
                             name="description"
-                            rules={[{ required: true, message: "请输入活动描述" }]}
+                            rules={[{ required: false, message: "请输入活动描述" }]}
                         >
                             <TextArea 
                                 placeholder="请输入活动描述" 
@@ -132,7 +158,7 @@ export const ActivityManagementDetailsPage = () => {
                         <Form.Item
                             label="封面图片"
                             name="cover"
-                            rules={[{ required: true, message: "请输入封面图片链接" }]}
+                            rules={[{ required: false, message: "请输入封面图片链接" }]}
                         >
                             <Input placeholder="请输入封面图片链接" />
                         </Form.Item>
@@ -146,11 +172,11 @@ export const ActivityManagementDetailsPage = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label="余额"
-                            name="balance"
+                            label="免费额度"
+                            name="freeCredit"
                             rules={[{ required: true, message: "请输入余额" }]}
                         >
-                            <Input placeholder="请输入余额" />
+                            <InputNumber placeholder="请输入余额" />
                         </Form.Item>
 
                         {edit && (

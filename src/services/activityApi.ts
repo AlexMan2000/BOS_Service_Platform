@@ -49,3 +49,16 @@ export const updateActivity = async (body: ActivitySubmitType, config?:any) => {
         throw error;
     }
 }
+
+
+export const getActivityById = async (id: number, config?:any) => {
+    try {
+        const res = await getRequest(`/activity/selectById/${id}`, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting activity by id:", error);
+        throw error;
+    }
+}

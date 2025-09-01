@@ -27,15 +27,10 @@ export const ActivityListPage = () => {
     const DEFAULT_NEW_ROW: ActivitySubmitType = {
         id: 0,
         accountId: 0,
-        balance: '',
+        freeCredit: 0,
         status: 0,
-        createdTime: new Date().toISOString(),
-        updatedTime: new Date().toISOString(),
         name: '活动1',
-        freeCredit: '',
-        cover: '',
         description: '',
-        link: '',
         startTime: new Date().toISOString(),  
         endTime: new Date().toISOString(),
     }
@@ -115,15 +110,15 @@ export const ActivityListPage = () => {
 
     const fetchData = async () => {
         try {
-            const data = await getAllActivities()
-            console.log('data', data)
-            // 确保data是数组
-            if (Array.isArray(data)) {
-                setTableDataSource(data as ActivityTableType[])
-            } else {
-                console.warn('API返回的数据不是数组:', data)
+            const commonResult = await getAllActivities()
+            if (commonResult.code === ResponseCode.SUCCESS) {
+                const data = commonResult.data as ActivityTableType[]
+                setTableDataSource(data)
+            } else {    
+                console.warn('API返回的数据不是数组:', commonResult)
                 setTableDataSource([])
             }
+
         } catch (error) {
             console.error('获取活动数据失败:', error)
             setTableDataSource([])
@@ -159,23 +154,21 @@ export const ActivityListPage = () => {
                             id: item.id,
                             name: item.name,
                             freeCredit: item.freeCredit,
-                            cover: item.cover,
                             description: item.description,
-                            link: item.link,
                             startTime: formatDateTime(item.startTime),
                             endTime: formatDateTime(item.endTime),
                             accountId: item.accountId,
-                            balance: item.balance,
                             status: item.status,
-                            createdTime: formatDateTime(item.createdTime),
-                            updatedTime: formatDateTime(item.updatedTime),
                         }
                     })
 
                     const sumitActivityVO = sumitActivityVOs[0];
+                    console.log('sumitActivityVO', sumitActivityVO)
                     const commonResult = await createActivity(sumitActivityVO)
                     if (commonResult.code === ResponseCode.SUCCESS) {
                         message.success('新增活动成功')
+                        setIsBatchImportModalOpen(false)
+                        fetchData()
                     } else {
                         message.error('新增活动失败')
                     }
@@ -287,14 +280,22 @@ export const ActivityListPage = () => {
                     <Column title="Name" dataIndex="name" key="name" />
                     <Column title="Description" dataIndex="description" key="description" />
                     <Column title="Free Credit" dataIndex="freeCredit" key="freeCredit" />
-                    <Column title="Cover" dataIndex="cover" key="cover" />
-                    <Column title="Link" dataIndex="link" key="link" />
                     <Column title="Start Time" dataIndex="startTime" key="startTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                     />
                     <Column title="End Time" dataIndex="endTime" key="endTime" 
+                    render={(text: Date) => {
+                        return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
+                    }}
+                    />
+                    <Column title="Created Time" dataIndex="createdTime" key="createdTime" 
+                    render={(text: Date) => {
+                        return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
+                    }}
+                    />
+                    <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
@@ -309,6 +310,7 @@ export const ActivityListPage = () => {
                         render={(_: any, record: ActivityTableType) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
+                                    console.log("详情", record)
                                     navigate("/admin/activities-management/activity-detail", { state: record })
                                 }}>详情</Button>
                                 <Button type="link" size="small" style={{ color: "green" }}
@@ -316,7 +318,7 @@ export const ActivityListPage = () => {
                                         console.log("上线", record)
                                         // 后端请求
                                         try {
-                                            await updateActivity({...record, status: record.status === 1 ? 2 : 1})
+                                            await updateActivity({...record, status: record.status === 1 ? 2 : 1, freeCredit: record.freeCredit})
                                             await fetchData()
                                         } catch (error) {
                                             console.log("更新失败", error)

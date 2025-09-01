@@ -4,7 +4,7 @@ export interface Activity {
     id: number
     name: string
     accountId: number
-    balance: string
+    freeCredit: number
     cover: string
     description: string
     status: number
@@ -24,26 +24,25 @@ export interface ActivityCardType {
 }
 
 
-export interface ActivityTableType extends Activity {
+export interface ActivityTableType {
     id: number
     name: string
-    freeCredit: string
-    cover: string
+    accountId: number
+    freeCredit: number
     description: string
-    link: string
+    status: number
     startTime: string
     endTime: string
-    status: number
 }
 
-export interface ActivitySubmitType extends Activity {
-    id: number,
-    name: string,
-    freeCredit: string,
-    cover: string,
-    description: string,
-    link: string,
-    startTime: string,
+export interface ActivitySubmitType {
+    id: number
+    name: string
+    accountId: number
+    freeCredit: number
+    description: string
+    status: number
+    startTime: string
     endTime: string
 }
 
