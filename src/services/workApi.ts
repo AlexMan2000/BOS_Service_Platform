@@ -1,5 +1,5 @@
 import { ProjectSubmitType, ProjectUpdateType } from "@/commons/types/activity";
-import { deleteRequest, postRequest, putRequest } from "./axiosInstance";
+import { deleteRequest, getRequest, postRequest, putRequest } from "./axiosInstance";
 
 export const getAllWorks = async (body: any, config?:any) => {
     try {
@@ -12,6 +12,18 @@ export const getAllWorks = async (body: any, config?:any) => {
         return res.data;
     } catch (error: any) {
         console.error("Error getting all works:", error);
+        throw error;
+    }
+}
+
+export const getWorkById = async (id: number, config?:any) => {
+    try {
+        const res = await getRequest(`/work/getById/${id}`, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting work by id:", error);
         throw error;
     }
 }

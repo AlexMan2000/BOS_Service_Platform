@@ -212,6 +212,7 @@ export const ProjectListPage = () => {
                     </div>
                 </div>
                 <Table<ProjectTableType> dataSource={tableDataSource}>
+                    <Column title="Id" dataIndex="id" key="id" />
                     <Column title="Title" dataIndex="title" key="title" /> 
                     <Column title="Authors" dataIndex="authors" key="authors" />
                     <Column title="Description" dataIndex="description" key="description"

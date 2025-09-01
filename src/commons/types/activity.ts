@@ -58,6 +58,7 @@ export interface ActivityDetail {
 
 
 export interface Project {
+    id: number
     title: string
     amount: number
     authors: string

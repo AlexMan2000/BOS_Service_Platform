@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { Form, Input, Button, InputNumber, message } from "antd"
 import styles from "./ProjectManagementDetailsPage.module.less"
 import { Project } from "@/commons/types/activity"
+import { getWorkById, updateWork } from "@/services/workApi"
+import { ResponseCode } from "@/commons/defs/code"
 
 const { TextArea } = Input
 
@@ -30,10 +32,16 @@ export const ProjectManagementDetailsPage = () => {
         }
     }, [state, projectForm])
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = async (values: any) => {
         console.log('Project form values:', values)
         setEdit(false)
         // Add your form submission logic here
+        const commonResult = await updateWork({...values, id: state.id})
+        if (commonResult.code === ResponseCode.SUCCESS) {
+            message.success("更新成功")
+        } else {
+            message.error("更新失败")
+        }
     }
 
     return (
@@ -43,10 +51,16 @@ export const ProjectManagementDetailsPage = () => {
                     <div className={styles.formControls}>
                         <Button 
                             type="primary" 
-                            onClick={() => {
-                                if (state.activityStatus !== 0) {
-                                    message.error("活动已开始，无法编辑作品")
-                                    return
+                            onClick={async () => {
+                                // if (state.activityStatus !== 0) {
+                                //     message.error("活动已开始，无法编辑作品")
+                                //     return
+                                // }
+                                if (!edit) {
+                                    const commonResult = await getWorkById(state.id);
+                                    if (commonResult.code === ResponseCode.SUCCESS) {
+                                        projectForm.setFieldsValue(commonResult.data)
+                                    }
                                 }
                                 setEdit(!edit)
                             }}
@@ -75,20 +89,6 @@ export const ProjectManagementDetailsPage = () => {
                             <Input placeholder="请输入项目标题" />
                         </Form.Item>
 
-                        <Form.Item
-                            label="项目金额"
-                            name="amount"
-                            rules={[{ required: true, message: "请输入项目金额" }]}
-                        >
-                            <InputNumber
-                                placeholder="请输入项目金额"
-                                style={{ width: '100%' }}
-                                min={0}
-                                precision={2}
-                                formatter={(value) => `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={(value) => value!.replace(/¥\s?|(,*)/g, '') as any}
-                            />
-                        </Form.Item>
 
                         <Form.Item
                             label="项目作者"
@@ -109,7 +109,7 @@ export const ProjectManagementDetailsPage = () => {
                         <Form.Item
                             label="项目描述"
                             name="description"
-                            rules={[{ required: true, message: "请输入项目描述" }]}
+                            rules={[{ required: false, message: "请输入项目描述" }]}
                         >
                             <TextArea 
                                 placeholder="请输入项目描述" 
@@ -122,7 +122,7 @@ export const ProjectManagementDetailsPage = () => {
                         <Form.Item
                             label="封面图片"
                             name="cover"
-                            rules={[{ required: true, message: "请输入封面图片链接" }]}
+                            rules={[{ required: false, message: "请输入封面图片链接" }]}
                         >
                             <Input placeholder="请输入封面图片链接" />
                         </Form.Item>
@@ -131,7 +131,7 @@ export const ProjectManagementDetailsPage = () => {
                             label="项目链接"
                             name="link"
                             rules={[
-                                { required: true, message: "请输入项目链接" },
+                                { required: false, message: "请输入项目链接" },
                                 { type: 'url', message: "请输入有效的URL" }
                             ]}
                         >
