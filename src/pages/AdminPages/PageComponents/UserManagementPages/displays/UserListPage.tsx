@@ -237,6 +237,7 @@ export const UserListPage = () => {
                                             // await wait(1);
                                             setBatchImportSaved(true)
                                         }}
+                                        maxRowLength={1}
                                     />
                                 },
                                 {

@@ -81,6 +81,7 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
     const addMultipleRows = (count: number) => {
         console.log(`Adding ${count} rows, current dataSource length:`, safeDataSource.length);
 
+        console.log("maxRowLength", maxRowLength)
         if (safeDataSource.length + count > (maxRowLength ?? 1)) {
             message.error("最多添加1行");
             return;
