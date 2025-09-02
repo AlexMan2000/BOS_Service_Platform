@@ -2,10 +2,10 @@ import styles from "./ProjectCard.module.less"
 import { Activity, ProjectCardType } from "@/commons/types/activity"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber, Popconfirm, Tag, Tooltip } from "antd"
+import { Modal, Button, InputNumber, Popconfirm, Tooltip } from "antd"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
-import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
+// import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
 import { useDispatch, useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { betWork } from "@/services/workApi"
@@ -53,7 +53,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
     }
 
     // 获取活动状态信息（如果活动有状态的话）
-    const statusInfo = activity ? getActivityStatusInfo(activity.status) : null
+    // const statusInfo = activity ? getActivityStatusInfo(activity.status) : null
 
     const dispatch = useDispatch()
 

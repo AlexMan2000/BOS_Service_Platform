@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import styles from "./UserProfileIndexPage.module.less"
-import { Tabs } from "antd"
 import { useState } from "react"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { useSelector } from "react-redux"

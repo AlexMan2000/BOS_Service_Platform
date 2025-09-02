@@ -1,7 +1,7 @@
 
 import { Outlet, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { Form, Input, Button, InputNumber, message } from "antd"
+import { Form, Input, Button, message } from "antd"
 import styles from "./ProjectManagementDetailsPage.module.less"
 import { Project } from "@/commons/types/activity"
 import { getWorkById, updateWork } from "@/services/workApi"

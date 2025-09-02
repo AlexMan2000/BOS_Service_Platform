@@ -7,7 +7,6 @@ import { Popconfirm } from "antd"
 import { Activity, ProjectSubmitType, ProjectTableType } from "@/commons/types/activity"
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
-import { wait } from "@/commons/utils/sys_utils"
 import styles from "./ProjectListPage.module.less"
 import Column from "antd/es/table/Column"
 import templateUrl from "@/assets/templates/project_batch_import_template.csv?url";

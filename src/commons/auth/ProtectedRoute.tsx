@@ -1,5 +1,3 @@
-import { selectUser } from '@/store/slice/userSlice/userSlice';
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 

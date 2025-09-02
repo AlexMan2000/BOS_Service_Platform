@@ -73,43 +73,43 @@ export const ProjectGridPage = () => {
     }, [id])
 
 
-    const PIE_CONFIG = {
-        data: [
-            { type: '未开始', value: 27 },
-            { type: '已结束', value: 25 },
-            { type: '进行中', value: 18 },
-            { type: '分类四', value: 15 },
-            { type: '分类五', value: 10 },
-            { type: '其他', value: 5 },
-        ],
-        angleField: 'value',
-        colorField: 'type',
-        label: {
-            text: 'value',
-            style: {
-                fontWeight: 'bold',
-            },
-        },
-        legend: {
-            color: {
-                title: false,
-                position: '',
-                rowPadding: 5,
-            },
-        },
-        size: 100,
-    };
+    // const PIE_CONFIG = {
+    //     data: [
+    //         { type: '未开始', value: 27 },
+    //         { type: '已结束', value: 25 },
+    //         { type: '进行中', value: 18 },
+    //         { type: '分类四', value: 15 },
+    //         { type: '分类五', value: 10 },
+    //         { type: '其他', value: 5 },
+    //     ],
+    //     angleField: 'value',
+    //     colorField: 'type',
+    //     label: {
+    //         text: 'value',
+    //         style: {
+    //             fontWeight: 'bold',
+    //         },
+    //     },
+    //     legend: {
+    //         color: {
+    //             title: false,
+    //             position: '',
+    //             rowPadding: 5,
+    //         },
+    //     },
+    //     size: 100,
+    // };
 
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('YYYY-MM-DD HH:mm')
     }
 
-    const formatCurrency = (amount: string) => {
-        return new Intl.NumberFormat('zh-CN', {
-            style: 'currency',
-            currency: 'CNY'
-        }).format(parseInt(amount))
-    }
+    // const formatCurrency = (amount: string) => {
+    //     return new Intl.NumberFormat('zh-CN', {
+    //         style: 'currency',
+    //         currency: 'CNY'
+    //     }).format(parseInt(amount))
+    // }
 
     const fallbackImages = [
         "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
