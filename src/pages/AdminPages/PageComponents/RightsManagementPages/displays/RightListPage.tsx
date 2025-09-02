@@ -1,6 +1,6 @@
 import { BenefitCreateVO, BenefitCodeListVO, Right } from "@/commons/types/right"
 import styles from "./RightListPage.module.less"
-import { Button, Input, message, Modal, Space, Tag } from "antd"
+import { Button, Input, message, Modal, Space, Tag, Popconfirm } from "antd"
 import { useState, useEffect } from "react"
 import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
@@ -176,6 +176,29 @@ export const RightListPage = () => {
         }
     }
 
+    const handleCheckSingleBenefit = async (code: string) => {
+        try {
+            // 调用单个核销API，注意codes是一个数组
+            const checkBenefitCodeVO = {
+                codes: [code], // 即使只有一个元素也要传递数组
+                redeemedBy: userId
+            }
+
+            const result = await checkAllBenefitCodes(checkBenefitCodeVO)
+            
+            if (result.code === ResponseCode.SUCCESS) {
+                message.success('核销成功')
+                // 重新加载数据
+                fetchBenefitCodeData(0, 10)
+            } else {
+                message.error(result.message || '核销失败')
+            }
+        } catch (error) {
+            console.error('核销失败:', error)
+            message.error('核销失败，请重试')
+        }
+    }
+
     useEffect(() => {
         if (activeTab === 0) { // management
             fetchBenefitData(0, 10)
@@ -198,19 +221,31 @@ export const RightListPage = () => {
             </Tabs>
 
                          {activeTab === 1 && <div className={styles.checkBenenfitContent}>
-                 <div className={styles.checkBenenfitContentHeader}>
-                     <div className={styles.checkBenenfitContentHeaderTitle}>兑换码核销管理</div>
-                     <Button 
-                         type="primary" 
-                         danger
-                         onClick={handleCheckAllBenefits}
-                         disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
-                     >
-                         全部核销 ({benefitCodeDataSource.filter(item => item.status === 1).length})
-                     </Button>
-                 </div>
+                                 <div className={styles.checkBenenfitContentHeader}>
+                    <div className={styles.checkBenenfitContentHeaderTitle}>兑换码核销管理</div>
+                    <Popconfirm
+                        title="确认全部核销"
+                        description={`确定要核销所有 ${benefitCodeDataSource.filter(item => item.status === 1).length} 个未核销的兑换码吗？`}
+                        onConfirm={handleCheckAllBenefits}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
+                    >
+                        <Button 
+                            type="primary" 
+                            danger
+                            disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
+                        >
+                            全部核销 ({benefitCodeDataSource.filter(item => item.status === 1).length})
+                        </Button>
+                    </Popconfirm>
+                </div>
                  <div className={styles.divider}></div>
-                <Table<BenefitCodeListVO> dataSource={benefitCodeDataSource} className={styles.table}>
+                <Table<BenefitCodeListVO> 
+                    dataSource={benefitCodeDataSource} 
+                    className={styles.table}
+                    scroll={{ x: 1000 }}
+                >
                     <Column title="Name" dataIndex="benefitName" key="benefitName" />
                     <Column title="Redeem Code" dataIndex="code" key="code" />
                     <Column title="Benefit Account Id" dataIndex="accountId" key="accountId" />
@@ -223,6 +258,33 @@ export const RightListPage = () => {
                     <Column title="Status" dataIndex="status" key="status" render={(text: boolean) => {
                         return <Tag color={text ? "red" : "green"}>{text ? "未核销" : "已核销"}</Tag>
                     }} />
+                    <Column
+                        title="操作"
+                        key="action"
+                        width={120}
+                        fixed="right"
+                        render={(_: any, record: BenefitCodeListVO) => (
+                            <Space size="middle">
+                                {record.status === 1 ? (
+                                    <Popconfirm
+                                        title="确认核销"
+                                        description="确定要核销这个兑换码吗？"
+                                        onConfirm={() => handleCheckSingleBenefit(record.code)}
+                                        okText="确认"
+                                        cancelText="取消"
+                                    >
+                                        <Button type="link" size="small" style={{ color: "#ff4d4f" }}>
+                                            核销
+                                        </Button>
+                                    </Popconfirm>
+                                ) : (
+                                    <Button type="link" size="small" disabled style={{ color: "#d9d9d9" }}>
+                                        已核销
+                                    </Button>
+                                )}
+                            </Space>
+                        )}
+                    />
 
                 </Table>
             </div>}
