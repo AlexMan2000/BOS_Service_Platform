@@ -8,9 +8,12 @@ import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { betWork, getAllWorks } from "@/services/workApi"
+import { BetWorkVO } from "@/commons/types/activity"
+import { ResponseCode } from "@/commons/defs/code"
 
-export const ProjectCard = (props: ProjectCardType) => {
-    const { title, amount, authors, description, cover, createdTime, updatedTime } = props
+export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) => {
+    const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit} = props
     const navigate = useNavigate()
 
     const { state } = useLocation()
@@ -19,9 +22,9 @@ export const ProjectCard = (props: ProjectCardType) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [money, setMoney] = useState<number>(0)
-    const { balance } = useSelector(selectUser)
+    const { balance, accountId } = useSelector(selectUser)
 
-    console.log(balance, freeCredit)
+    console.log(balance, freeCredit, id)
 
     // 图片错误处理
     const [imgSrc, setImgSrc] = useState(cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
@@ -97,12 +100,12 @@ export const ProjectCard = (props: ProjectCardType) => {
                         <Tooltip title="假设你的余额是90，免费额度是100，那么你最多可以投注190元。如果你要对某个作品投注110元，优先消耗免费额度，您只需要消耗额外的10元账户余额">
 
                             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                            <QuestionCircleOutlined style={{ color: "#1677ff" }} />
-                            <div className={styles.infoText} style={{ color: "#1677ff" }}>
-                                投注优先消耗免费额度
+                                <QuestionCircleOutlined style={{ color: "#1677ff" }} />
+                                <div className={styles.infoText} style={{ color: "#1677ff" }}>
+                                    投注优先消耗免费额度，您的免费额度是{freeCredit}
+                                </div>
                             </div>
-                            </div>
-                            
+
                         </Tooltip>
 
                     </div>
@@ -110,10 +113,21 @@ export const ProjectCard = (props: ProjectCardType) => {
                         <Popconfirm
                             title="确认投注"
                             description={`您确定要投注 ${money} 元吗？`}
-                            onConfirm={(e) => {
+                            onConfirm={async (e) => {
                                 if (e) e.stopPropagation()
                                 console.log(money)
 
+                                const betWorkData: BetWorkVO = {
+                                    activityId: activity.id,
+                                    workId: id,
+                                    amount: money,
+                                    usedFreeAmount: freeCredit
+                                }
+                                console.log(betWorkData);
+                                await betWork(betWorkData)
+
+                                // 刷一下allworks
+                                await onSubmit()
 
                                 // Add your betting logic here
                                 setIsModalOpen(false) // Close modal after successful bet

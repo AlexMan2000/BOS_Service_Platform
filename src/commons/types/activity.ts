@@ -73,6 +73,7 @@ export interface Project {
 
 
 export interface ProjectCardType {
+    id: number,
     status: number,
     title: string
     amount: number
@@ -120,5 +121,8 @@ export interface ProjectTableType {
 
 
 export interface BetWorkVO {
-    
+    activityId: number;
+    workId: number;
+    amount: number;
+    usedFreeAmount: number;
 }

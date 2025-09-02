@@ -4,8 +4,8 @@ import styles from "./ProjectGridPage.module.less"
 import { ProjectCard } from "../cards/ProjectCard"
 import { useLocation } from "react-router-dom"
 import { Card, Typography, Tag, Space, Divider, Empty } from "antd"
-import { 
-    CalendarOutlined, 
+import {
+    CalendarOutlined,
     DollarOutlined
 } from "@ant-design/icons"
 import dayjs from "dayjs"
@@ -20,31 +20,18 @@ const { Title, Text, Paragraph } = Typography
 
 export const ProjectGridPage = () => {
 
-    const { state } = useLocation() 
+    const { state } = useLocation()
     const [projectCards, setProjectCards] = useState<ProjectCardType[]>([])
     const { accountId } = useSelector(selectUser)
     console.log("avtivity State", state)
-    
+
     // Get activity data from state or use mock data
     const activityData = state as Activity
     const id = activityData.id
-    
+
     // Mock activity data for demonstration
-    const mockActivity: Activity = {
-        id: 1,
-        name: "2024年度创新项目大赛",
-        accountId: 1,
-        freeCredit: 500000,
-        cover: "https://via.placeholder.com/400x300",
-        description: "本次创新项目大赛旨在鼓励员工发挥创新思维，推动技术进步与业务发展。参赛项目涵盖人工智能、区块链、物联网等前沿技术领域，为公司未来发展储备技术力量。",
-        status: 1,
-        createdTime: "2024-01-01T09:00:00Z",
-        updatedTime: "2024-01-15T14:30:00Z",
-        startTime: "2024-01-01T09:00:00Z",
-        endTime: "2024-03-31T18:00:00Z"
-    }
-    
-    const currentActivity = activityData || mockActivity
+
+    const currentActivity = activityData
 
     const [imgSrc, setImgSrc] = useState(currentActivity.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
 
@@ -69,8 +56,8 @@ export const ProjectGridPage = () => {
     }
 
     useEffect(() => {
-       
-        
+
+
         if (id && id !== 0) {
             fetchData()
         } else {
@@ -82,30 +69,30 @@ export const ProjectGridPage = () => {
 
     const PIE_CONFIG = {
         data: [
-          { type: '未开始', value: 27 },
-          { type: '已结束', value: 25 },
-          { type: '进行中', value: 18 },
-          { type: '分类四', value: 15 },
-          { type: '分类五', value: 10 },
-          { type: '其他', value: 5 },
+            { type: '未开始', value: 27 },
+            { type: '已结束', value: 25 },
+            { type: '进行中', value: 18 },
+            { type: '分类四', value: 15 },
+            { type: '分类五', value: 10 },
+            { type: '其他', value: 5 },
         ],
         angleField: 'value',
         colorField: 'type',
         label: {
-          text: 'value',
-          style: {
-            fontWeight: 'bold',
-          },
+            text: 'value',
+            style: {
+                fontWeight: 'bold',
+            },
         },
         legend: {
-          color: {
-            title: false,
-            position: '',
-            rowPadding: 5,
-          },
+            color: {
+                title: false,
+                position: '',
+                rowPadding: 5,
+            },
         },
         size: 100,
-      };
+    };
 
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('YYYY-MM-DD HH:mm')
@@ -123,7 +110,7 @@ export const ProjectGridPage = () => {
         "https://picsum.photos/400/300?random=1",
         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
     ]
-    
+
     const [fallbackIndex, setFallbackIndex] = useState(0)
 
     const handleImageError = () => {
@@ -143,7 +130,7 @@ export const ProjectGridPage = () => {
 
     // Activity Detail Card Component
     const ActivityDetailCard = () => (
-        <Card 
+        <Card
             className={styles.activityDetail}
             cover={
                 <img
@@ -177,7 +164,7 @@ export const ProjectGridPage = () => {
                         <DollarOutlined style={{ color: '#52c41a', marginRight: 8 }} />
                         <Text strong>活动免费额度：</Text>
                         <Text style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                            {formatCurrency(currentActivity.freeCredit.toString())}
+                            {currentActivity.freeCredit.toString()}
                         </Text>
                     </div>
 
@@ -199,11 +186,11 @@ export const ProjectGridPage = () => {
 
             <div className={styles.activityDescription}>
                 <Text strong>活动描述：</Text>
-                <Paragraph 
-                    ellipsis={{ 
-                        rows: 3, 
-                        expandable: true, 
-                        symbol: '展开' 
+                <Paragraph
+                    ellipsis={{
+                        rows: 3,
+                        expandable: true,
+                        symbol: '展开'
                     }}
                     style={{ marginTop: 8, marginBottom: 0 }}
                 >
@@ -230,7 +217,7 @@ export const ProjectGridPage = () => {
                 <div className={styles.dashboardFullWidth}>
                     <ActivityDetailCard />
                     {/* <PieChartCard /> */}
-                    
+
                     {/* Empty State */}
                     <Card className={styles.emptyStateCard}>
                         <Empty
@@ -266,7 +253,7 @@ export const ProjectGridPage = () => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Projects Grid Section */}
             <div className={styles.projectsSection}>
                 <div className={styles.projectsSectionHeader}>
@@ -276,7 +263,11 @@ export const ProjectGridPage = () => {
                 </div>
                 <div className={styles.grid}>
                     {projectCards.map((project) => (
-                        <ProjectCard key={project.title} {...project} />
+                        <ProjectCard key={project.title} {...project} onSubmit={
+                            async () => {
+                                await fetchData()
+                            }
+                        } />
                     ))}
                 </div>
             </div>

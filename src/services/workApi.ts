@@ -67,7 +67,7 @@ export const deleteWork = async (id: number, config?:any) => {
 
 export const betWork = async (body: BetWorkVO, config?:any) => {
     try {
-        const res = await postRequest("/work/bet", body, {
+        const res = await postRequest("/activityBet/bet", body, {
             ...config
         });
         return res.data;
