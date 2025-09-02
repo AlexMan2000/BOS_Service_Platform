@@ -36,14 +36,20 @@ export const ProjectGridPage = () => {
     const [imgSrc, setImgSrc] = useState(currentActivity.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
 
     const activityFreeCredit = currentActivity.freeCredit // should remains the same in the whole activity
+    const activityStatus = currentActivity.status;
 
+
+    const [activityAccountFreeCredit, setActivityAccountFreeCredit] = useState(activityFreeCredit)
+
+    console.log(activityStatus)
     const fetchData = async () => {
         try {
-            const commonResult: any = await getAllWorks({ freeCredit: activityFreeCredit, accountId: accountId, activityId: id })
+            const commonResult: any = await getAllWorks({ freeCredit: activityAccountFreeCredit, accountId: accountId, activityId: id })
             if (commonResult.code === ResponseCode.SUCCESS) {
                 const data = commonResult.data.workList
                 // 确保data是数组
                 console.log('data', data)
+                setActivityAccountFreeCredit(commonResult.data.freeCredit)
                 setProjectCards(data as ProjectCardType[])
             } else {
                 console.warn('获取项目数据失败:', commonResult)
@@ -164,7 +170,7 @@ export const ProjectGridPage = () => {
                         <DollarOutlined style={{ color: '#52c41a', marginRight: 8 }} />
                         <Text strong>活动免费额度：</Text>
                         <Text style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                            {currentActivity.freeCredit.toString()}
+                            {activityAccountFreeCredit.toString()}
                         </Text>
                     </div>
 
@@ -267,7 +273,10 @@ export const ProjectGridPage = () => {
                             async () => {
                                 await fetchData()
                             }
-                        } />
+                            
+                        } 
+                        canBet={activityStatus === 1}
+                        />
                     ))}
                 </div>
             </div>

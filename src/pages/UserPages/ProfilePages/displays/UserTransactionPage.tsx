@@ -1,10 +1,35 @@
 import { TransactionTableType } from "@/commons/types/txn"
 import styles from "./UserTransactionPage.module.less"
-import { Table, Space, Button, Tag } from "antd"
+import { Table, Tag, message } from "antd"
 import Column from "antd/es/table/Column"
 import dayjs from "dayjs"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { getUserTransactions } from "@/services/txnApi"
+import { ResponseCode } from "@/commons/defs/code"  
+import { useState, useEffect } from "react"
 
 export const UserTransactionPage = () => {
+
+
+    const { userId, accountId } = useSelector(selectUser)
+
+    const [transactionDataSource, setTransactionDataSource] = useState<TransactionTableType[]>([])
+
+    console.log("userId", userId, "accountId", accountId)
+    const fetchData = async () => {
+        const commonResult = await getUserTransactions({ accountId: accountId })
+        if (commonResult.code === ResponseCode.SUCCESS) {
+            setTransactionDataSource(commonResult.data as TransactionTableType[])
+        } else {
+            message.error(commonResult.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     const DEFAULT_DATA_DISPLAY: TransactionTableType[] = [
         {
             sourceAccountId: "1",
@@ -49,13 +74,16 @@ export const UserTransactionPage = () => {
 
     return (
         <div className={styles.container}>
-            <Table<TransactionTableType> dataSource={DEFAULT_DATA_DISPLAY} className={styles.table}>
-                <Column title="Source Account" dataIndex="sourceAccountId" key="sourceAccountId" />
-                <Column title="Target Account" dataIndex="targetAccountId" key="targetAccountId" />
-                <Column title="Source Name" dataIndex="sourceName" key="sourceName" />
-                <Column title="Target Name" dataIndex="targetName" key="targetName" />
+            <Table<TransactionTableType> dataSource={transactionDataSource} className={styles.table}>
+               
+                <Column title="Source Name" dataIndex="sourceName" key="sourceName" render={()=>"您"} />
+                <Column title="目标名称" dataIndex="targetName" key="targetName" />
                 <Column title="Amount" dataIndex="amount" key="amount" />
-                <Column title="Tx Type" dataIndex="txType" key="txType" />
+                <Column title="交易类型" dataIndex="txType" key="txType" 
+                render={(text: string) => {
+                    return <Tag color={text === "TRANSFER" ? "blue" : text === "GRANT" ? "green" : text === "ACTIVITY_BET" ? "red" : text === "BENEFIT_REDEEM" ? "purple" : "gray"}>{text === "TRANSFER" ? "转账" : text === "GRANT" ? "发放" : text === "ACTIVITY_BET" ? "活动投注" : text === "BENEFIT_REDEEM" ? "权益核销" : "--"}</Tag>
+                }}
+                />
                 <Column title="Reason" dataIndex="reason" key="reason" />
                 <Column title="Start Time" dataIndex="startTime" key="startTime"
                     render={(text: string) => {

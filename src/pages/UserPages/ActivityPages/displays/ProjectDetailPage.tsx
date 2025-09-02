@@ -1,15 +1,19 @@
 import { useLocation } from "react-router-dom"
-import { List, Card, Typography, Space, Divider } from "antd"
+import { List, Card, Typography, Space, Divider, Modal, Button, InputNumber, Popconfirm, Tooltip } from "antd"
 import { 
     UserOutlined, 
     CalendarOutlined, 
     DollarOutlined, 
     LinkOutlined,
+    QuestionCircleOutlined,
 } from "@ant-design/icons"
 import dayjs from "dayjs"
 import styles from "./ProjectDetailPage.module.less"
-import { Project } from "@/commons/types/activity"
+import { Project, Activity, BetWorkVO } from "@/commons/types/activity"
 import { useState } from "react"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { betWork } from "@/services/workApi"
 
 const { Title, Text, Paragraph } = Typography
 
@@ -17,9 +21,17 @@ export const ProjectDetailPage = () => {
     const { state } = useLocation()
     const projects = state?.projects || [] // Assuming projects array is passed in state
     const singleProject = state as Project // Or single project
+    
+    // 获取activity信息 - 假设从父页面传递过来
+    const activity = state?.activity as Activity
+    const { balance } = useSelector(selectUser)
+    
+    // 投注相关状态
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [money, setMoney] = useState<number>(0)
+    const [currentProject, setCurrentProject] = useState<Project | null>(null)
 
-
-
+    console.log(singleProject)
 
     const projectsToDisplay = projects.length > 0 ? projects : (singleProject ? [singleProject] : [])
 
@@ -64,9 +76,81 @@ const handleImageLoad = () => {
 
     return (
         <div className={styles.container}>
+            {/* 投注Modal */}
+            {activity && (
+                <Modal
+                    open={isModalOpen}
+                    onCancel={() => {
+                        setMoney(0)
+                        setIsModalOpen(false)
+                        setCurrentProject(null)
+                    }}
+                    footer={null}
+                    title={"投注"}
+                    width={500}
+                >
+                    <div style={{ padding: '20px 0' }}>
+                        <div style={{ marginBottom: 16 }}>
+                            <div style={{ marginBottom: 8, fontWeight: 'bold' }}>
+                                投注金额
+                            </div>
+                            <InputNumber
+                                value={money}
+                                min={1}
+                                max={balance + activity.freeCredit}
+                                onChange={(value) => {
+                                    if (value) {
+                                        setMoney(value)
+                                    }
+                                }}
+                                style={{ width: '100%' }}
+                            />
+                        </div>
+                        <div style={{ marginBottom: 16 }}>
+                            <Tooltip title="假设你的余额是90，免费额度是100，那么你最多可以投注190元。如果你要对某个作品投注110元，优先消耗免费额度，您只需要消耗额外的10元账户余额">
+                                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                    <QuestionCircleOutlined style={{ color: "#1677ff" }} />
+                                    <div style={{ color: "#1677ff" }}>
+                                        投注优先消耗免费额度，您的免费额度是{activity.freeCredit}
+                                    </div>
+                                </div>
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <Popconfirm
+                                title="确认投注"
+                                description={`您确定要投注 ${money} 元吗？`}
+                                onConfirm={async () => {
+                                    if (currentProject && activity) {
+                                        console.log(money)
+                                        const betWorkData: BetWorkVO = {
+                                            activityId: activity.id,
+                                            workId: currentProject.id,
+                                            amount: money,
+                                            usedFreeAmount: activity.freeCredit
+                                        }
+                                        console.log(betWorkData);
+                                        await betWork(betWorkData)
+                                        
+                                        setIsModalOpen(false)
+                                        setMoney(0)
+                                        setCurrentProject(null)
+                                    }
+                                }}
+                                okText="确认投注"
+                                cancelText="取消"
+                            >
+                                <Button style={{ width: "100%" }} type="primary">
+                                    投注
+                                </Button>
+                            </Popconfirm>
+                        </div>
+                    </div>
+                </Modal>
+            )}
             <div className={styles.header}>
                 <Title level={2}>作品详情</Title>
-                <Text type="secondary">共 {projectsToDisplay.length} 个项目</Text>
+                
             </div>
 
             <List
@@ -79,17 +163,18 @@ const handleImageLoad = () => {
                     <List.Item
                         className={styles.listItem}
                         key={project.title}
-                        actions={[
-                            // <Button 
-                            //     key="view" 
-                            //     type="primary" 
-                            //     disabled={!project.link}
-                            //     icon={<EyeOutlined />}
-                            //     onClick={() => handleViewProject(project)}
-                            // >
-                            //     查看作品连接
-                            // </Button>,
-                        ]}
+                        actions={activity ? [
+                            <Button 
+                                key="bet" 
+                                type="primary" 
+                                onClick={() => {
+                                    setCurrentProject(project)
+                                    setIsModalOpen(true)
+                                }}
+                            >
+                                投注
+                            </Button>,
+                        ] : []}
                         extra={
                             <img
                                 className={styles.projectImage}

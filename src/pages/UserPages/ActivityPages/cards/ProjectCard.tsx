@@ -6,14 +6,15 @@ import { Modal, Button, InputNumber, Popconfirm, Tag, Tooltip } from "antd"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
-import { betWork, getAllWorks } from "@/services/workApi"
+import { betWork } from "@/services/workApi"
 import { BetWorkVO } from "@/commons/types/activity"
+import { getUserBalance } from "@/services/accountApi"
 import { ResponseCode } from "@/commons/defs/code"
-
-export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) => {
-    const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit} = props
+import { setUserInfo } from "@/store/slice/userSlice/userSlice"
+export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, canBet: boolean }) => {
+    const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit, canBet} = props
     const navigate = useNavigate()
 
     const { state } = useLocation()
@@ -22,7 +23,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) =
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [money, setMoney] = useState<number>(0)
-    const { balance, accountId } = useSelector(selectUser)
+    const { balance, userId } = useSelector(selectUser)
 
     console.log(balance, freeCredit, id)
 
@@ -53,10 +54,25 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) =
 
     // 获取活动状态信息（如果活动有状态的话）
     const statusInfo = activity ? getActivityStatusInfo(activity.status) : null
+
+    const dispatch = useDispatch()
+
+    const acticityStatus = activity.status
     return (
         <div className={styles.container} onClick={() => {
             navigate(`/home/activities/projects/detail`, {
-                state: props
+                state: {
+                    title,
+                    amount,
+                    authors,
+                    description,
+                    cover,
+                    createdTime,
+                    updatedTime,
+                    id,
+                    activityStatus: acticityStatus,
+                    activity: activity
+                }
             })
         }}>
             <Modal
@@ -115,16 +131,24 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) =
                             description={`您确定要投注 ${money} 元吗？`}
                             onConfirm={async (e) => {
                                 if (e) e.stopPropagation()
-                                console.log(money)
 
                                 const betWorkData: BetWorkVO = {
                                     activityId: activity.id,
                                     workId: id,
                                     amount: money,
-                                    usedFreeAmount: freeCredit
+                                    usedFreeAmount: Math.min(freeCredit, money)
                                 }
                                 console.log(betWorkData);
                                 await betWork(betWorkData)
+
+
+                               const balanceResult: any = await getUserBalance(userId)
+                               if (balanceResult.code === ResponseCode.SUCCESS) {
+                                const balance = balanceResult.data
+                                dispatch(setUserInfo({
+                                    balance: balance
+                                }))
+                               }
 
                                 // 刷一下allworks
                                 await onSubmit()
@@ -174,11 +198,6 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) =
                         金额: ¥{amount.toLocaleString()}
                     </div>
                 )}
-                {statusInfo && (
-                    <div className={styles.status}>
-                        <Tag color={statusInfo.color}>{statusInfo.text}</Tag>
-                    </div>
-                )}
                 <div className={styles.startTime}>
                     创建时间: {formatDateTime(createdTime)}
                 </div>
@@ -192,7 +211,9 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void }) =
                     e.stopPropagation();
                 }}
             >
-                <Button type="primary" onClick={(e) => {
+                <Button type="primary" 
+                disabled={!canBet}
+                onClick={(e) => {
                     e.stopPropagation()
                     e.preventDefault()
                     setIsModalOpen(true)

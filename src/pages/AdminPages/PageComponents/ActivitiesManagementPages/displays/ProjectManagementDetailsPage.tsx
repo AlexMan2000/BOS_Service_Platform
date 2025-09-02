@@ -50,6 +50,7 @@ export const ProjectManagementDetailsPage = () => {
                 <div className={styles.projectDetailsHeader}>
                     <div className={styles.formControls}>
                         <Button 
+                            disabled={state.activityStatus !== 0}
                             type="primary" 
                             onClick={async () => {
                                 // if (state.activityStatus !== 0) {

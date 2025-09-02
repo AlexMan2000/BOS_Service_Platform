@@ -306,26 +306,14 @@ export const ActivityListPage = () => {
                     <Column
                         title="Action"
                         key="action"
-                        width={150}
+                        width={180}
+                        fixed={"right"}
                         render={(_: any, record: ActivityTableType) => (
                             <Space size="middle">
                                 <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
                                     console.log("详情", record)
                                     navigate("/admin/activities-management/activity-detail", { state: record })
                                 }}>详情</Button>
-                                <Button type="link" size="small" style={{ color: "green" }}
-                                    onClick={async () => {
-                                        console.log("上线", record)
-                                        // 后端请求
-                                        try {
-                                            await updateActivity({...record, status: record.status === 1 ? 2 : 1, freeCredit: record.freeCredit})
-                                            await fetchData()
-                                        } catch (error) {
-                                            console.log("更新失败", error)
-                                            message.error("更新失败")
-                                        }
-                                    }}
-                                >{record.status === 1 ? "结束" : "开始"}</Button>
                                 <Popconfirm title="确定删除吗？" onConfirm={async () => {
                                     console.log("删除", record)
                                     await deleteActivity(record.id)

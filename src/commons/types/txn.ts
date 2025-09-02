@@ -33,3 +33,7 @@ export interface PersonalTransferVO {
     reason: string;
     createdBy: number; //调用人userId
 }
+
+export interface GetUserTransactionsVO {
+    accountId: number;
+}

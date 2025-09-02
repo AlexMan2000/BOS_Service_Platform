@@ -77,7 +77,7 @@ export const ProjectListPage = () => {
 
     const fetchData = async () => {
         try {
-            const commonResult: any = await getAllWorks({ freeCredit: 1321321, accountId: 122, activityId: id })
+            const commonResult: any = await getAllWorks({ freeCredit: 1321321, activityId: id })
             if (commonResult.code === ResponseCode.SUCCESS) {
                 const data = commonResult.data.workList
                 // 确保data是数组
@@ -108,6 +108,9 @@ export const ProjectListPage = () => {
             setTableDataSource([])
         }
     }, [id])
+
+
+    console.log(status)
 
 
     return (
@@ -202,7 +205,7 @@ export const ProjectListPage = () => {
                     </div>
                     <div className={styles.addUser}>
                         <Button type="primary" 
-                        disabled={id === 0}
+                        disabled={id === 0 || status !==0}
                         onClick={() => {
                             // 确保清空数据源时设置为空数组
                             setBatchImportDataSource([])
@@ -212,31 +215,34 @@ export const ProjectListPage = () => {
                     </div>
                 </div>
                 <Table<ProjectTableType> dataSource={tableDataSource}>
-                    <Column title="Id" dataIndex="id" key="id" />
-                    <Column title="Title" dataIndex="title" key="title" /> 
-                    <Column title="Authors" dataIndex="authors" key="authors" />
-                    <Column title="Description" dataIndex="description" key="description"
+                    <Column title="作品id" dataIndex="id" key="id" />
+                    <Column title="作品名" dataIndex="title" key="title" /> 
+                    <Column title="作者" dataIndex="authors" key="authors" />
+                    <Column title="投注总金额" dataIndex="amount" key="amount" />
+                    <Column title="描述" dataIndex="description" key="description"
                       render={(text: string) => {
                         return text ? text : "--"
                      }}
                     />
-                    <Column title="Cover" dataIndex="cover" key="cover" 
+                    <Column title="封面" dataIndex="cover" key="cover" 
                      render={(text: string) => {
                         return text ? text : "--"
                      }}
                     />
-                    <Column title="Link" dataIndex="link" key="link"
+                    <Column title="附件链接" dataIndex="link" key="link"
                       render={(text: string) => {
                         return text ? text : "--"
                      }}
                     />
                     <Column
-                        title="Action"
+                        title="操作"
                         key="action"
                         width={150}
                             render={(_: any, record: ProjectTableType) => (
                             <Space size="middle">
-                                <Button type="link" size="small" style={{ color: "#1677ff" }} onClick={() => {
+                                <Button 
+                               
+                                type="link" size="small"  onClick={() => {
                                     navigate("/admin/activities-management/activity-detail/project-detail", { state: {...record, activityStatus: status} })
                                 }}>作品详情</Button>
                                 <Popconfirm title="确定删除吗？" onConfirm={async () => {
