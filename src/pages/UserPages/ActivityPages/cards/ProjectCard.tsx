@@ -3,7 +3,7 @@ import { Activity, ProjectCardType } from "@/commons/types/activity"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Modal, Button, InputNumber, Popconfirm, Tag, Tooltip } from "antd"
-import { InfoCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons"
+import { QuestionCircleOutlined } from "@ant-design/icons"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
 import { useSelector } from "react-redux"
@@ -114,7 +114,7 @@ export const ProjectCard = (props: ProjectCardType) => {
                                 if (e) e.stopPropagation()
                                 console.log(money)
 
-                                
+
                                 // Add your betting logic here
                                 setIsModalOpen(false) // Close modal after successful bet
                                 setMoney(0)

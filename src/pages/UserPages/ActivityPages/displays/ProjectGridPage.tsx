@@ -2,12 +2,10 @@
 import { ProjectCardType, Activity } from "@/commons/types/activity"
 import styles from "./ProjectGridPage.module.less"
 import { ProjectCard } from "../cards/ProjectCard"
-import { Pie } from "@ant-design/charts"
 import { useLocation } from "react-router-dom"
-import { Card, Typography, Tag, Space, Divider, Avatar, Empty } from "antd"
+import { Card, Typography, Tag, Space, Divider, Empty } from "antd"
 import { 
     CalendarOutlined, 
-    UserOutlined, 
     DollarOutlined
 } from "@ant-design/icons"
 import dayjs from "dayjs"

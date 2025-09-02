@@ -1,12 +1,10 @@
 import { useLocation } from "react-router-dom"
-import { List, Card, Tag, Avatar, Button, Typography, Space, Divider } from "antd"
+import { List, Card, Typography, Space, Divider } from "antd"
 import { 
     UserOutlined, 
     CalendarOutlined, 
     DollarOutlined, 
     LinkOutlined,
-    EditOutlined,
-    EyeOutlined 
 } from "@ant-design/icons"
 import dayjs from "dayjs"
 import styles from "./ProjectDetailPage.module.less"

@@ -39,7 +39,7 @@ export const UserRightsPage = () => {
                     }}
                 />
                 <Column title="Status" dataIndex="status" key="status" render={(text: boolean) => {
-                    return <Tag color={text ? "green" : "red"}>{text ? "未核销" : "已核销"}</Tag>
+                    return <Tag color={text ? "red" : "green"}>{text ? "未核销" : "已核销"}</Tag>
                 }} />
                 
             </Table>

@@ -78,6 +78,11 @@ export interface BenefitCodeListVO {
     accountId: string;
     benefitId: string;
     benefitName: string;
-    status: boolean;
+    status: number;
     code: string;
+}
+
+export interface CheckBenefitCodeVO {
+    codes: string[];
+    redeemedBy: string;
 }
