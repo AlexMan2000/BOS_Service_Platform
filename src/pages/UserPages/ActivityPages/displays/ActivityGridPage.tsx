@@ -27,7 +27,7 @@ export const ActivityGridPage = () => {
 
     return (
         <div className={styles.container}>
-            {activityCard.map((card) => (
+            {activityCard && activityCard.length > 0 && activityCard.map((card) => (
                 <ActivityCard key={card.name} {...card} />
             ))}
         </div>

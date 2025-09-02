@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { createBenefit } from "@/services/benefitApi"
 import { ResponseCode } from "@/commons/defs/code"
-import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
+import { formatDateTimeToISO } from "@/commons/utils/parser/dateFormatter"
 import dayjs from "dayjs"
 
 
@@ -162,7 +162,7 @@ export const RightListPage = () => {
                             total: item.total,
                             remain: item.remain,
                             active: item.active,
-                            expDate: formatDateTime(item.expDate ?? ''),
+                            expDate: formatDateTimeToISO(item.expDate ?? ''),
                             createdBy: employeeNo,
                         }
                     })

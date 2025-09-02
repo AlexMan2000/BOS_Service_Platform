@@ -17,8 +17,9 @@ export const UserRightsPage = () => {
             total: 100,
             remain: 100,
             active: true,
-            exp_date: "2021-01-01 12:00:00",
-            status: "active"
+            expDate: "2021-01-01 12:00:00",
+            status: "active",
+            id: 1,
         },
         {
             name: "免考",
@@ -28,8 +29,9 @@ export const UserRightsPage = () => {
             total: 100,
             remain: 100,
             active: true,
-            exp_date: "2021-01-01 12:00:00",
-            status: "expired"
+            expDate: "2021-01-01 12:00:00",
+            status: "expired",
+            id: 2,
         },
         {
             name: "免考",
@@ -39,8 +41,9 @@ export const UserRightsPage = () => {
             total: 100,
             remain: 100,
             active: true,
-            exp_date: "2021-01-01 12:00:00",
-            status: "inactive"
+            expDate: "2021-01-01 12:00:00",
+            status: "inactive",
+            id: 3,
         }
     ]
 

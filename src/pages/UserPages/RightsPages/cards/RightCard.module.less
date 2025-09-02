@@ -8,6 +8,8 @@
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
 
+    position: relative;
+
     &:hover {
         transform: scale(1.05);
         cursor: pointer;
@@ -52,7 +54,6 @@
             position: absolute;
             top: 0px;
             right: 6px;
-            background-color: #000;
             color: #fff;
             font-size: 12px;
             padding: 5px 10px;
@@ -78,9 +79,14 @@
             font-size: 14px;
             color: #666;
         }
+
+        padding-bottom: 60px;
     }
     .button {
         padding: 0px 10px 10px 10px;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
         align-self: flex-end;
     }
 

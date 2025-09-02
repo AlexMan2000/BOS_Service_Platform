@@ -73,6 +73,7 @@ export interface Project {
 
 
 export interface ProjectCardType {
+    status: number,
     title: string
     amount: number
     authors: string

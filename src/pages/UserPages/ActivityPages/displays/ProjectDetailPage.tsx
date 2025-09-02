@@ -11,6 +11,7 @@ import {
 import dayjs from "dayjs"
 import styles from "./ProjectDetailPage.module.less"
 import { Project } from "@/commons/types/activity"
+import { useState } from "react"
 
 const { Title, Text, Paragraph } = Typography
 
@@ -19,47 +20,37 @@ export const ProjectDetailPage = () => {
     const projects = state?.projects || [] // Assuming projects array is passed in state
     const singleProject = state as Project // Or single project
 
-    // Mock data for demonstration - replace with actual data
-    const mockProjects: Project[] = [
-        {
-            title: "AI智能客服系统",
-            amount: 50000,
-            authors: "张三, 李四, 王五",
-            activityId: "ACT001",
-            description: "基于深度学习的智能客服系统，能够自动识别用户意图并提供精准回复。系统采用最新的NLP技术，支持多轮对话和情感分析。",
-            cover: "https://via.placeholder.com/300x200",
-            link: "https://github.com/example/ai-customer-service",
-            createdTime: "2024-01-15T10:00:00Z",
-            updatedTime: "2024-01-20T15:30:00Z",
-            deleted: false
-        },
-        {
-            title: "区块链溯源平台",
-            amount: 80000,
-            authors: "赵六, 孙七",
-            activityId: "ACT001",
-            description: "利用区块链技术构建的产品溯源平台，确保产品信息的真实性和不可篡改性。平台支持二维码扫描和批次追踪功能。",
-            cover: "https://via.placeholder.com/300x200",
-            link: "https://github.com/example/blockchain-tracing",
-            createdTime: "2024-01-10T14:20:00Z",
-            updatedTime: "2024-01-18T11:45:00Z",
-            deleted: false
-        },
-        {
-            title: "智慧城市数据可视化",
-            amount: 120000,
-            authors: "周八, 吴九, 郑十",
-            activityId: "ACT001",
-            description: "面向智慧城市建设的大数据可视化平台，集成交通、环境、人口等多维度数据，提供实时监控和决策支持。",
-            cover: "https://via.placeholder.com/300x200",
-            link: "https://github.com/example/smart-city-viz",
-            createdTime: "2024-01-05T09:15:00Z",
-            updatedTime: "2024-01-22T16:20:00Z",
-            deleted: false
-        }
-    ]
 
-    const projectsToDisplay = projects.length > 0 ? projects : (singleProject ? [singleProject] : mockProjects)
+
+
+    const projectsToDisplay = projects.length > 0 ? projects : (singleProject ? [singleProject] : [])
+
+
+    console.log("projectsToDisplay", projectsToDisplay)
+
+const fallbackImages = [
+    "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
+    "https://picsum.photos/400/300?random=1",
+    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
+]
+
+const [fallbackIndex, setFallbackIndex] = useState(0)
+
+const [imgSrc, setImgSrc] = useState(projects.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+
+const handleImageError = () => {
+    console.log("Image load error for:", imgSrc)
+    if (fallbackIndex < fallbackImages.length - 1) {
+        const nextIndex = fallbackIndex + 1
+        setFallbackIndex(nextIndex)
+        setImgSrc(fallbackImages[nextIndex])
+    }
+}
+
+
+const handleImageLoad = () => {
+    console.log("Image loaded successfully:", imgSrc)
+}
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('zh-CN', {
@@ -72,14 +63,6 @@ export const ProjectDetailPage = () => {
         return dayjs(dateString).format('YYYY-MM-DD HH:mm')
     }
 
-    const handleViewProject = (project: Project) => {
-        window.open(project.link, '_blank')
-    }
-
-    const handleEditProject = (project: Project) => {
-        console.log('Edit project:', project)
-        // Add navigation to edit page
-    }
 
     return (
         <div className={styles.container}>
@@ -92,58 +75,41 @@ export const ProjectDetailPage = () => {
                 className={styles.projectList}
                 itemLayout="vertical"
                 size="large"
-                pagination={{
-                    onChange: (page) => {
-                        console.log(page)
-                    },
-                    pageSize: 5,
-                    showSizeChanger: true,
-                    showQuickJumper: true,
-                    showTotal: (total, range) =>
-                        `${range[0]}-${range[1]} 共 ${total} 项`,
-                }}
+                pagination={false}
                 dataSource={projectsToDisplay}
                 renderItem={(project: Project) => (
                     <List.Item
                         className={styles.listItem}
                         key={project.title}
                         actions={[
-                            <Button 
-                                key="view" 
-                                type="primary" 
-                                icon={<EyeOutlined />}
-                                onClick={() => handleViewProject(project)}
-                            >
-                                查看作品
-                            </Button>,
-                            <Button 
-                                key="edit" 
-                                icon={<EditOutlined />}
-                                onClick={() => handleEditProject(project)}
-                            >
-                                编辑
-                            </Button>
+                            // <Button 
+                            //     key="view" 
+                            //     type="primary" 
+                            //     disabled={!project.link}
+                            //     icon={<EyeOutlined />}
+                            //     onClick={() => handleViewProject(project)}
+                            // >
+                            //     查看作品连接
+                            // </Button>,
                         ]}
                         extra={
                             <img
                                 className={styles.projectImage}
                                 alt="project cover"
-                                src={project.cover}
-                                onError={(e) => {
-                                    e.currentTarget.src = '/default-img.png'
-                                }}
+                                src={imgSrc}
+                                onError={handleImageError}
+                                onLoad={handleImageLoad}
                             />
                         }
                     >
                         <Card className={styles.projectCard} bordered={false}>
                             <List.Item.Meta
-                                avatar={<Avatar size={64} icon={<UserOutlined />} />}
                                 title={
                                     <div className={styles.projectTitle}>
                                         <Title level={4} style={{ margin: 0 }}>
                                             {project.title}
                                         </Title>
-                                        <Tag color="blue">ID: {project.activityId}</Tag>
+                                        {/* <Tag color="blue">ID: {project.activityId}</Tag> */}
                                     </div>
                                 }
                                 description={
@@ -155,7 +121,7 @@ export const ProjectDetailPage = () => {
                                         </div>
                                         <div className={styles.amountInfo}>
                                             <DollarOutlined style={{ marginRight: 8, color: '#52c41a' }} />
-                                            <Text strong>项目金额：</Text>
+                                            <Text strong>投注总金额：</Text>
                                             <Text style={{ color: '#52c41a', fontSize: '16px', fontWeight: 'bold' }}>
                                                 {formatCurrency(project.amount)}
                                             </Text>
@@ -164,7 +130,7 @@ export const ProjectDetailPage = () => {
                                             <LinkOutlined style={{ marginRight: 8, color: '#722ed1' }} />
                                             <Text strong>项目链接：</Text>
                                             <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                                {project.link}
+                                                {project.link || '--'}
                                             </a>
                                         </div>
                                     </Space>

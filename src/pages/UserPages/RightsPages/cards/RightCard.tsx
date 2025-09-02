@@ -1,17 +1,42 @@
-import { RightCardType } from "@/commons/types/right"
+import { BenefitRedeemVO, RightCardType } from "@/commons/types/right"
 import { useNavigate } from "react-router-dom"
 import styles from "./RightCard.module.less"
-import { Popconfirm, Modal, Button, InputNumber, message } from "antd"
+import { Popconfirm, Modal, Button, InputNumber, message, Tag } from "antd"
 import { useState } from "react"
 import { InfoCircleOutlined } from "@ant-design/icons"
-
+import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { benefitRedeem } from "@/services/benefitApi"
+import { ResponseCode } from "@/commons/defs/code"
 export const RightCard = (props: RightCardType) => {
-    const { name, description, price, image, total, remain, active, expDate } = props
+    const {id, name, description, price, image, total, remain, active, expDate } = props
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [amount, setAmount] = useState<number>(0)
+    const [amount, setAmount] = useState<number>(1)
 
-    
+    const { accountId } = useSelector(selectUser)
+
+    const [imgSrc, setImgSrc] = useState(image || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    const fallbackImages = [
+        "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
+        "https://picsum.photos/400/300?random=1",
+        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
+    ]
+    const [fallbackIndex, setFallbackIndex] = useState(0)
+    const handleImageError = () => {
+        console.log("Image load error for:", imgSrc)
+        if (fallbackIndex < fallbackImages.length - 1) {
+            const nextIndex = fallbackIndex + 1
+            setFallbackIndex(nextIndex)
+            setImgSrc(fallbackImages[nextIndex])
+        }
+    }
+
+    const handleImageLoad = () => {
+        console.log("Image loaded successfully:", imgSrc)
+    }
+
     return (
         <div className={styles.container} onClick={() => {
             navigate(`/home/rights/details`, { state: props })
@@ -20,7 +45,7 @@ export const RightCard = (props: RightCardType) => {
                 open={isModalOpen}
                 onCancel={(e) => {
                     e.stopPropagation()
-                    setAmount(0)
+                    setAmount(1)
                     setIsModalOpen(false)
                 }}
                 footer={null}
@@ -44,6 +69,8 @@ export const RightCard = (props: RightCardType) => {
                         </div>
                         <InputNumber
                             value={amount}
+                            min={1}
+                            max={remain}
                             onChange={(value) => {
                                 if (value) {
                                     setAmount(value)
@@ -61,12 +88,26 @@ export const RightCard = (props: RightCardType) => {
                         <Popconfirm
                             title="确认兑换"
                             description={`您确定要兑换 ${amount} 份该权益吗？兑换后将消耗 ${price * amount} 余额`}
-                            onConfirm={(e) => {
+                            onConfirm={async (e) => {
                                 if (e) e.stopPropagation()
                                 console.log(amount)
                                 // Add your betting logic here
+                                console.log(amount, accountId)
+                                const benefitRedeemVO: BenefitRedeemVO = {
+                                    count: amount,
+                                    accountId: accountId.toString(),
+                                    benefitId: id,
+                                }
+                                console.log(benefitRedeemVO)
+                                const commonResult = await benefitRedeem(benefitRedeemVO);
+                                if (commonResult.code === ResponseCode.SUCCESS) {
+                                    message.success("兑换成功")
+                                } else {
+                                    message.error(commonResult.message)
+                                }
+            
                                 setIsModalOpen(false) // Close modal after successful bet
-                                setAmount(0)
+                                setAmount(1)
                                 message.success(`兑换成功，兑换码为: ${Math.random().toString(36).substring(2, 15)}, 请在权益页面查看`, 10)
                             }}
                             onCancel={(e) => {
@@ -88,7 +129,7 @@ export const RightCard = (props: RightCardType) => {
             </Modal>
 
             <div className={styles.cover}>
-                <img src={image} alt={name} />
+                <img src={imgSrc} alt={name} onError={handleImageError} onLoad={handleImageLoad} />
             </div>
             <div className={styles.content}>
                 <div className={styles.name}>
@@ -98,10 +139,10 @@ export const RightCard = (props: RightCardType) => {
                     {description}
                 </div>
                 <div className={styles.status}>
-                    {active ? "有效" : "无效"}
+                    <Tag color={active ? "green" : "red"}>{active ? "有效" : "无效"}</Tag>
                 </div>
                 <div className={styles.startTime}>
-                    过期时间: {expDate}
+                    过期时间: {formatDateTime(expDate)}
                 </div>
                 <div className={styles.price}>
                     价格: {price}
