@@ -179,7 +179,7 @@ export const RightCard = (props: RightCardProps) => {
                     e.stopPropagation();
                 }}
             >
-                <Button type="primary" onClick={(e) => {
+                <Button disabled={remain === 0 || !active} type="primary" onClick={(e) => {
                     e.stopPropagation()
                     e.preventDefault()
                     setIsModalOpen(true)

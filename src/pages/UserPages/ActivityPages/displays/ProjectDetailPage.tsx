@@ -25,6 +25,8 @@ export const ProjectDetailPage = () => {
     // 获取activity信息 - 假设从父页面传递过来
     const activity = state?.activity as Activity
     const { balance } = useSelector(selectUser)
+
+    console.log("activity", activity)
     
     // 投注相关状态
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -140,7 +142,9 @@ const handleImageLoad = () => {
                                 okText="确认投注"
                                 cancelText="取消"
                             >
-                                <Button style={{ width: "100%" }} type="primary">
+                                <Button 
+                                disabled={activity.status !==1}
+                                style={{ width: "100%" }} type="primary">
                                     投注
                                 </Button>
                             </Popconfirm>
@@ -167,6 +171,7 @@ const handleImageLoad = () => {
                             <Button 
                                 key="bet" 
                                 type="primary" 
+                                disabled={activity.status !==1}
                                 onClick={() => {
                                     setCurrentProject(project)
                                     setIsModalOpen(true)

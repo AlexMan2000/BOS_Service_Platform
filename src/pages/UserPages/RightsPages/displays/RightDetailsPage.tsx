@@ -152,7 +152,7 @@ export const RightDetailsPage = () => {
                                     type="primary" 
                                     size="large"
                                     icon={<ShoppingCartOutlined />}
-                                    disabled={remain === 0}
+                                    disabled={remain === 0 || !active}
                                 >
                                     立即兑换
                                 </Button>
