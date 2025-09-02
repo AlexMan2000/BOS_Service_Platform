@@ -4,6 +4,12 @@ export const formatDateTime = (date: string) => {
     return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 }
 
+
+export const formatDateTimeToISO = (date: string) => {
+    return dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
+}
+
+
 export const formatDate = (date: string) => {
     return dayjs(date).format("YYYY-MM-DD");
 }

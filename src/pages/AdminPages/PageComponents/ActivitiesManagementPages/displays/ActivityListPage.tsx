@@ -13,7 +13,7 @@ import { ActivitySubmitType, ActivityTableType, ActivityTransferSubmitType } fro
 import { createActivity, deleteActivity, getAllActivities, updateActivity } from "@/services/activityApi"
 import dayjs from "dayjs"
 import { ResponseCode } from "@/commons/defs/code"
-import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
+import { formatDateTimeToISO } from "@/commons/utils/parser/dateFormatter"
 export const ActivityListPage = () => {
     const navigate = useNavigate()
 
@@ -155,8 +155,8 @@ export const ActivityListPage = () => {
                             name: item.name,
                             freeCredit: item.freeCredit,
                             description: item.description,
-                            startTime: formatDateTime(item.startTime),
-                            endTime: formatDateTime(item.endTime),
+                            startTime: formatDateTimeToISO(item.startTime),
+                            endTime: formatDateTimeToISO(item.endTime),
                             accountId: item.accountId,
                             status: item.status,
                         }
