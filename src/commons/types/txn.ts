@@ -25,3 +25,11 @@ export interface TransferVO {
     reason: string;
     createdBy: number; //调用人userId
 }
+
+
+export interface PersonalTransferVO {
+    targetEmployeeNo: string;
+    amount: number;
+    reason: string;
+    createdBy: number; //调用人userId
+}

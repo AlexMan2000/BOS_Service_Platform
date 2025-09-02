@@ -1,6 +1,9 @@
-import { AutoCompleteProps, Form, Input, Modal, Popconfirm, Button } from "antd"
-import { AutoComplete } from "antd"
-import { useState } from "react"
+import { PersonalTransferVO } from "@/commons/types/txn"
+import { Form, Input, Modal, Popconfirm, Button, InputNumber, message } from "antd"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { personalTransfer } from "@/services/txnApi"
+import { ResponseCode } from "@/commons/defs/code"
 
 
 interface TransferModalProps {
@@ -9,12 +12,14 @@ interface TransferModalProps {
     title: string
 }
 export const TransferModal = ({ transferOpen, setTransferOpen, title }: TransferModalProps) => {
-    
+
     const [transferForm] = Form.useForm()
 
     const handleConfirm = () => {
         transferForm.submit()
     }
+
+    const { userId } = useSelector(selectUser)
 
     const customFooter = [
         <Button key="cancel" onClick={() => setTransferOpen(false)}>
@@ -36,36 +41,54 @@ export const TransferModal = ({ transferOpen, setTransferOpen, title }: Transfer
 
     return (
         <Modal
-                title={title}
-                open={transferOpen}
-                onCancel={() => {
-                    setTransferOpen(false)
-                }}
-                footer={customFooter}>
-                <Form form={transferForm} onFinish={() => {
+            title={title}
+            open={transferOpen}
+            onCancel={() => {
+                setTransferOpen(false)
+            }}
+            footer={customFooter}>
+            <Form
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 14 }}
+                style={{ maxWidth: 600 }}
+                form={transferForm}
+
+                onFinish={async () => {
                     console.log(transferForm.getFieldsValue())
+
+                    const personalTransferVO: PersonalTransferVO = {
+                        targetEmployeeNo: transferForm.getFieldValue("targetEmployeeNo"),
+                        amount: transferForm.getFieldValue("amount"),
+                        reason: transferForm.getFieldValue("reason"),
+                        createdBy: Number(userId)
+                    }
+                    const result: any = await personalTransfer(personalTransferVO)
+                    if (result.code === ResponseCode.SUCCESS) {
+                        message.success("转账成功！")
+                        setTransferOpen(false)
+                    } else {
+                        message.error(result.message + ", 转账失败!")
+                    }
                     setTransferOpen(false)
+
                 }}>
-                    {/* <Form.Item label="目标账号类型" name="targetType" rules={[{ required: true, message: "请输入目标账号类型" }]}>
-                        <Input placeholder="请输入目标账号类型" />
-                    </Form.Item> */}
-                    <Form.Item label="目标账号" name="targetAccountId" rules={[{ required: true, message: "请输入目标账号" }]}>
-                        <Input
-                            placeholder="请输入目标账号"
-                            onChange={(e) => {
-                                const value = e.target.value
-                                // 网络请求
-                                console.log(value)
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item label="转账金额" name="amount" rules={[{ required: true, message: "请输入转账金额" }]}>
-                        <Input placeholder="请输入转账金额" />
-                    </Form.Item>
-                    <Form.Item label="转账事由" name="reason" rules={[{ required: true, message: "请输入转账备注" }]}>
-                        <Input.TextArea placeholder="请输入转账备注" />
-                    </Form.Item>
-                </Form>
-            </Modal>
+                <Form.Item label="他/她的工号" name="targetEmployeeNo" rules={[{ required: true, message: "请输入目标账号" }]}>
+                    <Input
+                        placeholder="请输入工号"
+                        onChange={(e) => {
+                            const value = e.target.value
+                            // 网络请求
+                            console.log(value)
+                        }}
+                    />
+                </Form.Item>
+                <Form.Item label="转账金额" name="amount" rules={[{ required: true, message: "请输入转账金额" }]}>
+                    <InputNumber placeholder="请输入转账金额" />
+                </Form.Item>
+                <Form.Item label="转账事由" name="reason" rules={[{ required: true, message: "请输入转账备注" }]}>
+                    <Input.TextArea placeholder="请输入转账备注" />
+                </Form.Item>
+            </Form>
+        </Modal>
     )
 }
