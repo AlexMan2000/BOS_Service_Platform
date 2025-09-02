@@ -50,7 +50,7 @@ export const LoginPage = () => {
                     return
                 }
                 navigate("/home")
-            } else if (role === "ADMIN") {
+            } else if (role === "ADMIN" || role === "SUPER") {
                 navigate("/admin")
             }
         } else if (commonResult.code === ResponseCode.FIRST_LOGIN) {

@@ -26,12 +26,12 @@ export const UserListPage = () => {
 
     const [batchImportActiveTab, setBatchImportActiveTab] = useState('1')
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
-    const [batchImportLoading, setBatchImportLoading] = useState(false)
+    const [_, setBatchImportLoading] = useState(false)
     const [batchImportFile, setBatchImportFile] = useState<File | null>(null)
     const [batchImportSaved, setBatchImportSaved] = useState(false)
     const [batchTransferSaved, setBatchTransferSaved] = useState(false)
 
-    const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
+    // const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
 
 

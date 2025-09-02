@@ -86,8 +86,12 @@ export const GenericEditableTable = <T extends object>(props: GenericEditableTab
             return;
         }
         const newRows: T[] = [];
+        const currentTimestamp = Date.now();
+        
         for (let i = 0; i < count; i++) {
-            newRows.push({ ...defaultNewRow, [rowKey]: `${rowKey}${i + 1}` });
+            // 生成唯一的rowKey，使用时间戳+索引+随机数确保唯一性
+            const uniqueKey = `${rowKey}_${currentTimestamp}_${i}_${Math.random().toString(36).substr(2, 9)}`;
+            newRows.push({ ...defaultNewRow, [rowKey]: uniqueKey });
         }
 
         // Always add to bottom
