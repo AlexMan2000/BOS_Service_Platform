@@ -1,6 +1,6 @@
-import { Right } from "@/commons/types/right"
+import { BenefitRedeemVO, Right } from "@/commons/types/right"
 import styles from "./RightDetailsPage.module.less"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Button, InputNumber, message, Modal, Popconfirm, Tag, Card, Typography, Space, Divider, Avatar } from "antd"
 import { useState } from "react"
 import { 
@@ -14,16 +14,20 @@ import {
     FileTextOutlined
 } from "@ant-design/icons"
 import dayjs from "dayjs"
+import { benefitRedeem } from "@/services/benefitApi"
+import { ResponseCode } from "@/commons/defs/code"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
 
 const { Title, Text, Paragraph } = Typography
 
 export const RightDetailsPage = () => {
 
-    const { name, description, price, image, total, remain, active, expDate } = useLocation().state as Right
-
+    const { name, description, price, image, total, remain, active, expDate, id } = useLocation().state as Right
+    const { accountId } = useSelector(selectUser)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [amount, setAmount] = useState(1)
-
+    const navigate = useNavigate()
     const formatCurrency = (price: number) => {
         return new Intl.NumberFormat('zh-CN', {
             style: 'currency',
@@ -118,11 +122,25 @@ export const RightDetailsPage = () => {
                                         <div>总金额: {formatCurrency(price * amount)}</div>
                                     </div>
                                 }
-                                onConfirm={() => {
+                                onConfirm={async () => {
                                     setIsModalOpen(false)
+                                    const benefitRedeemVO: BenefitRedeemVO = {
+                                        count: amount,
+                                        accountId: accountId.toString(),
+                                        benefitId: id,
+                                    }
+                                    // console.log(benefitRedeemVO)
+                                    const commonResult = await benefitRedeem(benefitRedeemVO);
+                                    if (commonResult.code === ResponseCode.SUCCESS) {
+                                        setIsModalOpen(false)
+                                        setAmount(1)
+                                        navigate("/home/rights")
+                                    } else {
+                                        message.error(commonResult.message)
+                                    }
                                     message.success({
-                                        content: `兑换 ${amount} 个权益成功！兑换码为: ${Math.random().toString(36).substring(2, 15)}，请妥善保存`,
-                                        duration: 10,
+                                        content: `兑换 ${amount} 个权益成功！请在个人中心查看`,
+                                        duration: 3,
                                         style: { marginTop: '20vh' }
                                     })
                                 }}

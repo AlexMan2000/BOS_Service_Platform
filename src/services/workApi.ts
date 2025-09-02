@@ -1,4 +1,4 @@
-import { ProjectSubmitType, ProjectUpdateType } from "@/commons/types/activity";
+import { BetWorkVO, ProjectSubmitType, ProjectUpdateType } from "@/commons/types/activity";
 import { deleteRequest, getRequest, postRequest, putRequest } from "./axiosInstance";
 
 export const getAllWorks = async (body: any, config?:any) => {
@@ -61,6 +61,18 @@ export const deleteWork = async (id: number, config?:any) => {
         return res.data; 
     } catch (error: any) {
         console.error("Error deleting work:", error);
+        throw error;
+    }
+}
+
+export const betWork = async (body: BetWorkVO, config?:any) => {
+    try {
+        const res = await postRequest("/work/bet", body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error betting work:", error);
         throw error;
     }
 }

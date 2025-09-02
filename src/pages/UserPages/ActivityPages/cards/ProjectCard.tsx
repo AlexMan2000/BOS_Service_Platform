@@ -2,10 +2,12 @@ import styles from "./ProjectCard.module.less"
 import { Activity, ProjectCardType } from "@/commons/types/activity"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber, Popconfirm, Tag } from "antd"
-import { InfoCircleOutlined } from "@ant-design/icons"
+import { Modal, Button, InputNumber, Popconfirm, Tag, Tooltip } from "antd"
+import { InfoCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
+import { useSelector } from "react-redux"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
 
 export const ProjectCard = (props: ProjectCardType) => {
     const { title, amount, authors, description, cover, createdTime, updatedTime } = props
@@ -13,20 +15,24 @@ export const ProjectCard = (props: ProjectCardType) => {
 
     const { state } = useLocation()
     const activity = state as Activity
+    const { freeCredit } = activity
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [money, setMoney] = useState<number>(0)
-    
+    const { balance } = useSelector(selectUser)
+
+    console.log(balance, freeCredit)
+
     // 图片错误处理
     const [imgSrc, setImgSrc] = useState(cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
-    
+
     // 备用图片列表
     const fallbackImages = [
         "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
         "https://picsum.photos/400/300?random=1",
         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
     ]
-    
+
     const [fallbackIndex, setFallbackIndex] = useState(0)
 
     const handleImageError = () => {
@@ -78,6 +84,8 @@ export const ProjectCard = (props: ProjectCardType) => {
                         </div>
                         <InputNumber
                             value={money}
+                            min={1}
+                            max={balance + freeCredit}
                             onChange={(value) => {
                                 if (value) {
                                     setMoney(value)
@@ -86,10 +94,17 @@ export const ProjectCard = (props: ProjectCardType) => {
                         />
                     </div>
                     <div className={styles.infoContainer}>
-                        <InfoCircleOutlined style={{ color: "#1677ff" }} />
-                        <div className={styles.infoText} style={{ color: "#1677ff" }}>
-                            投注优先消耗免费额度
-                        </div>
+                        <Tooltip title="假设你的余额是90，免费额度是100，那么你最多可以投注190元。如果你要对某个作品投注110元，优先消耗免费额度，您只需要消耗额外的10元账户余额">
+
+                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                            <QuestionCircleOutlined style={{ color: "#1677ff" }} />
+                            <div className={styles.infoText} style={{ color: "#1677ff" }}>
+                                投注优先消耗免费额度
+                            </div>
+                            </div>
+                            
+                        </Tooltip>
+
                     </div>
                     <div className={styles.buttonContainer}>
                         <Popconfirm
@@ -98,6 +113,8 @@ export const ProjectCard = (props: ProjectCardType) => {
                             onConfirm={(e) => {
                                 if (e) e.stopPropagation()
                                 console.log(money)
+
+                                
                                 // Add your betting logic here
                                 setIsModalOpen(false) // Close modal after successful bet
                                 setMoney(0)
@@ -120,7 +137,7 @@ export const ProjectCard = (props: ProjectCardType) => {
                 </div>
             </Modal>
             <div className={styles.cover}>
-                <img 
+                <img
                     src={imgSrc}
                     onError={handleImageError}
                     onLoad={handleImageLoad}

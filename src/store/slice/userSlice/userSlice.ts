@@ -12,7 +12,7 @@ interface UserState {
   createdTime: string; // 注册时间
   createdBy: string; // 经办人 
   lastLogin: string; // 上一次登录时间
-  balance: string; // 稳定余额
+  balance: number; // 稳定余额
   
   // Role and authentication
   role: string; // User role
@@ -47,7 +47,7 @@ const initialState: UserState = {
   createdTime: '',
   createdBy: '',
   lastLogin: '',
-  balance: '',
+  balance: 0,
   
   // Role and authentication
   role: 'user',
@@ -78,7 +78,7 @@ export const userSlice = createSlice({
       state.createdTime = ''
       state.createdBy = ''
       state.lastLogin = ''
-      state.balance = ''
+      state.balance = 0
       
       // Reset role and authentication
       state.role = 'user'

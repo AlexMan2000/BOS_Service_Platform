@@ -67,3 +67,17 @@ export interface BenefitRedeemVO {
     accountId: string,
     benefitId: number
 }
+
+export interface BenefitCodeQryVO {
+    userId?: number,
+    pageNum: number,
+    pageSize: number
+}
+
+export interface BenefitCodeListVO {
+    accountId: string;
+    benefitId: string;
+    benefitName: string;
+    status: boolean;
+    code: string;
+}

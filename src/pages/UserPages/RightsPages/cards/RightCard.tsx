@@ -9,13 +9,17 @@ import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { benefitRedeem } from "@/services/benefitApi"
 import { ResponseCode } from "@/commons/defs/code"
-export const RightCard = (props: RightCardType) => {
-    const {id, name, description, price, image, total, remain, active, expDate } = props
+interface RightCardProps extends RightCardType {
+    onSubmit: () => void;
+}
+
+export const RightCard = (props: RightCardProps) => {
+    const {id, name, description, price, image, total, remain, active, expDate, onSubmit } = props
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [amount, setAmount] = useState<number>(1)
 
-    const { accountId } = useSelector(selectUser)
+    const { accountId, balance } = useSelector(selectUser)
 
     const [imgSrc, setImgSrc] = useState(image || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
     const fallbackImages = [
@@ -39,7 +43,19 @@ export const RightCard = (props: RightCardType) => {
 
     return (
         <div className={styles.container} onClick={() => {
-            navigate(`/home/rights/details`, { state: props })
+            // Create a clean object without functions for navigation state
+            const rightData = {
+                id,
+                name,
+                description,
+                price,
+                image,
+                total,
+                remain,
+                active,
+                expDate
+            }
+            navigate(`/home/rights/details`, { state: rightData })
         }}>
             <Modal
                 open={isModalOpen}
@@ -70,7 +86,7 @@ export const RightCard = (props: RightCardType) => {
                         <InputNumber
                             value={amount}
                             min={1}
-                            max={remain}
+                            max={Math.min(remain, balance)}
                             onChange={(value) => {
                                 if (value) {
                                     setAmount(value)
@@ -81,7 +97,7 @@ export const RightCard = (props: RightCardType) => {
                     <div className={styles.infoContainer}>
                         <InfoCircleOutlined style={{ color: "#1677ff" }} />
                         <div className={styles.infoText} style={{ color: "#1677ff" }}>
-                            兑换消耗余额: {price * amount}
+                            兑换消耗余额: {price * amount}，当前余额: {balance}
                         </div>
                     </div>
                     <div className={styles.buttonContainer}>
@@ -90,25 +106,29 @@ export const RightCard = (props: RightCardType) => {
                             description={`您确定要兑换 ${amount} 份该权益吗？兑换后将消耗 ${price * amount} 余额`}
                             onConfirm={async (e) => {
                                 if (e) e.stopPropagation()
-                                console.log(amount)
-                                // Add your betting logic here
-                                console.log(amount, accountId)
+
+                                if (price * amount > balance) {
+                                    message.error("余额不足")
+                                    return
+                                }
                                 const benefitRedeemVO: BenefitRedeemVO = {
                                     count: amount,
                                     accountId: accountId.toString(),
                                     benefitId: id,
                                 }
-                                console.log(benefitRedeemVO)
                                 const commonResult = await benefitRedeem(benefitRedeemVO);
                                 if (commonResult.code === ResponseCode.SUCCESS) {
-                                    message.success("兑换成功")
+                                    message.success({
+                                        content: `兑换 ${amount} 个权益成功！请在个人中心查看`,
+                                        duration: 3,
+                                    })
+                                    onSubmit()
                                 } else {
                                     message.error(commonResult.message)
                                 }
             
                                 setIsModalOpen(false) // Close modal after successful bet
                                 setAmount(1)
-                                message.success(`兑换成功，兑换码为: ${Math.random().toString(36).substring(2, 15)}, 请在权益页面查看`, 10)
                             }}
                             onCancel={(e) => {
                                 if (e) e.stopPropagation()

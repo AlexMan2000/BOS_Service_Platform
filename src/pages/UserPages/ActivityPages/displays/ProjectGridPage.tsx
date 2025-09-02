@@ -15,13 +15,16 @@ import { getActivityStatusColor, getActivityStatusText, getActivityStatusIcon } 
 import { getAllWorks } from "@/services/workApi"
 import { ResponseCode } from "@/commons/defs/code"
 import { useEffect, useState } from "react"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { useSelector } from "react-redux"
 
 const { Title, Text, Paragraph } = Typography
 
 export const ProjectGridPage = () => {
 
-    const { state } = useLocation()
+    const { state } = useLocation() 
     const [projectCards, setProjectCards] = useState<ProjectCardType[]>([])
+    const { accountId } = useSelector(selectUser)
     console.log("avtivity State", state)
     
     // Get activity data from state or use mock data
@@ -47,10 +50,11 @@ export const ProjectGridPage = () => {
 
     const [imgSrc, setImgSrc] = useState(currentActivity.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
 
+    const activityFreeCredit = currentActivity.freeCredit // should remains the same in the whole activity
 
     const fetchData = async () => {
         try {
-            const commonResult: any = await getAllWorks({ freeCredit: 1321321, accountId: 122, activityId: id })
+            const commonResult: any = await getAllWorks({ freeCredit: activityFreeCredit, accountId: accountId, activityId: id })
             if (commonResult.code === ResponseCode.SUCCESS) {
                 const data = commonResult.data.workList
                 // 确保data是数组

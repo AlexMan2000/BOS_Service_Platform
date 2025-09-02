@@ -1,4 +1,4 @@
-import { BenefitCreateVO, BenefitRedeemVO, ListAllBenefitVO, RightUpdateVO } from "@/commons/types/right";
+import { BenefitCodeQryVO, BenefitCreateVO, BenefitRedeemVO, ListAllBenefitVO, RightUpdateVO } from "@/commons/types/right";
 import { deleteRequest, postRequest, putRequest } from "./axiosInstance";
 
 export const getAllRights = async (body: ListAllBenefitVO, config?:any) => {
@@ -63,6 +63,30 @@ export const benefitRedeem = async (body: BenefitRedeemVO, config?:any) => {
         return res.data;
     } catch (error: any) {
         console.error("Error redeeming benefit:", error);
+        throw error;
+    }
+}
+
+export const getUserBenefitInfo = async (body: BenefitCodeQryVO, config?:any) => {
+    try {
+        const res = await postRequest("/benefitCode/listByUser", body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting user benefit info:", error);
+        throw error;
+    }
+}
+
+export const listAllBenefitCodes = async (body: BenefitCodeQryVO, config?:any) => {
+    try {
+        const res = await postRequest("/benefitCode/listAll", body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error listing all benefit codes:", error);
         throw error;
     }
 }

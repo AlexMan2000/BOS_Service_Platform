@@ -147,3 +147,15 @@ export const batchTransfer = async (body: UserTransferSubmitType[], config?: any
         throw error;
     }
 }
+
+export const getUserBalance = async (userId: string, config?: any) => {
+    try {
+        const res = await getRequest(`/account/getBalance/${userId}`, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error getting user balance:", error);
+        throw error;
+    }
+}

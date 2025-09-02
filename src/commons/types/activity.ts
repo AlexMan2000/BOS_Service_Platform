@@ -117,3 +117,8 @@ export interface ProjectTableType {
     createdTime: string,
     updatedTime: string
 }
+
+
+export interface BetWorkVO {
+    
+}
