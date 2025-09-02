@@ -54,39 +54,38 @@ export const getAllAccounts = async (body: ListAllAccountVO, config?: any) => {
     }
 }
 
-function getFilename(disposition?: string | null, fallback = "template.xlsx") {
-    if (!disposition) return fallback;
-    // RFC 5987: filename*=UTF-8''<url-encoded>
-    const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
-    if (utf8Match) return decodeURIComponent(utf8Match[1]);
-  
-    // legacy: filename="<...>" or filename=<...>
-    const asciiMatch = disposition.match(/filename="?([^"]+)"?/i);
-    if (asciiMatch) return decodeURIComponent(asciiMatch[1]);
-  
-    return fallback;
-  }
-  
-
-
-export const downloadTemplate = async (type: string,config?: any) => {
+export const downloadTemplate = async (type: string) => {
     try {
-        const res = await getRequest(`${type}/get-import-template`, {
-            responseType: 'blob',
-            ...config
-        });
-        const contentDisposition = res.headers["content-disposition"];
-        const filename = getFilename(contentDisposition, "批量导入用户模板.xlsx");
+        // 定义模板文件映射
+        const templateFileMap: { [key: string]: string } = {
+            'account': 'user_batch_import_template.csv',
+            'user': 'user_batch_import_template.csv',
+            'activity': 'activity_batch_import_template.csv',
+            'project': 'project_batch_import_template.csv',
+            'right': 'right_batch_import_template.csv',
+            'transfer': 'user_batch_transfer_template.csv',
+            'transaction': 'user_batch_transfer_template.csv'
+        };
 
-        const blob = new Blob([res.data], {
-            // Use correct MIME type for Excel files to ensure they open properly
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
+        const templateFileName = templateFileMap[type] || 'user_batch_import_template.csv';
+        const templatePath = `/src/assets/templates/${templateFileName}`;
+
+        // 使用 fetch 从本地获取文件
+        const response = await fetch(templatePath);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch template: ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
+
+        // 根据类型设置下载文件名
+        const downloadFileName = templateFileName.replace('.csv', '_下载.csv');
 
         const a = document.createElement("a");
         a.href = objectUrl;
-        a.download = filename;
+        a.download = downloadFileName;
         document.body.appendChild(a);
         a.click();
         a.remove();

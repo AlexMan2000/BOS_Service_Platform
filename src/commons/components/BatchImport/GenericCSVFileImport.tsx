@@ -105,7 +105,7 @@ export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                     <div 
                         onClick={async () => {
-                            await downloadTemplate(type || "account")
+                            await downloadTemplate(type || "user")
                         }} 
                         className={styles.downloadLink}
                     >
