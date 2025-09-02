@@ -13,8 +13,8 @@ import { BetWorkVO } from "@/commons/types/activity"
 import { getUserBalance } from "@/services/accountApi"
 import { ResponseCode } from "@/commons/defs/code"
 import { setUserInfo } from "@/store/slice/userSlice/userSlice"
-export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, canBet: boolean }) => {
-    const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit, canBet} = props
+export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, canBet: boolean, activityAccountFreeCredit: number }) => {
+    const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit, canBet, activityAccountFreeCredit} = props
     const navigate = useNavigate()
 
     const { state } = useLocation()
@@ -104,7 +104,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                         <InputNumber
                             value={money}
                             min={1}
-                            max={balance + freeCredit}
+                            max={balance + activityAccountFreeCredit}
                             onChange={(value) => {
                                 if (value) {
                                     setMoney(value)
@@ -118,7 +118,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                                 <QuestionCircleOutlined style={{ color: "#1677ff" }} />
                                 <div className={styles.infoText} style={{ color: "#1677ff" }}>
-                                    投注优先消耗免费额度，您的免费额度是{freeCredit}
+                                    投注优先消耗免费额度，您目前免费额度是{activityAccountFreeCredit}
                                 </div>
                             </div>
 
@@ -132,11 +132,12 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                             onConfirm={async (e) => {
                                 if (e) e.stopPropagation()
 
+                                console.log("activityAccountFreeCredit, money", activityAccountFreeCredit, money)
                                 const betWorkData: BetWorkVO = {
                                     activityId: activity.id,
                                     workId: id,
                                     amount: money,
-                                    usedFreeAmount: Math.min(freeCredit, money)
+                                    usedFreeAmount: Math.min(activityAccountFreeCredit, money)
                                 }
                                 console.log(betWorkData);
                                 await betWork(betWorkData)

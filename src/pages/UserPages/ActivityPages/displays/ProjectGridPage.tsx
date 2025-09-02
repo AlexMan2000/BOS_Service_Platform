@@ -44,7 +44,7 @@ export const ProjectGridPage = () => {
     console.log(activityStatus)
     const fetchData = async () => {
         try {
-            const commonResult: any = await getAllWorks({ freeCredit: activityAccountFreeCredit, accountId: accountId, activityId: id })
+            const commonResult: any = await getAllWorks({ freeCredit: activityFreeCredit, accountId: accountId, activityId: id })
             if (commonResult.code === ResponseCode.SUCCESS) {
                 const data = commonResult.data.workList
                 // 确保data是数组
@@ -170,7 +170,7 @@ export const ProjectGridPage = () => {
                         <DollarOutlined style={{ color: '#52c41a', marginRight: 8 }} />
                         <Text strong>活动免费额度：</Text>
                         <Text style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                            {activityAccountFreeCredit.toString()}
+                            {activityFreeCredit.toString()}
                         </Text>
                     </div>
 
@@ -276,6 +276,7 @@ export const ProjectGridPage = () => {
                             
                         } 
                         canBet={activityStatus === 1}
+                        activityAccountFreeCredit={activityAccountFreeCredit}
                         />
                     ))}
                 </div>
