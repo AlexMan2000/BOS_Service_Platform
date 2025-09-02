@@ -2,12 +2,15 @@ import { Outlet, useNavigate } from "react-router-dom"
 import styles from "./UserProfileIndexPage.module.less"
 import { Tabs } from "antd"
 import { useState } from "react"
+import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { useSelector } from "react-redux"
 
 
 export const UserProfileIndexPage = () => {
     const navigate = useNavigate()
 
     const [activeTab, setActiveTab] = useState("details")
+    const { role } = useSelector(selectUser)
 
     const items = [
         {
@@ -24,10 +27,17 @@ export const UserProfileIndexPage = () => {
         }
     ]
 
+    const filteredItems = items.filter((item) => {
+        if(role === "ADMIN" || role ==="SUPER"){
+            return item.key !== "rights"
+        }
+        return true
+    })
+
     return (
         <div className={styles.container}>
             <div className={styles.tabs}>
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                     <div key={item.key} className={`${styles.tabItem} ${activeTab === item.key ? styles.active : ""}`} onClick={() => 
                     {
                         setActiveTab(item.key)

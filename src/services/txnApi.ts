@@ -25,3 +25,16 @@ export const getUserTransactions = async (body: GetUserTransactionsVO, config?:a
         throw error;
     }
 }
+
+export const getUserTransactionsByAdmin = async (config?:any) => {
+    try {
+        const res = await getRequest(`/transaction/listAll`, {
+            ...config
+        });
+        return res.data;
+    
+    } catch (error: any) {
+        console.error("Error getting user transactions by admin:", error);
+        throw error;
+    }
+}
