@@ -1,9 +1,11 @@
 import { PersonalTransferVO } from "@/commons/types/txn"
 import { Form, Input, Modal, Popconfirm, Button, InputNumber, message } from "antd"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { personalTransfer } from "@/services/txnApi"
 import { ResponseCode } from "@/commons/defs/code"
+import { getUserBalance } from "@/services/accountApi"
+import { setUserInfo } from "@/store/slice/userSlice/userSlice"
 
 
 interface TransferModalProps {
@@ -20,7 +22,7 @@ export const TransferModal = ({ transferOpen, setTransferOpen, title }: Transfer
     }
 
     const { userId } = useSelector(selectUser)
-
+    const dispatch = useDispatch()  
     const customFooter = [
         <Button key="cancel" onClick={() => setTransferOpen(false)}>
             取消
@@ -64,6 +66,13 @@ export const TransferModal = ({ transferOpen, setTransferOpen, title }: Transfer
                     }
                     const result: any = await personalTransfer(personalTransferVO)
                     if (result.code === ResponseCode.SUCCESS) {
+                        const balanceResult: any = await getUserBalance(userId)
+                        if (balanceResult.code === ResponseCode.SUCCESS) {
+                            const balance = balanceResult.data
+                            dispatch(setUserInfo({
+                                balance: balance
+                            }))
+                        }
                         message.success("转账成功！")
                         setTransferOpen(false)
                     } else {
