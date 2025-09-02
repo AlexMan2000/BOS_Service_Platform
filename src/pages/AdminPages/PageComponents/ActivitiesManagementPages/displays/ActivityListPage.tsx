@@ -267,11 +267,11 @@ export const ActivityListPage = () => {
                             setIsBatchImportModalOpen(true)
                         }}
                         >新增活动</Button>
-                        <Button type="primary" onClick={() => {
+                        {/* <Button type="primary" onClick={() => {
                             setBatchTransferDataSource([])
                             setIsBatchTransferModalOpen(true)
                         }}
-                        >批量发放</Button>
+                        >批量发放</Button> */}
                     </div>
                 </div>
                 <Table<ActivityTableType> dataSource={tableDataSource}
