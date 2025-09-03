@@ -14,6 +14,11 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { betWork } from "@/services/workApi"
+import BackupImage1 from "@/assets/images/backup-image-1.jpg"
+import BackupImage2 from "@/assets/images/backup-image-2.jpg"
+import BackupImage3 from "@/assets/images/backup-image-3.jpg"
+import BackupImage4 from "@/assets/images/backup-image-4.jpg"
+import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 
 const { Title, Text, Paragraph } = Typography
 
@@ -41,24 +46,25 @@ export const ProjectDetailPage = () => {
     console.log("projectsToDisplay", projectsToDisplay)
 
 const fallbackImages = [
-    "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片",
-    "https://picsum.photos/400/300?random=1",
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaaguaXoOWbvueJhzwvdGV4dD48L3N2Zz4="
+    BackupImage1,
+    BackupImage2,
+    BackupImage3,
+    BackupImage4,
+    BackupImage5,
 ]
-
-const [fallbackIndex, setFallbackIndex] = useState(0)
 
 const [imgSrc, setImgSrc] = useState(projects.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
 
+const [hasErrorOccurred, setHasErrorOccurred] = useState(false)
+
 const handleImageError = () => {
     console.log("Image load error for:", imgSrc)
-    if (fallbackIndex < fallbackImages.length - 1) {
-        const nextIndex = fallbackIndex + 1
-        setFallbackIndex(nextIndex)
-        setImgSrc(fallbackImages[nextIndex])
+    if (!hasErrorOccurred) {
+        setHasErrorOccurred(true)
+        const randomIndex = Math.floor(Math.random() * fallbackImages.length)
+        setImgSrc(fallbackImages[randomIndex])
     }
 }
-
 
 const handleImageLoad = () => {
     console.log("Image loaded successfully:", imgSrc)
