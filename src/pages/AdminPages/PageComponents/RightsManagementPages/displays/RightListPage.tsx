@@ -49,7 +49,7 @@ export const RightListPage = () => {
 
     const PROCOLUMNS_CONFIGS: ProColumns<BenefitCreateVO>[] = [
         {
-            title: 'Name',
+            title: '权益名称',
             dataIndex: 'name',
             key: 'name',
             width: 120,
@@ -64,41 +64,41 @@ export const RightListPage = () => {
             },
         },
         {
-            title: 'Description',
+            title: '权益描述',
             dataIndex: 'description',
             key: 'description',
             width: 100,
         },
         {
-            title: 'Price',
+            title: '权益价格',
             dataIndex: 'price',
             key: 'price',
             valueType: 'digit',
             width: 120,
         },
         {
-            title: 'Image',
+            title: '权益图片',
             dataIndex: 'image',
             key: 'image',
             width: 120,
             valueType: 'text',
         },
         {
-            title: 'Total',
+            title: '总量',
             dataIndex: 'total',
             key: 'total',
             valueType: 'digit',
             width: 100,
         },
         {
-            title: 'Remaining',
+            title: '剩余数量',
             dataIndex: 'remain',
             key: 'remain',
             valueType: 'digit',
             width: 100,
         },
         {
-            title: 'Active',
+            title: '状态',
             dataIndex: 'active',
             key: 'active',
             width: 100,
@@ -109,7 +109,7 @@ export const RightListPage = () => {
             },
         },
         {
-            title: 'Exp Date',
+            title: '过期时间',
             dataIndex: 'expDate',
             key: 'expDate',
             width: 120,
@@ -246,16 +246,16 @@ export const RightListPage = () => {
                     className={styles.table}
                     scroll={{ x: 1000 }}
                 >
-                    <Column title="Name" dataIndex="benefitName" key="benefitName" />
-                    <Column title="Redeem Code" dataIndex="code" key="code" />
-                    <Column title="Benefit Account Id" dataIndex="accountId" key="accountId" />
-                    <Column title="Benefit Id" dataIndex="benefitId" key="benefitId" />
-                    <Column title="Exp Date" dataIndex="expDate" key="expDate"
+                    <Column title="权益名称" dataIndex="benefitName" key="benefitName" />
+                    <Column title="兑换码" dataIndex="code" key="code" />
+                    <Column title="权益账户id" dataIndex="accountId" key="accountId" />
+                    <Column title="权益id" dataIndex="benefitId" key="benefitId" />
+                    <Column title="过期时间" dataIndex="expDate" key="expDate"
                         render={(text: string) => {
                             return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                         }}
                     />
-                    <Column title="Status" dataIndex="status" key="status" render={(text: boolean) => {
+                    <Column title="状态" dataIndex="status" key="status" render={(text: boolean) => {
                         return <Tag color={text ? "red" : "green"}>{text ? "未核销" : "已核销"}</Tag>
                     }} />
                     <Column
@@ -400,36 +400,36 @@ export const RightListPage = () => {
                 <Table<Right> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                 >
-                    <Column title="Name" dataIndex="name" key="name" />
-                    <Column title="Description" dataIndex="description" key="description" />
-                    <Column title="Price" dataIndex="price" key="price" />
-                    <Column title="Image" dataIndex="image" key="image" />
-                    <Column title="Total" dataIndex="total" key="total" />
-                    <Column title="Remaining" dataIndex="remain" key="remain" />
-                    <Column title="Status" dataIndex="active" key="active" render={(text: boolean) => {
+                    <Column title="权益名称" dataIndex="name" key="name" />
+                    <Column title="权益描述" dataIndex="description" key="description" />
+                    <Column title="权益价格" dataIndex="price" key="price" />
+                    <Column title="权益图片" dataIndex="image" key="image" />
+                    <Column title="总量" dataIndex="total" key="total" />
+                    <Column title="剩余数量" dataIndex="remain" key="remain" />
+                    <Column title="状态" dataIndex="active" key="active" render={(text: boolean) => {
                         return <Tag color={text ? "green" : "red"}>{text ? "Active" : "Inactive"}</Tag>
                     }} />
-                    <Column title="Exp Date" dataIndex="expDate" key="expDate"
+                    <Column title="过期时间" dataIndex="expDate" key="expDate"
                         render={(text: string) => {
                             return dayjs(text).format("YYYY-MM-DD HH:mm:ss")
                         }}
                     />
-                    <Column title="Created Time" dataIndex="createdTime" key="createdTime"
+                    <Column title="创建时间" dataIndex="createdTime" key="createdTime"
                         render={(text: string) => {
                             return dayjs(text).format("YYYY-MM-DD HH:mm:ss")
                         }}
                     />
-                    <Column title="Created By" dataIndex="createdBy" key="createdBy" />
+                    <Column title="创建者" dataIndex="createdBy" key="createdBy" />
                     <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime"
                         render={(text: string) => {
                             return dayjs(text).format("YYYY-MM-DD HH:mm:ss")
                         }}
                     />
-                    <Column title="Deleted" dataIndex="deleted" key="deleted" render={(text: boolean) => {
+                    <Column title="是否删除" dataIndex="deleted" key="deleted" render={(text: boolean) => {
                         return <Tag color={text ? "red" : "green"}>{text ? "是" : "否"}</Tag>
                     }} />
                     <Column
-                        title="Action"
+                        title="操作"
                         key="action"
                         width={150}
                         fixed="right"

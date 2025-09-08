@@ -43,7 +43,7 @@ export const ActivityListPage = () => {
 
     const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<ActivitySubmitType>[] = [
         {
-            title: 'Name',
+            title: '活动名称',
             dataIndex: 'name',
             key: 'name',
             width: 120,
@@ -58,39 +58,39 @@ export const ActivityListPage = () => {
             },
         },
         {
-            title: 'Free Credit',
+            title: '活动免费额度',
             dataIndex: 'freeCredit',
             key: 'freeCredit',
             width: 100,
         },
         {
-            title: 'Cover',
+            title: '活动封面',
             dataIndex: 'cover',
             key: 'cover',
             width: 120,
         },
         {
-            title: 'Description',
+            title: '活动描述',
             dataIndex: 'description',
             key: 'description',
             width: 120,
             valueType: 'text',
         },
         {
-            title: 'Link',
+            title: '活动链接',
             dataIndex: 'link',
             key: 'link',
             width: 100,
         },
         {
-            title: 'Start Time',
+            title: '活动开始时间',
             dataIndex: 'startTime',
             key: 'startTime',
             valueType: 'date',
             width: 100,
         },
         {
-            title: 'End Time',
+            title: '活动结束时间',
             dataIndex: 'endTime',
             key: 'endTime',
             valueType: 'date',
