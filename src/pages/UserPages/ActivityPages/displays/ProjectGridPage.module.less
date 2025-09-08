@@ -119,8 +119,8 @@
             }
         }
 
-        // Pie Chart Card Styles
-        .pieChartCard {
+        // Chart Card Styles (for both Pie and Bar charts)
+        .chartCard {
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border: none;
@@ -136,11 +136,27 @@
                 }
             }
 
-            .pieChartGroup {
-                height: 200px;
+            :global(.ant-tabs) {
+                :global(.ant-tabs-tab) {
+                    font-weight: 500;
+                    
+                    :global(.anticon) {
+                        margin-right: 6px;
+                    }
+                }
+            }
+
+            .pieChartGroup, .barChartGroup {
+                height: 280px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                padding: 10px 0;
+            }
+
+            .barChartGroup {
+                // Additional styling for bar charts if needed
+                padding: 20px 10px;
             }
         }
     }
@@ -197,7 +213,7 @@
 // Animation enhancements
 .activityDetail,
 .freeAmountCard,
-.pieChartCard {
+.chartCard {
     transition: all 0.3s ease;
     
     &:hover {
@@ -286,7 +302,7 @@
                 min-width: 0;
             }
 
-            .pieChartColumn {
+            .chartColumn {
                 flex: 1;
                 min-width: 300px;
             }
@@ -333,7 +349,7 @@
                 flex-direction: column;
                 gap: 20px;
 
-                .pieChartColumn {
+                .chartColumn {
                     min-width: auto;
                 }
             }

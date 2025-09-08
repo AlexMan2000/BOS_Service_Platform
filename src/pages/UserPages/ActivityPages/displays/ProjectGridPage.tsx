@@ -3,10 +3,12 @@ import { ProjectCardType, Activity } from "@/commons/types/activity"
 import styles from "./ProjectGridPage.module.less"
 import { ProjectCard } from "../cards/ProjectCard"
 import { useLocation } from "react-router-dom"
-import { Card, Typography, Tag, Space, Divider, Empty } from "antd"
+import { Card, Typography, Tag, Space, Divider, Empty, Tabs } from "antd"
 import {
     CalendarOutlined,
-    DollarOutlined
+    DollarOutlined,
+    PieChartOutlined,
+    BarChartOutlined
 } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { getActivityStatusColor, getActivityStatusText, getActivityStatusIcon } from "@/commons/utils/formatters/statusFormatter"
@@ -20,7 +22,7 @@ import BackupImage2 from "@/assets/images/backup-image-2.jpg"
 import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
-import { Pie } from "@ant-design/plots"
+import { Pie, Column } from "@ant-design/plots"
 const { Title, Text, Paragraph } = Typography
 
 
@@ -108,16 +110,18 @@ export const ProjectGridPage = () => {
         console.log("Image loaded successfully:", imgSrc)
     }
 
-    const PIE_CONFIG = useMemo(() => {
-        const validData = projectCards && projectCards.length > 0 
+    const chartData = useMemo(() => {
+        return projectCards && projectCards.length > 0 
             ? projectCards.map((project) => ({
                 type: project.title || '未命名项目',
                 value: project.amount || 0
             })).filter(item => item.value > 0)
             : [];
+    }, [projectCards]);
 
+    const PIE_CONFIG = useMemo(() => {
         return {
-            data: validData,
+            data: chartData,
             angleField: 'value',
             colorField: 'type',
             radius: 0.8,
@@ -135,7 +139,42 @@ export const ProjectGridPage = () => {
                 },
             ],
         };
-    }, [projectCards])
+    }, [chartData]);
+
+    const BAR_CONFIG = useMemo(() => {
+        return {
+            data: chartData,
+            xField: 'type',
+            yField: 'value',
+            label: {
+                position: 'middle' as const,
+                style: {
+                    fill: '#FFFFFF',
+                    opacity: 0.6,
+                },
+            },
+            xAxis: {
+                label: {
+                    autoHide: true,
+                    autoRotate: false,
+                },
+            },
+            meta: {
+                type: {
+                    alias: '项目类型',
+                },
+                value: {
+                    alias: '金额',
+                },
+            },
+            color: ["#1677ff", "#52c41a", "#faad14", "#ff4d4f", "#722ed1"],
+            interactions: [
+                {
+                    type: 'element-active',
+                },
+            ],
+        };
+    }, [chartData])
 
 
     // Activity Detail Card Component
@@ -210,24 +249,62 @@ export const ProjectGridPage = () => {
         </Card>
     );
 
-    // Pie Chart Card Component
-    const PieChartCard = () => {
+    // Chart Card Component with Tab Switching
+    const ChartCard = () => {
         const hasData = projectCards && projectCards.length > 0 && 
                        projectCards.some(project => project.amount && project.amount > 0);
         
-        return (
-            <Card className={styles.pieChartCard} title="项目分类统计">
-                <div className={styles.pieChartGroup}>
-                    {hasData ? (
+        const tabItems = [
+            {
+                key: 'pie',
+                label: (
+                    <span>
+                        <PieChartOutlined />
+                        饼图
+                    </span>
+                ),
+                children: hasData ? (
+                    <div className={styles.pieChartGroup}>
                         <Pie {...PIE_CONFIG} />
-                    ) : (
-                        <Empty
-                            image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            description="暂无数据可统计"
-                            style={{ padding: '40px 0' }}
-                        />
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="暂无数据可统计"
+                        style={{ padding: '40px 0' }}
+                    />
+                ),
+            },
+            {
+                key: 'bar',
+                label: (
+                    <span>
+                        <BarChartOutlined />
+                        柱状图
+                    </span>
+                ),
+                children: hasData ? (
+                    <div className={styles.barChartGroup}>
+                        <Column {...BAR_CONFIG} />
+                    </div>
+                ) : (
+                    <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="暂无数据可统计"
+                        style={{ padding: '40px 0' }}
+                    />
+                ),
+            },
+        ];
+        
+        return (
+            <Card className={styles.chartCard} title="项目分类统计">
+                <Tabs 
+                    defaultActiveKey="pie"
+                    items={tabItems}
+                    centered
+                    size="small"
+                />
             </Card>
         );
     };
@@ -239,7 +316,7 @@ export const ProjectGridPage = () => {
             <div className={styles.containerNoProjects}>
                 <div className={styles.dashboardFullWidth}>
                     <ActivityDetailCard />
-                    {/* <PieChartCard /> */}
+                    {/* <ChartCard /> */}
 
                     {/* Empty State */}
                     <Card className={styles.emptyStateCard}>
@@ -271,8 +348,8 @@ export const ProjectGridPage = () => {
                     <div className={styles.activityDetailColumn}>
                         <ActivityDetailCard />
                     </div>
-                    <div className={styles.pieChartColumn}>
-                        <PieChartCard />
+                    <div className={styles.chartColumn}>
+                        <ChartCard />
                     </div>
                 </div>
             </div>
