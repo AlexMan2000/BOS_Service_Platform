@@ -11,7 +11,7 @@ import transferTemplateUrl from "@/assets/templates/user_batch_transfer_template
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
-import { batchTransfer, createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
+import { batchTransfer, batchTransferExcel, createAccount, deleteAccount, getAllAccounts, getUserAccountInfo, uploadCSV } from "@/services/accountApi"
 import { ResponseCode } from "@/commons/defs/code"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
@@ -26,15 +26,17 @@ export const UserListPage = () => {
     const { role } = useSelector(selectUser)
 
     const [batchImportActiveTab, setBatchImportActiveTab] = useState('1')
+    const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
+
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
     const [_, setBatchImportLoading] = useState(false)
     const [batchImportFile, setBatchImportFile] = useState<File | null>(null)
     const [batchImportSaved, setBatchImportSaved] = useState(false)
-    const [batchTransferSaved, setBatchTransferSaved] = useState(false)
 
     // const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
-
+    const [batchTransferFile, setBatchTransferFile] = useState<File | null>(null)
+    const [batchTransferSaved, setBatchTransferSaved] = useState(false)
 
     // Used for batch import
     const [importDataSource, setImportDataSource] = useState<UserSubmitType[]>([])
@@ -268,15 +270,20 @@ export const UserListPage = () => {
                 open={isBatchTransferModalOpen}
                 onCancel={() => {
                     setIsBatchTransferModalOpen(false)
-                    setBatchTransferSaved(false)
                 }}
                 title="批量发放"
                 onOk={async () => {
-                    if (!batchTransferSaved) {
-                        message.info("提交任何一行前请先保存！")
-                        return
+                    if (batchTransferActiveTab === '1') {
+                        if (!batchTransferSaved) {
+                            message.info("请先提交文件")
+                            return
+                        }
+                        const result = await batchTransferExcel(batchTransferFile as File)
+                        console.log('result', result)
+                        fetchData(0, 10)
+                        setIsBatchTransferModalOpen(false)
+                        return;
                     }
-                    console.log('onOk', transferDataSource)
                     const userTransferVO: UserTransferSubmitType[] = transferDataSource.map((item) => { return {
                         employeeNo: item.employeeNo,
                         amount: item.amount,
@@ -285,7 +292,6 @@ export const UserListPage = () => {
                     const result: any = await batchTransfer(userTransferVO);
                     if (result.code === ResponseCode.SUCCESS) {
                         message.success("提交成功！")
-                        setBatchTransferSaved(false)
                         setIsBatchTransferModalOpen(false)
                         fetchData(0, 10)
                     } else {
@@ -313,7 +319,6 @@ export const UserListPage = () => {
                                     size="small"
                                     onSave={async (rowKey: React.Key, data: UserTransferSubmitType, row: UserTransferSubmitType) => {
                                         console.log('Saving row:', rowKey, data, row);
-                                        setBatchTransferSaved(true)
                                     }}
                                     maxRowLength={10}
                                 />
@@ -324,7 +329,10 @@ export const UserListPage = () => {
                                 children: <GenericCSVFileImport 
                                 type="transfer"
                                 file_url={transferTemplateUrl}
-                                download_name="user_import_template.csv" onUpload={() => { }} />
+                                download_name="user_import_template.csv" onUpload={async (file: File) => {
+                                    setBatchTransferFile(file)
+                                    setBatchTransferSaved(true)
+                                 }} />
                             }
                         ]} />
                     </div>

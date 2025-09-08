@@ -149,6 +149,26 @@ export const batchTransfer = async (body: UserTransferSubmitType[], config?: any
     }
 }
 
+
+export const batchTransferExcel = async (body: File, config?: any) => {
+    try {
+
+        const formData = new FormData();
+        formData.append('file', body);
+        const res = await postRequest(`/transaction/import-excel`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 2000,
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error batch transferring:", error);
+        throw error;
+    }
+}
+
 export const getUserBalance = async (userId: string, config?: any) => {
     try {
         const res = await getRequest(`/account/getBalance/${userId}`, {

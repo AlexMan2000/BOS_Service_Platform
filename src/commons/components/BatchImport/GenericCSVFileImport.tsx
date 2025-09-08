@@ -85,6 +85,7 @@ export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
 
     const handleFileUpload = async (file: File) => {
         try {
+            console.log('file', file)
             const previewData = await parseCSVFile(file)
             setCsvPreview(previewData)
             onUpload(file)
