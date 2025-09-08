@@ -22,7 +22,7 @@ export const UserListPage = () => {
 
     const { employeeNo } = useSelector(selectUser)
     const [tableDataSource, setTableDataSource] = useState<User[]>([])
-
+    const { role } = useSelector(selectUser)
 
     const [batchImportActiveTab, setBatchImportActiveTab] = useState('1')
     const [isBatchImportModalOpen, setIsBatchImportModalOpen] = useState(false)
@@ -340,10 +340,10 @@ export const UserListPage = () => {
                             setIsBatchImportModalOpen(true)
                         }}
                         >新增用户</Button>
-                        <Button type="primary" onClick={() => {
+                        {role === "SUPER" && <Button type="primary" onClick={() => {
                             setTransferDataSource([])
                             setIsBatchTransferModalOpen(true)
-                        }}>新增发放</Button>
+                        }}>新增发放</Button>}
                     </div>
                 </div>
                 <Table<User> dataSource={tableDataSource}
