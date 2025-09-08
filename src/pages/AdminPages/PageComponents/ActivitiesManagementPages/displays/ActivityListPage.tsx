@@ -277,34 +277,34 @@ export const ActivityListPage = () => {
                 <Table<ActivityTableType> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                 >
-                    <Column title="Name" dataIndex="name" key="name" />
-                    <Column title="Description" dataIndex="description" key="description" />
-                    <Column title="Free Credit" dataIndex="freeCredit" key="freeCredit" />
-                    <Column title="Start Time" dataIndex="startTime" key="startTime" 
+                    <Column title="活动名称" dataIndex="name" key="name" />
+                    <Column title="活动描述" dataIndex="description" key="description" />
+                    <Column title="活动免费额度" dataIndex="freeCredit" key="freeCredit" />
+                    <Column title="活动开始时间" dataIndex="startTime" key="startTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                     />
-                    <Column title="End Time" dataIndex="endTime" key="endTime" 
+                    <Column title="活动结束时间" dataIndex="endTime" key="endTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                     />
-                    <Column title="Created Time" dataIndex="createdTime" key="createdTime" 
+                    <Column title="创建时间" dataIndex="createdTime" key="createdTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                     />
-                    <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime" 
+                    <Column title="更新时间" dataIndex="updatedTime" key="updatedTime" 
                     render={(text: Date) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                     />
-                    <Column title="Status" dataIndex="status" key="status" render={(text: number) => {
+                    <Column title="活动状态" dataIndex="status" key="status" render={(text: number) => {
                         return <Tag color={text === 1 ? "green" : text === 2 ? "red" : "blue"}>{text === 1 ? "进行中" : text === 2 ? "已结束" : "未开始"}</Tag>
                     }} />
                     <Column
-                        title="Action"
+                        title="操作"
                         key="action"
                         width={180}
                         fixed={"right"}

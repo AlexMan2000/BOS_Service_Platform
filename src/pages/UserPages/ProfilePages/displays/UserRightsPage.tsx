@@ -65,16 +65,16 @@ export const UserRightsPage = () => {
                 scroll={{ x: 800 }}
                 loading={loading}
             >
-                <Column title="Name" dataIndex="benefitName" key="benefitName" />
-                <Column title="Redeem Code" dataIndex="code" key="code" />
-                <Column title="Benefit Account Id" dataIndex="accountId" key="accountId" />
-                <Column title="Benefit Id" dataIndex="benefitId" key="benefitId" />
-                <Column title="Exp Date" dataIndex="expDate" key="expDate"
+                <Column title="权益名称" dataIndex="benefitName" key="benefitName" />
+                <Column title="兑换码" dataIndex="code" key="code" />
+                <Column title="权益账户ID" dataIndex="accountId" key="accountId" />
+                <Column title="权益ID" dataIndex="benefitId" key="benefitId" />
+                <Column title="过期时间" dataIndex="expDate" key="expDate"
                     render={(text: string) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                     }}
                 />
-                <Column title="Status" dataIndex="status" key="status" render={(text: number) => {
+                <Column title="权益状态" dataIndex="status" key="status" render={(text: number) => {
                     return <Tag color={text === 1 ? "red" : "green"}>{text === 1 ? "未核销" : "已核销"}</Tag>
                 }} />
                 {role === "ADMIN" && <Column 
