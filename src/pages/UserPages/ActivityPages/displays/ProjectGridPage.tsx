@@ -12,7 +12,7 @@ import dayjs from "dayjs"
 import { getActivityStatusColor, getActivityStatusText, getActivityStatusIcon } from "@/commons/utils/formatters/statusFormatter"
 import { getAllWorks } from "@/services/workApi"
 import { ResponseCode } from "@/commons/defs/code"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { useSelector } from "react-redux"
 import BackupImage1 from "@/assets/images/backup-image-1.jpg"
@@ -108,13 +108,34 @@ export const ProjectGridPage = () => {
         console.log("Image loaded successfully:", imgSrc)
     }
 
-    const PIE_CONFIG = {
-        data: projectCards.map((project) => ({
-            type: project.title,
-            value: project.amount
-        })),
-        title: "项目分类统计",
-    }
+    const PIE_CONFIG = useMemo(() => {
+        const validData = projectCards && projectCards.length > 0 
+            ? projectCards.map((project) => ({
+                type: project.title || '未命名项目',
+                value: project.amount || 0
+            })).filter(item => item.value > 0)
+            : [];
+
+        return {
+            data: validData,
+            angleField: 'value',
+            colorField: 'type',
+            radius: 0.8,
+            label: {
+                type: 'outer',
+                content: '{name}: {percentage}',
+            },
+            legend: {
+                position: "bottom" as const,
+            },
+            color: ["#1677ff", "#52c41a", "#faad14", "#ff4d4f", "#722ed1"],
+            interactions: [
+                {
+                    type: 'element-active',
+                },
+            ],
+        };
+    }, [projectCards])
 
 
     // Activity Detail Card Component
@@ -190,13 +211,26 @@ export const ProjectGridPage = () => {
     );
 
     // Pie Chart Card Component
-    const PieChartCard = () => (
-        <Card className={styles.pieChartCard} title="项目分类统计">
-            <div className={styles.pieChartGroup}>
-                <Pie {...PIE_CONFIG}/>
-            </div>
-        </Card>
-    );
+    const PieChartCard = () => {
+        const hasData = projectCards && projectCards.length > 0 && 
+                       projectCards.some(project => project.amount && project.amount > 0);
+        
+        return (
+            <Card className={styles.pieChartCard} title="项目分类统计">
+                <div className={styles.pieChartGroup}>
+                    {hasData ? (
+                        <Pie {...PIE_CONFIG} />
+                    ) : (
+                        <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description="暂无数据可统计"
+                            style={{ padding: '40px 0' }}
+                        />
+                    )}
+                </div>
+            </Card>
+        );
+    };
 
     // Render based on whether there are projects
     if (projectCards.length === 0) {
