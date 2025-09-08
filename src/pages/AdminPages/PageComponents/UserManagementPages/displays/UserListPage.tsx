@@ -33,7 +33,6 @@ export const UserListPage = () => {
     const [batchImportFile, setBatchImportFile] = useState<File | null>(null)
     const [batchImportSaved, setBatchImportSaved] = useState(false)
 
-    // const [batchTransferActiveTab, setBatchTransferActiveTab] = useState('1')
     const [isBatchTransferModalOpen, setIsBatchTransferModalOpen] = useState(false)
     const [batchTransferFile, setBatchTransferFile] = useState<File | null>(null)
     const [batchTransferSaved, setBatchTransferSaved] = useState(false)
@@ -301,7 +300,13 @@ export const UserListPage = () => {
             >
                 <div className={styles.modalContent}>
                     <div className={styles.modalHeader}>
-                        <Tabs items={[
+                        <Tabs 
+                            onChange={(key) => {
+                                setBatchTransferActiveTab(key)
+                                setBatchTransferFile(null)
+                                setTransferDataSource([])
+                            }}
+                        items={[
                             {
                                 key: '1',
                                 label: '表格导入',

@@ -61,7 +61,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                 <div className={styles.header}>
                     <div className={styles.logo}>
                         <img src={logo} alt="logo" />
-                        稳定币交易平台
+                        权益积分平台
                     </div>
                     <div className={styles.collapse} onClick={() => {
                         dispatch(setIsSideBarCollapsed(!isSideBarCollapsed))

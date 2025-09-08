@@ -148,7 +148,7 @@ export const LoginPage = () => {
                
             <div className={styles.loginRegion}>
                 <div className={styles.loginTitle}>
-                    <span className={styles.loginTitleText}>稳定币奖励平台</span>
+                    <span className={styles.loginTitleText}>权益积分平台</span>
                 </div>
                 <div className={styles.loginForm}>
                     <Form layout="vertical"
