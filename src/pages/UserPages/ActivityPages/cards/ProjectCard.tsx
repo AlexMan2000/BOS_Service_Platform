@@ -2,7 +2,7 @@ import styles from "./ProjectCard.module.less"
 import { Activity, ProjectCardType } from "@/commons/types/activity"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Modal, Button, InputNumber, Popconfirm, Tooltip } from "antd"
+import { Modal, Button, InputNumber, Popconfirm, Tooltip, message } from "antd"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import { formatDateTime } from "@/commons/utils/parser/dateFormatter"
 // import { getActivityStatusInfo } from "@/commons/utils/formatters/statusFormatter"
@@ -117,6 +117,10 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                             max={balance + activityAccountFreeCredit}
                             onChange={(value) => {
                                 if (value) {
+                                    if (value > balance + activityAccountFreeCredit) {
+                                        message.error("余额不足， 自动设置为最大值")
+                                        return
+                                    }
                                     setMoney(value)
                                 }
                             }}
