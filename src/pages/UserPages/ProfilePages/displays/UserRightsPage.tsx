@@ -67,8 +67,8 @@ export const UserRightsPage = () => {
             >
                 <Column title="权益名称" dataIndex="benefitName" key="benefitName" />
                 <Column title="兑换码" dataIndex="code" key="code" />
-                <Column title="权益账户ID" dataIndex="accountId" key="accountId" />
-                <Column title="权益ID" dataIndex="benefitId" key="benefitId" />
+                {role === "ADMIN" || role === "SUPER" && <Column title="权益账户ID" dataIndex="accountId" key="accountId" />}
+                {role === "ADMIN" || role === "SUPER" && <Column title="权益ID" dataIndex="benefitId" key="benefitId" />}
                 <Column title="过期时间" dataIndex="expDate" key="expDate"
                     render={(text: string) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>

@@ -45,14 +45,18 @@ export const UserTransactionPage = () => {
             {role === "NORMAL" && <Table<TransactionTableType> dataSource={transactionDataSource} className={styles.table}>
                
                 <Column title="源用户" dataIndex="sourceName" key="sourceName" render={()=>"您"} />
-                <Column title="目标名称" dataIndex="targetName" key="targetName" />
+                <Column title="目标用户" dataIndex="targetName" key="targetName" />
                 <Column title="交易数额" dataIndex="amount" key="amount" />
                 <Column title="交易类型" dataIndex="txType" key="txType" 
                 render={(text: string) => {
                     return <Tag color={text === "TRANSFER" ? "blue" : text === "GRANT" ? "green" : text === "ACTIVITY_BET" ? "red" : text === "BENEFIT_REDEEM" ? "purple" : "gray"}>{text === "TRANSFER" ? "转账" : text === "GRANT" ? "发放" : text === "ACTIVITY_BET" ? "活动投注" : text === "BENEFIT_REDEEM" ? "权益核销" : "--"}</Tag>
                 }}
                 />
-                <Column title="交易事由" dataIndex="reason" key="reason" />
+                <Column title="交易事由" dataIndex="reason" key="reason"
+                    render={(text: string) => {
+                        return <span>{text ? text : "--"}</span>
+                    }}
+                />
                 <Column title="交易时间" dataIndex="startTime" key="startTime"
                     render={(text: string) => {
                         return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>

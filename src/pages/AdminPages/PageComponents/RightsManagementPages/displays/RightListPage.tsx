@@ -420,7 +420,7 @@ export const RightListPage = () => {
                         }}
                     />
                     <Column title="创建者" dataIndex="createdBy" key="createdBy" />
-                    <Column title="Updated Time" dataIndex="updatedTime" key="updatedTime"
+                    <Column title="更新时间" dataIndex="updatedTime" key="updatedTime"
                         render={(text: string) => {
                             return dayjs(text).format("YYYY-MM-DD HH:mm:ss")
                         }}
