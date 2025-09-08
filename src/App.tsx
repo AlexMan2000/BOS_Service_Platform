@@ -25,11 +25,18 @@ import { ActivityListPage } from "./pages/AdminPages/PageComponents/ActivitiesMa
 import { ProjectListPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectListPage";
 import { ProjectManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectManagementDetailsPage";
 import { ActivityManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityManagementDetailsPage";
-
+// import { useEffect } from "react";
 
 
 function App() {
 
+  // useEffect(() => {
+  //   const access_token = localStorage.getItem('access_token')
+  //   await validateToken()
+  //   if (access_token) {
+  //     localStorage.setItem('isAuthenticated', 'true')
+  //   }
+  // }, [])
 
   return (
     <BrowserRouter>

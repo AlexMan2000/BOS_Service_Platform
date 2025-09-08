@@ -20,6 +20,7 @@ import BackupImage2 from "@/assets/images/backup-image-2.jpg"
 import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
+import { Pie } from "@ant-design/plots"
 const { Title, Text, Paragraph } = Typography
 
 
@@ -107,6 +108,14 @@ export const ProjectGridPage = () => {
         console.log("Image loaded successfully:", imgSrc)
     }
 
+    const PIE_CONFIG = {
+        data: projectCards.map((project) => ({
+            type: project.title,
+            value: project.amount
+        })),
+        title: "项目分类统计",
+    }
+
 
     // Activity Detail Card Component
     const ActivityDetailCard = () => (
@@ -183,9 +192,9 @@ export const ProjectGridPage = () => {
     // Pie Chart Card Component
     const PieChartCard = () => (
         <Card className={styles.pieChartCard} title="项目分类统计">
-            {/* <div className={styles.pieChartGroup}>
+            <div className={styles.pieChartGroup}>
                 <Pie {...PIE_CONFIG}/>
-            </div> */}
+            </div>
         </Card>
     );
 

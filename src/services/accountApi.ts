@@ -54,9 +54,11 @@ export const getAllAccounts = async (body: ListAllAccountVO, config?: any) => {
     }
 }
 
-export const downloadTemplate = async (type: string) => {
+export const downloadTemplate = async (url: string, type: string) => {
     try {
-        // 定义模板文件映射
+
+        console.log(url, type)
+        // // 定义模板文件映射
         const templateFileMap: { [key: string]: string } = {
             'account': 'user_batch_import_template.csv',
             'user': 'user_batch_import_template.csv',
@@ -68,10 +70,10 @@ export const downloadTemplate = async (type: string) => {
         };
 
         const templateFileName = templateFileMap[type] || 'user_batch_import_template.csv';
-        const templatePath = `/src/assets/templates/${templateFileName}`;
+        // const templatePath = `/src/assets/templates/${templateFileName}`;
 
         // 使用 fetch 从本地获取文件
-        const response = await fetch(templatePath);
+        const response = await fetch(url);
         
         if (!response.ok) {
             throw new Error(`Failed to fetch template: ${response.statusText}`);
@@ -81,7 +83,7 @@ export const downloadTemplate = async (type: string) => {
         const objectUrl = URL.createObjectURL(blob);
 
         // 根据类型设置下载文件名
-        const downloadFileName = templateFileName.replace('.csv', '_下载.csv');
+        const downloadFileName = templateFileName.replace('.csv', '_download.csv');
 
         const a = document.createElement("a");
         a.href = objectUrl;

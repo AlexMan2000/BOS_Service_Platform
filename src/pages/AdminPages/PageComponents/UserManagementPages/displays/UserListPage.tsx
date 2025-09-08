@@ -7,6 +7,7 @@ import { ProColumns } from "@ant-design/pro-components"
 import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
 import templateUrl from "@/assets/templates/user_batch_import_template.csv?url";
+import transferTemplateUrl from "@/assets/templates/user_batch_transfer_template.csv?url";
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import { GenericCSVFileImport } from "@/commons/components/BatchImport/GenericCSVFileImport"
 import { useNavigate } from "react-router-dom"
@@ -320,7 +321,10 @@ export const UserListPage = () => {
                             {
                                 key: '2',
                                 label: 'Excel导入',
-                                children: <GenericCSVFileImport file_url={templateUrl} download_name="user_import_template.csv" onUpload={() => { }} />
+                                children: <GenericCSVFileImport 
+                                type="transfer"
+                                file_url={transferTemplateUrl}
+                                download_name="user_import_template.csv" onUpload={() => { }} />
                             }
                         ]} />
                     </div>

@@ -22,7 +22,7 @@ interface CSVPreviewData {
 }
 
 export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
-    const { type, onUpload, previewTrigger } = props
+    const { type, onUpload, previewTrigger, file_url } = props
     const [csvPreview, setCsvPreview] = useState<CSVPreviewData | null>(null)
 
     useEffect(() => {
@@ -105,7 +105,7 @@ export const GenericCSVFileImport = (props: GenericCSVFileImportProps) => {
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                     <div 
                         onClick={async () => {
-                            await downloadTemplate(type || "user")
+                            await downloadTemplate(file_url, type || "user")
                         }} 
                         className={styles.downloadLink}
                     >
