@@ -51,7 +51,7 @@ export const LandingPage = () => {
     return (
         <div className={styles.container}>
             <div className={`${styles.sideBar} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
-                <SideBar menuItems={role === "ADMIN" ? adminMenuItems :menuItems} defaultSelectedKey={defaultSelectedKey} />
+                <SideBar menuItems={(role === "ADMIN" || role === "SUPER") ? adminMenuItems :menuItems} defaultSelectedKey={defaultSelectedKey} />
             </div>
             <div className={`${styles.mainContent} ${isSideBarCollapsed ? styles.collapsed : ""}`}>
                 <Outlet />
