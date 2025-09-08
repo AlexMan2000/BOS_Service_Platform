@@ -403,7 +403,9 @@ export const RightListPage = () => {
                     <Column title="权益名称" dataIndex="name" key="name" />
                     <Column title="权益描述" dataIndex="description" key="description" />
                     <Column title="权益价格" dataIndex="price" key="price" />
-                    <Column title="权益图片" dataIndex="image" key="image" />
+                    <Column title="权益图片" dataIndex="image" key="image" render={(text: string) => {
+                        return <span>{text ? text : "--"}</span>
+                    }} />
                     <Column title="总量" dataIndex="total" key="total" />
                     <Column title="剩余数量" dataIndex="remain" key="remain" />
                     <Column title="状态" dataIndex="active" key="active" render={(text: boolean) => {

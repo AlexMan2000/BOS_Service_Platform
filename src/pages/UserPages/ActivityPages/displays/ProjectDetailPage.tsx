@@ -53,7 +53,7 @@ const fallbackImages = [
     BackupImage5,
 ]
 
-const [imgSrc, setImgSrc] = useState(projects.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+const [imgSrc, setImgSrc] = useState(projects.cover || "")
 
 const [hasErrorOccurred, setHasErrorOccurred] = useState(false)
 

@@ -40,7 +40,7 @@ export const ProjectGridPage = () => {
 
     const currentActivity = activityData
 
-    const [imgSrc, setImgSrc] = useState(currentActivity.cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    const [imgSrc, setImgSrc] = useState(currentActivity.cover || "")
 
     const activityFreeCredit = currentActivity.freeCredit // should remains the same in the whole activity
     const activityStatus = currentActivity.status;

@@ -28,7 +28,7 @@ export const RightCard = (props: RightCardProps) => {
 
     const { accountId, balance } = useSelector(selectUser)
 
-    const [imgSrc, setImgSrc] = useState(image || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    const [imgSrc, setImgSrc] = useState(image || "")
     const fallbackImages = [
         BackupImage1,
         BackupImage2,

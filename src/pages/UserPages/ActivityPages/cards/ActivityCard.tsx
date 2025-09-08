@@ -17,7 +17,7 @@ import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 export const ActivityCard = (props: ActivityCardType) => {
     const { name, description, cover, status, startTime, endTime } = props
     const navigate = useNavigate()
-    const [imgSrc, setImgSrc] = useState(cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    const [imgSrc, setImgSrc] = useState(cover || "")
 
     const statusInfo = getActivityStatusInfo(status)
 

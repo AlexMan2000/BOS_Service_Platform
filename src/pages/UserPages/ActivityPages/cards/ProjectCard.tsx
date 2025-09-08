@@ -36,7 +36,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
     console.log(balance, freeCredit, id)
 
     // 图片错误处理
-    const [imgSrc, setImgSrc] = useState(cover || "https://via.placeholder.com/400x300/f0f0f0/666?text=暂无图片")
+    const [imgSrc, setImgSrc] = useState(cover || "")
 
     // 备用图片列表
     const fallbackImages = [

@@ -278,7 +278,9 @@ export const ActivityListPage = () => {
                     scroll={{ x: 1000 }}
                 >
                     <Column title="活动名称" dataIndex="name" key="name" />
-                    <Column title="活动描述" dataIndex="description" key="description" />
+                    <Column title="活动描述" dataIndex="description" key="description" render={(text: string) => {
+                        return <span>{text ? text : "--"}</span>
+                    }} />
                     <Column title="活动免费额度" dataIndex="freeCredit" key="freeCredit" />
                     <Column title="活动开始时间" dataIndex="startTime" key="startTime" 
                     render={(text: Date) => {
