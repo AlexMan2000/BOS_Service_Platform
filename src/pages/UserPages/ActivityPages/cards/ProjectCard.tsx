@@ -205,7 +205,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                     作者: {authors}
                 </div>
                 <div className={styles.amount}>
-                    金额: {amount?.toLocaleString() || 0}
+                    个人投注金额: {amount?.toLocaleString() || 0}
                 </div>
                 <div className={styles.startTime}>
                     创建时间: {formatDateTime(createdTime)}
