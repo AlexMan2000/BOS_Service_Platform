@@ -92,6 +92,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                     <span>用户名: {name}</span>
                     {role === "NORMAL" && <span>余额: {balance}</span>}
                     {role === "ADMIN" && <span>管理员</span>}
+                    {role === "SUPER" && <span>超级管理员</span>}
                 </div>
 
                 {avatarMenuOpen && <div className={styles.avatarMenu}>
