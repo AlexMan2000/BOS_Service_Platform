@@ -22,6 +22,18 @@ export const loginUser = async (body: LoginRequest, config?:any): Promise<Common
 }
 
 
+export const refreshTokenApi = async (config?:any): Promise<CommonResult<any>> => {
+    try {
+        const res = await postRequest("/user/refresh", {}, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+
 export const changePassword = async (body: ChangePasswordRequest, config?:any): Promise<CommonResult<boolean>> => {
     try {
         const res = await postRequest(

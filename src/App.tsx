@@ -25,18 +25,55 @@ import { ActivityListPage } from "./pages/AdminPages/PageComponents/ActivitiesMa
 import { ProjectListPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectListPage";
 import { ProjectManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ProjectManagementDetailsPage";
 import { ActivityManagementDetailsPage } from "./pages/AdminPages/PageComponents/ActivitiesManagementPages/displays/ActivityManagementDetailsPage";
-// import { useEffect } from "react";
+import { useEffect } from "react";
+import { ResponseCode } from "./commons/defs/code";
+import { refreshTokenApi } from "./services/userApi";
+import { setUserInfo } from "./store/slice/userSlice/userSlice";
+import { useDispatch } from "react-redux";
+import { getUserAccountInfo } from "./services/accountApi";
+import { message } from "antd";
 
 
 function App() {
 
-  // useEffect(() => {
-  //   const access_token = localStorage.getItem('access_token')
-  //   await validateToken()
-  //   if (access_token) {
-  //     localStorage.setItem('isAuthenticated', 'true')
-  //   }
-  // }, [])
+  const dispatch = useDispatch()
+  const refreshToken = async () => {
+    const commonResult = await refreshTokenApi()
+    if (commonResult.code === ResponseCode.SUCCESS) {
+      localStorage.setItem('access_token', commonResult.data.token)
+      console.log(commonResult.data)
+      const userInfo = commonResult.data.user
+      dispatch(setUserInfo({
+        userId: userInfo.id,
+        ...userInfo,
+        access_token: commonResult.data.token,
+      }))
+      const role = userInfo.role
+
+      if (role === "NORMAL") {
+        const commonResultAccountInfo = await getUserAccountInfo(userInfo.id)
+        if (commonResultAccountInfo.code === ResponseCode.SUCCESS) {
+          const userAccount = commonResultAccountInfo.data;
+          dispatch(setUserInfo({
+            accountId: userAccount.accountId,
+            balance: userAccount.balance,
+            lastLogin: userAccount.lastLogin,
+            createdTime: userAccount.createdTime,
+            createdBy: userAccount.createdBy,
+          }))
+        } else {
+          message.error(commonResultAccountInfo.message + ", 获取用户账号信息失败!")
+          return
+        }
+      }
+
+    }
+  }
+
+  useEffect(() => {
+    console.log("refreshToken")
+    refreshToken()
+  }, [])
 
   return (
     <BrowserRouter>
@@ -55,7 +92,7 @@ function App() {
           </ProtectedRoute>
         }>
           <Route path="" element={<Navigate to="user-management" />} />
-          <Route path="user-management" element={<UserManagementIndexPage />} > 
+          <Route path="user-management" element={<UserManagementIndexPage />} >
             <Route index element={<UserListPage />} />
             <Route path="user-detail" element={<UserManagementDetailsPage />} />
           </Route>
@@ -85,7 +122,7 @@ function App() {
           <Route path="activities" element={<ActivityIndexPage />} >
             <Route index element={<ActivityGridPage />} />
             <Route path="projects" element={<ProjectGridPage />} />
-            <Route path="projects/detail" element={<ProjectDetailPage  />} />
+            <Route path="projects/detail" element={<ProjectDetailPage />} />
           </Route>
           <Route path="rights" element={<RightsIndexPage />} >
             <Route index element={<RightsGridPage />} />

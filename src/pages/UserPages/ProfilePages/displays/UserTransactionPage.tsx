@@ -44,8 +44,7 @@ export const UserTransactionPage = () => {
         <div className={styles.container}>
             {role === "NORMAL" && <Table<TransactionTableType> dataSource={transactionDataSource} className={styles.table}>
                
-                <Column title="源用户" dataIndex="sourceName" key="sourceName" render={()=>"您"} />
-                <Column title="目标用户" dataIndex="targetName" key="targetName" />
+                <Column title="交易对象" dataIndex="targetName" key="targetName" />
                 <Column title="交易数额" dataIndex="amount" key="amount" />
                 <Column title="交易类型" dataIndex="txType" key="txType" 
                 render={(text: string) => {

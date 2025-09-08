@@ -34,7 +34,7 @@ export const ProjectListPage = () => {
 
     const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<ProjectSubmitType>[] = [
         {
-            title: 'Title',
+            title: '作品名称',
             dataIndex: 'title',
             key: 'title',
             width: 120,
@@ -49,25 +49,25 @@ export const ProjectListPage = () => {
             },
         },
         {
-            title: 'Authors',
+            title: '作者',
             dataIndex: 'authors',
             key: 'authors',
             width: 100,
         },
         {
-            title: 'Description',
+            title: '描述',
             dataIndex: 'description',
             key: 'description',
             width: 120,
         },
         {
-            title: 'Link',
+            title: '附件链接',
             dataIndex: 'link',
             key: 'link',
             width: 100,
         },
         {
-            title: 'Cover',
+            title: '封面',
             dataIndex: 'cover',
             key: 'cover',
             width: 100,

@@ -204,11 +204,9 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                 <div className={styles.authors}>
                     作者: {authors}
                 </div>
-                {amount && (
-                    <div className={styles.amount}>
-                        金额: ¥{amount.toLocaleString()}
-                    </div>
-                )}
+                <div className={styles.amount}>
+                    金额: {amount.toLocaleString() || 0}
+                </div>
                 <div className={styles.startTime}>
                     创建时间: {formatDateTime(createdTime)}
                 </div>
