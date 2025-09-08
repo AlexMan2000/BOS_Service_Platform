@@ -56,7 +56,7 @@ export const UserListPage = () => {
 
     const PROCOLUMNS_IMPORT_CONFIGS: ProColumns<UserSubmitType>[] = [
         {
-            title: 'Employee No',
+            title: '工号',
             dataIndex: 'employeeNo',
             key: 'employeeNo',
             width: 120,
@@ -71,13 +71,13 @@ export const UserListPage = () => {
             },
         },
         {
-            title: 'Name',
+            title: '姓名',
             dataIndex: 'name',
             key: 'name',
             width: 100,
         },
         {
-            title: 'Department',
+            title: '部门',
             dataIndex: 'department',
             key: 'department',
             width: 100,
@@ -87,7 +87,7 @@ export const UserListPage = () => {
 
     const PROCOLUMNS_TRANSGER_CONFIGS: ProColumns<UserTransferSubmitType>[] = [
         {
-            title: 'Employee No',
+            title: '工号',
             dataIndex: 'employeeNo',
             key: 'employeeNo',
             width: 120,
@@ -102,14 +102,14 @@ export const UserListPage = () => {
             },
         },
         {
-            title: 'money',
+            title: '金额',
             dataIndex: 'amount',
             key: 'amount',
             valueType: 'digit',
             width: 100,
         },
         {
-            title: 'remark',
+            title: '备注',
             dataIndex: 'remark',
             key: 'remark',
             width: 120,
@@ -349,22 +349,22 @@ export const UserListPage = () => {
                 <Table<User> dataSource={tableDataSource}
                     scroll={{ x: 1000 }}
                 >
-                    <Column title="Name" dataIndex="name" key="name" />
-                    <Column title="Employee No" dataIndex="employeeNo" key="employeeNo" />
-                    <Column title="Department" dataIndex="department" key="department" />
-                    <Column title="Balance" dataIndex="balance" key="balance" />
-                    <Column title="Last Login" dataIndex="lastLogin" key="lastLogin"
+                    <Column title="姓名" dataIndex="name" key="name" />
+                    <Column title="工号" dataIndex="employeeNo" key="employeeNo" />
+                    <Column title="部门" dataIndex="department" key="department" />
+                    <Column title="余额" dataIndex="balance" key="balance" />
+                    <Column title="最后登录时间" dataIndex="lastLogin" key="lastLogin"
                         render={(text: string) => {
                             return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                         }}
                     />
-                    <Column title="Created Time" dataIndex="createdTime" key="createdTime"
+                    <Column title="创建时间" dataIndex="createdTime" key="createdTime"
                         render={(text: string) => {
                             return <span>{text ? dayjs(text).format("YYYY-MM-DD HH:mm:ss") : "--"}</span>
                         }}
                     />
                     <Column
-                        title="Action"
+                        title="操作"
                         key="action"
                         width={150}
                         render={(_: any, record: User) => (
