@@ -114,11 +114,12 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                         <InputNumber
                             value={money}
                             min={1}
-                            max={balance + activityAccountFreeCredit}
+                            // max={balance + activityAccountFreeCredit}
                             onChange={(value) => {
                                 if (value) {
                                     if (value > balance + activityAccountFreeCredit) {
-                                        message.error("余额不足， 自动设置为最大值")
+                                        message.error("余额不足， 将自动设置为当前可投注的最大值")
+                                        setMoney(balance + activityAccountFreeCredit)
                                         return
                                     }
                                     setMoney(value)

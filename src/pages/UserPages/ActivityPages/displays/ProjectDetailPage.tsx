@@ -215,7 +215,7 @@ const handleImageLoad = () => {
                                         </div>
                                         <div className={styles.amountInfo}>
                                             <DollarOutlined style={{ marginRight: 8, color: '#52c41a' }} />
-                                            <Text strong>投注总金额：</Text>
+                                            <Text strong>个人投注总金额：</Text>
                                             <Text style={{ color: '#52c41a', fontSize: '16px', fontWeight: 'bold' }}>
                                                 {formatCurrency(project.amount)}
                                             </Text>
