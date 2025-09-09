@@ -86,3 +86,10 @@ export interface CheckBenefitCodeVO {
     codes: string[];
     redeemedBy: string;
 }
+
+
+export interface BenefitCodeQryByNameVO {
+    userName?: string,
+    pageNum: number,
+    pageSize: number
+}

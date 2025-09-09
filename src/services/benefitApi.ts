@@ -1,4 +1,4 @@
-import { BenefitCodeQryVO, BenefitCreateVO, BenefitRedeemVO, CheckBenefitCodeVO, ListAllBenefitVO } from "@/commons/types/right";
+import { BenefitCodeQryByNameVO, BenefitCodeQryVO, BenefitCreateVO, BenefitRedeemVO, CheckBenefitCodeVO, ListAllBenefitVO } from "@/commons/types/right";
 import { deleteRequest, postRequest } from "./axiosInstance";
 
 export const getAllRights = async (body: ListAllBenefitVO, config?:any) => {
@@ -113,6 +113,18 @@ export const checkAllBenefitCodes = async (body: CheckBenefitCodeVO, config?:any
         return res.data;
     } catch (error: any) {
         console.error("Error checking all benefit codes:", error);
+        throw error;
+    }
+}
+
+export const listAllBenefitCodesAdminByUserName = async (body: BenefitCodeQryByNameVO, config?:any) => {
+    try {
+        const res = await postRequest("/benefitCode/queryByUserName", body, {
+            ...config
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Error listing all benefit codes by user name:", error);
         throw error;
     }
 }

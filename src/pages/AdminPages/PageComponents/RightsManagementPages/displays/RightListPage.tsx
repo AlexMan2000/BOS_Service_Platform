@@ -7,7 +7,7 @@ import { Table, Tabs } from "antd"
 import Column from "antd/es/table/Column"
 import { GenericEditableTable } from "@/commons/components/BatchImport/GenericEditableTable"
 import { useNavigate } from "react-router-dom"
-import { deleteBenefit, getAllRights, listAllBenefitCodesAdmin, checkAllBenefitCodes } from "@/services/benefitApi"
+import { deleteBenefit, getAllRights, listAllBenefitCodesAdmin, checkAllBenefitCodes, listAllBenefitCodesAdminByUserName } from "@/services/benefitApi"
 import { useSelector } from "react-redux"
 import { selectUser } from "@/store/slice/userSlice/userSlice"
 import { createBenefit } from "@/services/benefitApi"
@@ -162,7 +162,7 @@ export const RightListPage = () => {
             }
 
             const result = await checkAllBenefitCodes(checkBenefitCodeVO)
-            
+
             if (result.code === ResponseCode.SUCCESS) {
                 message.success(`成功核销 ${unredeemedCodes.length} 个兑换码`)
                 // 重新加载数据
@@ -185,7 +185,7 @@ export const RightListPage = () => {
             }
 
             const result = await checkAllBenefitCodes(checkBenefitCodeVO)
-            
+
             if (result.code === ResponseCode.SUCCESS) {
                 message.success('核销成功')
                 // 重新加载数据
@@ -220,32 +220,43 @@ export const RightListPage = () => {
                 <Tabs.TabPane tab="核销" key="1"></Tabs.TabPane>
             </Tabs>
 
-                         {activeTab === 1 && <div className={styles.checkBenenfitContent}>
-                                 <div className={styles.checkBenenfitContentHeader}>
+            {activeTab === 1 && <div className={styles.checkBenenfitContent}>
+                <div className={styles.checkBenenfitContentHeader}>
                     <div className={styles.checkBenenfitContentHeaderTitle}>兑换码核销管理</div>
-                    <Popconfirm
-                        title="确认全部核销"
-                        description={`确定要核销所有 ${benefitCodeDataSource.filter(item => item.status === 1).length} 个未核销的兑换码吗？`}
-                        onConfirm={handleCheckAllBenefits}
-                        okText="确认"
-                        cancelText="取消"
-                        disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
-                    >
-                        <Button 
-                            type="primary" 
-                            danger
+                    <div className={styles.toolBar}>
+                        <Input placeholder="按用户名查询" 
+                            onChange={async (e) => {
+                                    const commonResults = await listAllBenefitCodesAdminByUserName({ userName: e.target.value, pageNum: 0, pageSize: 10 })
+                                    const data = commonResults.data as BenefitCodeListVO[]
+                                    setBenefitCodeDataSource(data as BenefitCodeListVO[])
+                                }}
+                        />
+
+                        <Popconfirm
+                            title="确认全部核销"
+                            description={`确定要核销所有 ${benefitCodeDataSource.filter(item => item.status === 1).length} 个未核销的兑换码吗？`}
+                            onConfirm={handleCheckAllBenefits}
+                            okText="确认"
+                            cancelText="取消"
                             disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
                         >
-                            全部核销 ({benefitCodeDataSource.filter(item => item.status === 1).length})
-                        </Button>
-                    </Popconfirm>
+                            <Button
+                                type="primary"
+                                danger
+                                disabled={benefitCodeDataSource.filter(item => item.status === 1).length === 0}
+                            >
+                                全部核销 ({benefitCodeDataSource.filter(item => item.status === 1).length})
+                            </Button>
+                        </Popconfirm>
+                    </div>
                 </div>
-                 <div className={styles.divider}></div>
-                <Table<BenefitCodeListVO> 
-                    dataSource={benefitCodeDataSource} 
+                <div className={styles.divider}></div>
+                <Table<BenefitCodeListVO>
+                    dataSource={benefitCodeDataSource}
                     className={styles.table}
                     scroll={{ x: 1000 }}
                 >
+                    <Column title="兑换用户" dataIndex="userName" key="userName" />
                     <Column title="权益名称" dataIndex="benefitName" key="benefitName" />
                     <Column title="兑换码" dataIndex="code" key="code" />
                     <Column title="权益账户ID" dataIndex="accountId" key="accountId" />
