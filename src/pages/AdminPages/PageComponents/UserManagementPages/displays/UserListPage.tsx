@@ -394,7 +394,7 @@ export const UserListPage = () => {
                                 <Button type="link" size="small" style={{ color: "#ff4d4f" }}
                                     onClick={async () => {
                                         //删除用户
-                                        await deleteAccount(record.employeeNo)
+                                        await deleteAccount(record.accountId)
                                         // 重新获取数据
                                         await fetchData(0, 10)
                                     }}

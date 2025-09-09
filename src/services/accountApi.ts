@@ -23,7 +23,7 @@ export const createAccount = async (body: AccountCreateVO, config?: any): Promis
     }
 }
 
-export const deleteAccount = async (id: string, config?: any) => {
+export const deleteAccount = async (id: number, config?: any) => {
     try {
         const res = await deleteRequest(
             "/account/delete/" + id,

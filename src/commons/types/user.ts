@@ -1,5 +1,6 @@
 
 export interface User {
+    accountId: number // 账号id
     employeeNo: string // 工号
     password: string // 密码
     phone: string // 手机号
