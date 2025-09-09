@@ -13,6 +13,8 @@ import { loginUser } from "@/services/userApi"
 import { getUserAccountInfo } from "@/services/accountApi"
 
 export const LoginPage = () => {
+
+    console.log(coverImage)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [newPassword, setNewPassword] = useState("")
@@ -178,7 +180,7 @@ export const LoginPage = () => {
                 </div>
             </div>
             <div className={styles.imageRegion}>
-                <img src={coverImage} alt="login-bg" />
+                <img src={"http://127.0.0.1:8083/images/logo.png"} alt="login-bg" />
             </div>
         </div>
     )
