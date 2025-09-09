@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom"
-import { List, Card, Typography, Space, Divider, Modal, Button, InputNumber, Popconfirm, Tooltip } from "antd"
-import { 
-    UserOutlined, 
-    CalendarOutlined, 
-    DollarOutlined, 
+import { List, Card, Typography, Space, Divider, Modal, Button, InputNumber, Popconfirm, Tooltip, message } from "antd"
+import {
+    UserOutlined,
+    CalendarOutlined,
+    DollarOutlined,
     LinkOutlined,
     QuestionCircleOutlined,
 } from "@ant-design/icons"
@@ -11,33 +11,41 @@ import dayjs from "dayjs"
 import styles from "./ProjectDetailPage.module.less"
 import { Project, Activity, BetWorkVO } from "@/commons/types/activity"
 import { useState } from "react"
-import { useSelector } from "react-redux"
-import { selectUser } from "@/store/slice/userSlice/userSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { selectUser, setUserInfo } from "@/store/slice/userSlice/userSlice"
 import { betWork } from "@/services/workApi"
 import BackupImage1 from "@/assets/images/backup-image-1.jpg"
 import BackupImage2 from "@/assets/images/backup-image-2.jpg"
 import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
+import { getFunction } from "@/commons/utils/functionPools"
+import { ResponseCode } from "@/commons/defs/code"
+import { getUserBalance } from "@/services/accountApi"
 
 const { Title, Text, Paragraph } = Typography
 
 export const ProjectDetailPage = () => {
     const { state } = useLocation()
     const projects = state?.projects || [] // Assuming projects array is passed in state
-    const singleProject = state as Project // Or single project
-    
-    // 获取activity信息 - 假设从父页面传递过来
+    const singleProject = state // Or single project
+    // 获取activity信息 - 假设从父页面传递过来  
     const activity = state?.activity as Activity
     const { balance } = useSelector(selectUser)
 
+    const { userId } = useSelector(selectUser)
+    const dispatch = useDispatch()
+
+    const [activityAccountFreeCredit, setActivityAccountFreeCredit] = useState<number>(singleProject.activityAccountFreeCredit)
+
     console.log("activity", activity)
-    
+
     // 投注相关状态
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [money, setMoney] = useState<number>(0)
     const [currentProject, setCurrentProject] = useState<Project | null>(null)
 
+    const [betAmount, setBetAmount] = useState<number>(singleProject.amount)
     console.log(singleProject)
 
     const projectsToDisplay = projects.length > 0 ? projects : (singleProject ? [singleProject] : [])
@@ -45,30 +53,30 @@ export const ProjectDetailPage = () => {
 
     console.log("projectsToDisplay", projectsToDisplay)
 
-const fallbackImages = [
-    BackupImage1,
-    BackupImage2,
-    BackupImage3,
-    BackupImage4,
-    BackupImage5,
-]
+    const fallbackImages = [
+        BackupImage1,
+        BackupImage2,
+        BackupImage3,
+        BackupImage4,
+        BackupImage5,
+    ]
 
-const [imgSrc, setImgSrc] = useState(projects.cover || "")
+    const [imgSrc, setImgSrc] = useState(projects.cover || "")
 
-const [hasErrorOccurred, setHasErrorOccurred] = useState(false)
+    const [hasErrorOccurred, setHasErrorOccurred] = useState(false)
 
-const handleImageError = () => {
-    console.log("Image load error for:", imgSrc)
-    if (!hasErrorOccurred) {
-        setHasErrorOccurred(true)
-        const randomIndex = Math.floor(Math.random() * fallbackImages.length)
-        setImgSrc(fallbackImages[randomIndex])
+    const handleImageError = () => {
+        console.log("Image load error for:", imgSrc)
+        if (!hasErrorOccurred) {
+            setHasErrorOccurred(true)
+            const randomIndex = Math.floor(Math.random() * fallbackImages.length)
+            setImgSrc(fallbackImages[randomIndex])
+        }
     }
-}
 
-const handleImageLoad = () => {
-    console.log("Image loaded successfully:", imgSrc)
-}
+    const handleImageLoad = () => {
+        console.log("Image loaded successfully:", imgSrc)
+    }
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('zh-CN', {
@@ -81,6 +89,10 @@ const handleImageLoad = () => {
         return dayjs(dateString).format('YYYY-MM-DD HH:mm')
     }
 
+
+    const onSubmit = getFunction(state.callbackId)
+    console.log("onSubmit", onSubmit)
+    console.log("activityAccountFreeCredit", activityAccountFreeCredit)
 
     return (
         <div className={styles.container}>
@@ -105,9 +117,14 @@ const handleImageLoad = () => {
                             <InputNumber
                                 value={money}
                                 min={1}
-                                max={balance + activity.freeCredit}
+                                // max={balance + activity.freeCredit}
                                 onChange={(value) => {
                                     if (value) {
+                                        if (value > balance + activityAccountFreeCredit) {
+                                            message.error("余额不足， 将自动设置为当前可投注的最大值")
+                                            setMoney(balance + activityAccountFreeCredit)
+                                            return
+                                        }
                                         setMoney(value)
                                     }
                                 }}
@@ -119,7 +136,7 @@ const handleImageLoad = () => {
                                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                                     <QuestionCircleOutlined style={{ color: "#1677ff" }} />
                                     <div style={{ color: "#1677ff" }}>
-                                        投注优先消耗免费额度，您的免费额度是{activity.freeCredit}
+                                        投注优先消耗免费额度，您的免费额度是{activityAccountFreeCredit}
                                     </div>
                                 </div>
                             </Tooltip>
@@ -135,11 +152,30 @@ const handleImageLoad = () => {
                                             activityId: activity.id,
                                             workId: currentProject.id,
                                             amount: money,
-                                            usedFreeAmount: activity.freeCredit
+                                            usedFreeAmount: activityAccountFreeCredit
                                         }
                                         console.log(betWorkData);
                                         await betWork(betWorkData)
-                                        
+                                        if (onSubmit) {
+                                            const commonResult = await onSubmit()
+                                            if (commonResult.code === ResponseCode.SUCCESS) {
+                                                const work = commonResult.data.workList.filter((work: Project) => work.id === currentProject.id);
+                                                setBetAmount(work[0].amount)
+                                                setActivityAccountFreeCredit(commonResult.data.freeCredit)
+                                                message.success('投注成功')
+                                            } else {
+                                                message.error('投注失败')
+                                            }
+                                        }
+
+                                        const balanceResult: any = await getUserBalance(userId)
+                                        if (balanceResult.code === ResponseCode.SUCCESS) {
+                                            const balance = balanceResult.data
+                                            dispatch(setUserInfo({
+                                                balance: balance
+                                            }))
+                                        }
+
                                         setIsModalOpen(false)
                                         setMoney(0)
                                         setCurrentProject(null)
@@ -148,9 +184,9 @@ const handleImageLoad = () => {
                                 okText="确认投注"
                                 cancelText="取消"
                             >
-                                <Button 
-                                disabled={activity.status !==1}
-                                style={{ width: "100%" }} type="primary">
+                                <Button
+                                    disabled={activity.status !== 1}
+                                    style={{ width: "100%" }} type="primary">
                                     投注
                                 </Button>
                             </Popconfirm>
@@ -160,7 +196,7 @@ const handleImageLoad = () => {
             )}
             <div className={styles.header}>
                 <Title level={2}>作品详情</Title>
-                
+
             </div>
 
             <List
@@ -174,10 +210,10 @@ const handleImageLoad = () => {
                         className={styles.listItem}
                         key={project.title}
                         actions={activity ? [
-                            <Button 
-                                key="bet" 
-                                type="primary" 
-                                disabled={activity.status !==1}
+                            <Button
+                                key="bet"
+                                type="primary"
+                                disabled={activity.status !== 1}
                                 onClick={() => {
                                     setCurrentProject(project)
                                     setIsModalOpen(true)
@@ -217,7 +253,7 @@ const handleImageLoad = () => {
                                             <DollarOutlined style={{ marginRight: 8, color: '#52c41a' }} />
                                             <Text strong>个人投注总金额：</Text>
                                             <Text style={{ color: '#52c41a', fontSize: '16px', fontWeight: 'bold' }}>
-                                                {formatCurrency(project.amount)}
+                                                {formatCurrency(betAmount)}
                                             </Text>
                                         </div>
                                         <div className={styles.linkInfo}>
@@ -230,16 +266,16 @@ const handleImageLoad = () => {
                                     </Space>
                                 }
                             />
-                            
+
                             <Divider style={{ margin: '16px 0' }} />
-                            
+
                             <div className={styles.projectDescription}>
                                 <Text strong>项目描述：</Text>
-                                <Paragraph 
-                                    ellipsis={{ 
-                                        rows: 3, 
-                                        expandable: true, 
-                                        symbol: '展开' 
+                                <Paragraph
+                                    ellipsis={{
+                                        rows: 3,
+                                        expandable: true,
+                                        symbol: '展开'
                                     }}
                                     style={{ marginTop: 8 }}
                                 >

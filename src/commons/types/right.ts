@@ -64,7 +64,7 @@ export interface RightTableType extends Right {
 
 export interface BenefitRedeemVO {
     count: number,
-    accountId: string,
+    accountId: number,
     benefitId: number
 }
 

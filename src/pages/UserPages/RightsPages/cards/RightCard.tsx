@@ -123,7 +123,7 @@ export const RightCard = (props: RightCardProps) => {
                                 }
                                 const benefitRedeemVO: BenefitRedeemVO = {
                                     count: amount,
-                                    accountId: accountId.toString(),
+                                    accountId: accountId,
                                     benefitId: id,
                                 }
                                 const commonResult = await benefitRedeem(benefitRedeemVO);

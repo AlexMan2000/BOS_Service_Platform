@@ -51,9 +51,9 @@ export const ProjectGridPage = () => {
     const [activityAccountFreeCredit, setActivityAccountFreeCredit] = useState(activityFreeCredit)
 
     console.log(activityStatus)
-    const fetchData = async () => {
+    const fetchData = async (activityAccountFreeCredit?: number) => {
         try {
-            const commonResult: any = await getAllWorks({ freeCredit: activityFreeCredit, accountId: accountId, activityId: id })
+            const commonResult: any = await getAllWorks({ freeCredit: activityAccountFreeCredit || activityFreeCredit, accountId: accountId, activityId: id })
             if (commonResult.code === ResponseCode.SUCCESS) {
                 const data = commonResult.data.workList
                 // 确保data是数组
@@ -64,9 +64,11 @@ export const ProjectGridPage = () => {
                 console.warn('获取项目数据失败:', commonResult)
                 setProjectCards([])
             }
+            return commonResult;
         } catch (error) {
             console.error('获取项目数据失败:', error)
             setProjectCards([])
+            return { code: ResponseCode.FAILED, message: '获取项目数据失败', data: [] }
         }
     }
 
@@ -298,7 +300,7 @@ export const ProjectGridPage = () => {
         ];
         
         return (
-            <Card className={styles.chartCard} title="项目分类统计">
+            <Card className={styles.chartCard} title="个人作品投注情况">
                 <Tabs 
                     defaultActiveKey="pie"
                     items={tabItems}
@@ -365,7 +367,7 @@ export const ProjectGridPage = () => {
                     {projectCards.map((project) => (
                         <ProjectCard key={project.title} {...project} onSubmit={
                             async () => {
-                                await fetchData()
+                                return await fetchData()
                             }
 
                         }

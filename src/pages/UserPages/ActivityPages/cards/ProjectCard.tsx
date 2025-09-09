@@ -18,12 +18,14 @@ import BackupImage2 from "@/assets/images/backup-image-2.jpg"
 import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
+import { registerFunction } from "@/commons/utils/functionPools"
+import { v4 as uuidv4 } from 'uuid';
 
 
 
 export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, canBet: boolean, activityAccountFreeCredit: number }) => {
     const { title, amount, authors, description, cover, createdTime, updatedTime, id ,onSubmit, canBet, activityAccountFreeCredit} = props
-    const navigate = useNavigate()
+    const navigate = useNavigate()      
 
     const { state } = useLocation()
     const activity = state as Activity
@@ -70,6 +72,8 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
     const acticityStatus = activity.status
     return (
         <div className={styles.container} onClick={() => {
+            const callbackId = uuidv4()
+            registerFunction(callbackId, onSubmit)
             navigate(`/home/activities/projects/detail`, {
                 state: {
                     title,
@@ -81,7 +85,9 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
                     updatedTime,
                     id,
                     activityStatus: acticityStatus,
-                    activity: activity
+                    activity: activity,
+                    callbackId: callbackId,
+                    activityAccountFreeCredit: activityAccountFreeCredit
                 }
             })
         }}>

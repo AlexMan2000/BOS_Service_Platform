@@ -272,7 +272,8 @@ export const UserListPage = () => {
                 }}
                 title="批量发放"
                 onOk={async () => {
-                    if (batchTransferActiveTab === '1') {
+                    if (batchTransferActiveTab === '2') {
+                        console.log('文件提交')
                         if (!batchTransferSaved) {
                             message.info("请先提交文件")
                             return
