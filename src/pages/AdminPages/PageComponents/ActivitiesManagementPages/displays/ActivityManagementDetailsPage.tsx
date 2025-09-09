@@ -4,7 +4,7 @@ import { Form, Input, Button, DatePicker, Select, InputNumber } from "antd"
 import dayjs from "dayjs"
 import styles from "./ActivityManagementDetailsPage.module.less"
 import { Activity } from "@/commons/types/activity"
-import { getActivityById, updateActivity } from "@/services/activityApi"
+import { exportActivityFlowData, getActivityById, updateActivity } from "@/services/activityApi"
 import { message } from "antd"
 import { ResponseCode } from "@/commons/defs/code"
 const { TextArea } = Input
@@ -12,6 +12,7 @@ const { Option } = Select
 
 export const ActivityManagementDetailsPage = () => {
     const [edit, setEdit] = useState(false)
+    const [exporting, setExporting] = useState(false)
     const [activityForm] = Form.useForm()
 
     const location = useLocation()
@@ -39,7 +40,7 @@ export const ActivityManagementDetailsPage = () => {
         console.log('Activity form values:', values)
         setEdit(false)
         // Add your form submission logic here
-        const commonResult = await updateActivity({...values, id: state.id})
+        const commonResult = await updateActivity({ ...values, id: state.id })
         if (commonResult.code === ResponseCode.SUCCESS) {
             message.success("更新成功")
         } else {
@@ -48,7 +49,7 @@ export const ActivityManagementDetailsPage = () => {
 
     }
 
-    const stateToChild = {...state, status: state.status};
+    const stateToChild = { ...state, status: state.status };
 
     console.log("stateToChild", stateToChild)
 
@@ -56,10 +57,34 @@ export const ActivityManagementDetailsPage = () => {
         <div className={styles.container}>
             {location.pathname === "/admin/activities-management/activity-detail" && <div className={styles.activityDetails}>
                 <div className={styles.activityDetailsHeader}>
-                    <div className={styles.formControls}>
+                    <div className={styles.export}>
                         <Button 
                             type="primary" 
-                            onClick={async () =>  {
+                            loading={exporting}
+                            onClick={async () => {
+                                try {
+                                    setExporting(true)
+                                    const commonResult = await exportActivityFlowData(state.id)
+                                    if (commonResult.code === 200) {
+                                        message.success("导出成功")
+                                    } else {
+                                        message.error("导出失败")
+                                    }
+                                } catch (error: any) {
+                                    console.error("Export error:", error)
+                                    message.error("导出失败，请重试")
+                                } finally {
+                                    setExporting(false)
+                                }
+                            }}
+                        >
+                            导出明细
+                        </Button>
+                    </div>
+                    <div className={styles.formControls}>
+                        <Button
+                            type="primary"
+                            onClick={async () => {
                                 if (edit) {
                                     setEdit(!edit)
                                 } else {
@@ -89,7 +114,7 @@ export const ActivityManagementDetailsPage = () => {
                             {edit ? "取消" : "编辑"}
                         </Button>
                     </div>
-                    
+
                     <Form
                         disabled={!edit}
                         form={activityForm}
@@ -127,8 +152,8 @@ export const ActivityManagementDetailsPage = () => {
                             name="startTime"
                             rules={[{ required: true, message: "请选择开始时间" }]}
                         >
-                            <DatePicker 
-                                showTime 
+                            <DatePicker
+                                showTime
                                 format="YYYY-MM-DD HH:mm:ss"
                                 placeholder="请选择开始时间"
                                 style={{ width: '100%' }}
@@ -140,8 +165,8 @@ export const ActivityManagementDetailsPage = () => {
                             name="endTime"
                             rules={[{ required: true, message: "请选择结束时间" }]}
                         >
-                            <DatePicker 
-                                showTime 
+                            <DatePicker
+                                showTime
                                 format="YYYY-MM-DD HH:mm:ss"
                                 placeholder="请选择结束时间"
                                 style={{ width: '100%' }}
@@ -153,8 +178,8 @@ export const ActivityManagementDetailsPage = () => {
                             name="description"
                             rules={[{ required: false, message: "请输入活动描述" }]}
                         >
-                            <TextArea 
-                                placeholder="请输入活动描述" 
+                            <TextArea
+                                placeholder="请输入活动描述"
                                 rows={4}
                                 maxLength={500}
                                 showCount
@@ -190,8 +215,8 @@ export const ActivityManagementDetailsPage = () => {
                                 <Button type="primary" htmlType="submit">
                                     保存
                                 </Button>
-                                <Button 
-                                    style={{ marginLeft: 8 }} 
+                                <Button
+                                    style={{ marginLeft: 8 }}
                                     onClick={() => setEdit(false)}
                                 >
                                     取消
@@ -200,7 +225,7 @@ export const ActivityManagementDetailsPage = () => {
                         )}
                     </Form>
 
-                   
+
                 </div>
             </div>}
             <div className={styles.content}>
