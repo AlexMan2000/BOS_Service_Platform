@@ -126,7 +126,7 @@ export const RightDetailsPage = () => {
                                     setIsModalOpen(false)
                                     const benefitRedeemVO: BenefitRedeemVO = {
                                         count: amount,
-                                        accountId: accountId.toString(),
+                                        accountId: accountId,
                                         benefitId: id,
                                     }
                                     // console.log(benefitRedeemVO)

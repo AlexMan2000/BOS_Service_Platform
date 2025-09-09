@@ -6,7 +6,6 @@ import styles from "./ProjectManagementDetailsPage.module.less"
 import { Project } from "@/commons/types/activity"
 import { getWorkById, updateWork } from "@/services/workApi"
 import { ResponseCode } from "@/commons/defs/code"
-import { exportActivityFlowData } from "@/services/activityApi"
 
 const { TextArea } = Input
 
