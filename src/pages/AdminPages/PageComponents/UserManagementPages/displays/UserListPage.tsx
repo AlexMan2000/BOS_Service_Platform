@@ -204,7 +204,9 @@ export const UserListPage = () => {
                         setBatchImportLoading(true)
                         const result = await uploadCSV("account", batchImportFile as File)
                         console.log('result', result)
+                        setIsBatchImportModalOpen(false)
                         setBatchImportLoading(false)
+                        fetchData(0, 10)
                     }
                 }}
                 title="批量导入"
@@ -252,7 +254,6 @@ export const UserListPage = () => {
                                         onUpload={async (file: File) => {
                                             setBatchImportFile(file)
                                             //后端接口
-                                            // setIsBatchImportModalOpen(false)
                                             setBatchImportSaved(false)
                                         }} type="account" />
                                 }
