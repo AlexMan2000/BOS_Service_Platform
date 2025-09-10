@@ -22,6 +22,7 @@ import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 import { getFunction } from "@/commons/utils/functionPools"
 import { ResponseCode } from "@/commons/defs/code"
 import { getUserBalance } from "@/services/accountApi"
+import { ENDPOINT } from "@/services/config"
 
 const { Title, Text, Paragraph } = Typography
 
@@ -61,7 +62,7 @@ export const ProjectDetailPage = () => {
         BackupImage5,
     ]
 
-    const [imgSrc, setImgSrc] = useState(projects.cover || "")
+    const [imgSrc, setImgSrc] = useState(`${ENDPOINT}${projects.cover}` || "")
 
     const [hasErrorOccurred, setHasErrorOccurred] = useState(false)
 

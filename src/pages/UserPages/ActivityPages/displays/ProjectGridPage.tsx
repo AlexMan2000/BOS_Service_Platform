@@ -23,6 +23,7 @@ import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 import { Pie, Column } from "@ant-design/plots"
+import { ENDPOINT } from "@/services/config"
 const { Title, Text, Paragraph } = Typography
 
 
@@ -42,7 +43,7 @@ export const ProjectGridPage = () => {
 
     const currentActivity = activityData
 
-    const [imgSrc, setImgSrc] = useState(currentActivity.cover || "")
+    const [imgSrc, setImgSrc] = useState(`${ENDPOINT}${currentActivity.cover}` || "")
 
     const activityFreeCredit = currentActivity.freeCredit // should remains the same in the whole activity
     const activityStatus = currentActivity.status;

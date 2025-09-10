@@ -12,12 +12,12 @@ import BackupImage3 from "@/assets/images/backup-image-3.jpg"
 import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 
-
+import { ENDPOINT } from "@/services/config"
 
 export const ActivityCard = (props: ActivityCardType) => {
     const { name, description, cover, status, startTime, endTime } = props
     const navigate = useNavigate()
-    const [imgSrc, setImgSrc] = useState(cover || "")
+    const [imgSrc, setImgSrc] = useState(`${ENDPOINT}${cover}` || "")
 
     const statusInfo = getActivityStatusInfo(status)
 

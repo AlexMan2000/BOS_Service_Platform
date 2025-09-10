@@ -20,6 +20,7 @@ import BackupImage4 from "@/assets/images/backup-image-4.jpg"
 import BackupImage5 from "@/assets/images/backup-image-5.jpg"
 import { registerFunction } from "@/commons/utils/functionPools"
 import { v4 as uuidv4 } from 'uuid';
+import { ENDPOINT } from "@/services/config"
 
 
 
@@ -38,7 +39,7 @@ export const ProjectCard = (props: ProjectCardType & { onSubmit: () => void, can
     console.log(balance, freeCredit, id)
 
     // 图片错误处理
-    const [imgSrc, setImgSrc] = useState(cover || "")
+    const [imgSrc, setImgSrc] = useState(`${ENDPOINT}${cover}` || "")
 
     // 备用图片列表
     const fallbackImages = [

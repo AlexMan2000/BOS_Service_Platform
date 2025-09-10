@@ -11,6 +11,7 @@ import { message } from "antd"
 import { useState } from "react"
 import { loginUser } from "@/services/userApi"
 import { getUserAccountInfo } from "@/services/accountApi"
+import { ENDPOINT } from "@/services/config"
 
 export const LoginPage = () => {
 
@@ -180,7 +181,7 @@ export const LoginPage = () => {
                 </div>
             </div>
             <div className={styles.imageRegion}>
-                <img src={"http://127.0.0.1:8083/images/logo.png"} alt="login-bg" />
+                <img src={`${ENDPOINT}/images/logo.png`} alt="login-bg" />
             </div>
         </div>
     )
