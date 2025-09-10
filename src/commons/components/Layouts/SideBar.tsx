@@ -61,7 +61,7 @@ export const SideBar = ({ menuItems, defaultSelectedKey }: SideBarProps) => {
                 <div className={styles.header}>
                     <div className={styles.logo}>
                         <img src={logo} alt="logo" />
-                        权益积分平台
+                        乐创
                     </div>
                     <div className={styles.collapse} onClick={() => {
                         dispatch(setIsSideBarCollapsed(!isSideBarCollapsed))
